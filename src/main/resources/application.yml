@@ -26,4 +26,7 @@ spring:
     user:
       name: user
       password: 1234
+  jwt:
+    issuer: solball@naver.com
+    secret_key: photo
 
