@@ -14,9 +14,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Photo 프로젝트 API 명세서")
+                        .title("OurHood 프로젝트 API 명세서")
                         .version("1.0.0")
-                        .description("Photo API Documentation")
+                        .description("OurHood API Documentation")
                 );
     }
 
