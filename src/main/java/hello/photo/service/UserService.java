@@ -30,6 +30,8 @@ public class UserService {
         user = userRepository.save(user);
 
         String token = tokenProvider.createToken(user, Duration.ofHours(2));
+        user.setToken(token);
+        userRepository.save(user);
 
         return new UserSignupResponse(user.getId(), token);
     }
@@ -41,7 +43,14 @@ public class UserService {
             throw new RuntimeException("이메일이나 비밀번호가 틀렸습니다.");
         }
 
-        String token = tokenProvider.createToken(user, Duration.ofHours(2));
+        String token;
+        if (user.getToken() != null && tokenProvider.validToken(user.getToken())) {
+            token = user.getToken(); // 기존 토큰 재사용
+        } else {
+            token = tokenProvider.createToken(user, Duration.ofHours(2)); // 새 토큰 생성
+            user.setToken(token); // 새 토큰 저장
+            userRepository.save(user); // 업데이트된 사용자 저장
+        }
 
         return new UserLoginResponse(user.getId(), token);
     }

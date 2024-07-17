@@ -1,6 +1,3 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: photo
@@ -26,7 +23,6 @@ spring:
     user:
       name: user
       password: 1234
-  jwt:
-    issuer: solball@naver.com
-    secret_key: photo
-
+jwt:
+  issuer: solball@naver.com
+  secretKey: ourhood_secretKey
