@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class Room {
     private User host;
 
     @ManyToMany
-    private List<User> members;
+    private List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "room")
     private List<Moment> moments;

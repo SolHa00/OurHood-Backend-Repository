@@ -28,7 +28,7 @@ public class RoomController {
 
 //    @GetMapping
 //    @Operation(summary = "방 리스트 조회")
-//    public ResponseEntity<RoomListResponse> getRooms(@RequestParam String order, @RequestParam int roomsPerPage, @RequestParam int page) {
+//    public ResponseEntity<RoomListResponse> roomList(@RequestParam String order, @RequestParam int roomsPerPage, @RequestParam int page) {
 //        RoomListResponse response = roomService.getRooms(order, roomsPerPage, page);
 //        return ResponseEntity.ok(response);
 //    }

@@ -10,8 +10,8 @@ import hello.photo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -24,6 +24,7 @@ public class RoomService {
         room.setRoomName(request.getRoomName());
         room.setRoomDescription(request.getRoomDescription());
         room.setHost(user);
+        room.getMembers().add(user);
         room = roomRepository.save(room);
 
         return new RoomResponse(room.getId());
@@ -43,4 +44,8 @@ public class RoomService {
         return new RoomDetailResponse(isMember, room.getId(), room.getRoomName(), room.getRoomDescription(), room.getHost().getNickname());
     }
 
+    //방 리스트 조회
+//    public RoomListResponse getRooms(String order, int roomsPerPage, int page) {
+//        RoomListResponse response
+//    }
 }
