@@ -1,10 +1,11 @@
-package hello.photo.dto.room.request;
+package hello.photo.dto.join;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class RoomDetailRequest {
+public class JoinRequestDto {
+    private Long roomId;
     private Long userId;
 }

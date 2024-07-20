@@ -34,7 +34,7 @@ public class RoomController {
 //    }
 
     @PostMapping("/{roomId}")
-    @Operation(summary = "특정 방 조회", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로..")
+    @Operation(summary = "특정 방 입장", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로..")
     public ResponseEntity<RoomDetailResponse> getRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
         RoomDetailResponse response = roomService.getRoomDetails(roomId, request.getUserId());
         return ResponseEntity.ok(response);
