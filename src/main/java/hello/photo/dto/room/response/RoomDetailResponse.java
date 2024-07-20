@@ -12,12 +12,12 @@ public class RoomDetailResponse {
     private String roomDescription;
     private String hostName;
 
-    public RoomDetailResponse(boolean isMember, Long roomId, String roomName, String hostName, String roomDescription) {
+    public RoomDetailResponse(boolean isMember, Long roomId, String roomName, String roomDescription, String hostName) {
         this.isMember = isMember;
         this.roomId = roomId;
         this.roomName = roomName;
-        this.hostName = hostName;
         this.roomDescription = roomDescription;
+        this.hostName = hostName;
     }
 
 }
