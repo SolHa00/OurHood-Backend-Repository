@@ -29,6 +29,9 @@ public class User {
     @OneToMany(mappedBy = "commenter")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "user")
+    private List<Invitation> invitations;
+
 
     @Builder
     public User(String nickname, String email, String password) {

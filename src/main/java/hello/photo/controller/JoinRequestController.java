@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@Tag(name ="요청 관련 API")
+@Tag(name ="Join API", description = "참여 요청 관련 API")
 public class JoinRequestController {
 
     private final JoinRequestService joinRequestService;
