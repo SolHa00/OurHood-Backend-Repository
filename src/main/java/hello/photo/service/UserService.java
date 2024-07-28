@@ -59,7 +59,7 @@ public class UserService {
             userRepository.save(user); // 업데이트된 사용자 저장
         }
 
-        return new UserLoginResponse(user.getId(), token);
+        return new UserLoginResponse(user.getId(), user.getNickname(), token);
     }
 
 
