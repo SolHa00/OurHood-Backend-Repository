@@ -6,19 +6,24 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
-    database-platform: org.hibernate.dialect.H2Dialect
+#        dialect: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
 
-  h2:
-    console:
-      enabled: true
+#  h2:
+#    console:
+#      enabled: true
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/photo
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/photo
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://ourhooddatabase.crgyiukce4t8.ap-northeast-2.rds.amazonaws.com/ourhood
+    username: admin
+    password: 1q2w3e4r!
+    driver-class-name: com.mysql.cj.jdbc.Driver
   security:
     user:
       name: user
