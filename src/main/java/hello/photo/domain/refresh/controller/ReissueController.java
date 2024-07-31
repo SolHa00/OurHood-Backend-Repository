@@ -32,7 +32,6 @@ public class ReissueController {
 
     @Operation(summary = "AccessToken 재발급", description = "유효하지 않은 AccessToken을 RefreshToken을 통해 재발급",
             parameters = {
-                    @Parameter(name = "accessToken", description = "Access Token", required = true, in = ParameterIn.HEADER, schema = @Schema(type = "string")),
                     @Parameter(name = "refreshToken", description = "Refresh Token", required = true, in = ParameterIn.COOKIE, schema = @Schema(type = "string"))
             },
             responses = {
