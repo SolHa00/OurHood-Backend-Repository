@@ -45,13 +45,13 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 //경로별 인가 작업
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/signup", "/api/login","/error", "/swagger-ui/**", "/v3/api0-docs/**", "/api/reissue").permitAll()
+                        .requestMatchers("/api/signup", "/api/login","/error", "/swagger-ui/**", "/v3/api-docs/**", "/api/reissue").permitAll()
                         .anyRequest().authenticated()
                 )
                 //세션을 stateless 상태로 관리
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), LoginFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 //커스텀한 JWT 필터에 의해 설정된 인증 정보를 사용할 수 있게 함
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class)
                 .build();

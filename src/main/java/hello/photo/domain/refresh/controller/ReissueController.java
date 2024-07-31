@@ -4,6 +4,12 @@ import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import hello.photo.global.auth.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,11 +23,21 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name="AccessToken 재발급 요청 처리 API", description = "AccessToken이 더이상 유효하지 않을때 요청")
 public class ReissueController {
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
+
+    @Operation(summary = "AccessToken 재발급", description = "유효하지 않은 AccessToken을 RefreshToken을 통해 재발급",
+            parameters = {
+                    @Parameter(name = "accessToken", description = "Access Token", required = true, in = ParameterIn.HEADER, schema = @Schema(type = "string")),
+                    @Parameter(name = "refreshToken", description = "Refresh Token", required = true, in = ParameterIn.COOKIE, schema = @Schema(type = "string"))
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "토큰 재발급 성공")
+            })
     @PostMapping("/api/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
 
@@ -74,7 +90,7 @@ public class ReissueController {
 
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
         refreshTokenRepository.deleteByRefresh(refreshToken);
-        addRefreshEntity(email, newRefreshToken, 86400000L);
+        addRefreshEntity(email, newRefreshToken, 1000 * 60 * 60 * 24 * 2L); //2일
 
         //response
         response.setHeader("accessToken", newAccessToken);

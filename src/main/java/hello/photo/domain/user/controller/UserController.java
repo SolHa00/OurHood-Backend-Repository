@@ -4,7 +4,6 @@ import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
 import hello.photo.domain.user.dto.response.MyPageResponse;
 import hello.photo.domain.user.dto.response.UserLoginResponse;
-import hello.photo.domain.user.service.CustomUserDetailsService;
 import hello.photo.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,11 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api")
-@Tag(name="User API", description = "User API(회원가입, 로그인)")
+@Tag(name="User API", description = "User API(회원가입, 로그인, 마이페이지)")
 public class UserController {
 
     private final UserService userService;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @PostMapping("/signup")
     public void signup(@RequestBody UserSignupRequest request) {

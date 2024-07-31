@@ -65,10 +65,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String email = customUserDetails.getUsername();
 
         //토큰 생성
-        String accessToken = jwtUtil.createJwt("accessToken", email, 60000 * 10L); //10분
-        String refreshToken = jwtUtil.createJwt("refreshToken", email, 60000 * 60L); //60분
+        String accessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 120L); //120분
+        String refreshToken = jwtUtil.createJwt("refreshToken", email, 1000 * 60 * 60 * 24 * 2L); //2일
 
-        addRefreshToken(email, refreshToken, 60000 * 60L);
+        addRefreshToken(email, refreshToken, 1000 * 60 * 60 * 24 * 2L);
 
         //응답 설정
         response.setHeader("accessToken", accessToken);
