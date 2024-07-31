@@ -1,19 +1,17 @@
 package hello.photo.domain.user.dto;
 
 import hello.photo.domain.user.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
-
-    public CustomUserDetails(User user) {
-        this.user = user;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

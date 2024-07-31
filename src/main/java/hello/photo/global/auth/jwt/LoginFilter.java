@@ -22,7 +22,10 @@ import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
+    //클라에서 넘어온 JSON 데이터 얻기 위해 선언
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -37,16 +40,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
+            //클라 요청에서 email과 password 추출
             Map<String, String> authRequest = objectMapper.readValue(request.getInputStream(), new TypeReference<>() {});
             String email = authRequest.get("email");
             String password = authRequest.get("password");
+
+            //Spring Security에서 email, password 검증하기 위해서 token에 담음
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
+
+            //token에 담은 유저 데이터를 검증하기 위해 AuthenticationManager로 전달
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    //로그인 성공시 실행하는 메서드
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication){
 
@@ -68,6 +77,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     }
 
+    //로그인 실패시 실행하는 메서드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(401);
