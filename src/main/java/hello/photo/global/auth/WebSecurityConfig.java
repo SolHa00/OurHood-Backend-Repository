@@ -1,8 +1,14 @@
 package hello.photo.global.auth;
 
+import hello.photo.global.auth.jwt.JwtAuthenticationFilter;
+import hello.photo.global.auth.jwt.JwtUtil;
+import hello.photo.global.auth.jwt.LoginFilter;
+import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,27 +21,39 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
+
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    //AuthenticationManager Bean 등록
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil, refreshTokenRepository);
+        loginFilter.setFilterProcessesUrl("/api/login"); // 필터의 작동 경로 설정
         return http
                 //stateless 상태로 관리하기에 csrf 보안 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
-                //폼 기반 인증 비활성화
+                //Form 로그인 방식 비활성화
                 .formLogin(AbstractHttpConfigurer::disable)
-                //HTTP Basic 인증 비활성화
+                //http basic 인증 방식 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable)
+                //경로별 인가 작업
                 .authorizeHttpRequests(auth -> auth
-                        //일단은 모두 허용 가능하게 처리 -> 추후에 수정 예정
-                        .requestMatchers("/api/signup", "/api/login", "/**", "/error","/swagger-ui/**", "/v3/api0-docs/**").permitAll()
+                        .requestMatchers("/api/signup", "/api/login","/error", "/swagger-ui/**", "/v3/api0-docs/**", "/api/reissue").permitAll()
                         .anyRequest().authenticated()
                 )
-                //세션을 Stateless 상태로 관
-                .sessionManagement((session) ->
+                //세션을 stateless 상태로 관리
+                .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //JWT 인증이 먼저 처리되고 나머지 필터들이 JWT 필터에 의해 설정된 인증 정보를 사용할 수 있게 함
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), LoginFilter.class)
+                //커스텀한 JWT 필터에 의해 설정된 인증 정보를 사용할 수 있게 함
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

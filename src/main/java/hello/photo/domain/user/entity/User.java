@@ -21,7 +21,6 @@ public class User {
     private String nickname;
     private String email;
     private String password;
-    private String token;
 
     @OneToMany(mappedBy = "host")
     private List<Room> hostedRooms;

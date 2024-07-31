@@ -8,11 +8,9 @@ import lombok.Setter;
 public class UserLoginResponse {
     private Long userId;
     private String nickname;
-    private String token;
 
-    public UserLoginResponse(Long userId, String nickname, String token) {
+    public UserLoginResponse(Long userId, String nickname) {
         this.userId = userId;
         this.nickname = nickname;
-        this.token = token;
     }
 }

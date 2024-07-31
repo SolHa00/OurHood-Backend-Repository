@@ -15,4 +15,4 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 jwt:
   issuer: solball@naver.com
-  secretKey: ${JWT_SECRET_KEY}
+  secret-key: ${JWT_SECRET_KEY}

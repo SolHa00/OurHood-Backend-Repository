@@ -3,14 +3,12 @@ package hello.photo.domain.user.controller;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
 import hello.photo.domain.user.dto.response.MyPageResponse;
-import hello.photo.domain.user.dto.response.UserSignupResponse;
 import hello.photo.domain.user.dto.response.UserLoginResponse;
+import hello.photo.domain.user.service.CustomUserDetailsService;
 import hello.photo.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,13 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name="User API", description = "User API(회원가입, 로그인)")
 public class UserController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @PostMapping("/signup")
-    public UserSignupResponse signup(@RequestBody UserSignupRequest request) {
-        log.info("Signup request 들어옴");
-        return userService.signup(request);
+    public void signup(@RequestBody UserSignupRequest request) {
+        userService.signup(request);
     }
 
     @PostMapping("/login")
