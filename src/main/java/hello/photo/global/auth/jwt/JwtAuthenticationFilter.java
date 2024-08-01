@@ -42,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             PrintWriter writer = response.getWriter();
             writer.print("access token expired");
 
-            //response status code
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
@@ -56,7 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             PrintWriter writer = response.getWriter();
             writer.print("invalid access token");
 
-            //response status code
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

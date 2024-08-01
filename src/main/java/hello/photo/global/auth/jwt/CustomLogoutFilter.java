@@ -27,75 +27,62 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        //path and method verify
+        // (요청 경로가 /api/logout) && (method가 POST) -> 로그아웃 로직 실행 아닌 경우에는 다음 필터로 넘김
         String requestUri = request.getRequestURI();
         if (!requestUri.matches("^\\/api\\/logout$")) {
-
             filterChain.doFilter(request, response);
             return;
         }
         String requestMethod = request.getMethod();
         if (!requestMethod.equals("POST")) {
-
             filterChain.doFilter(request, response);
             return;
         }
 
-        //get refresh token
-        String refresh = null;
+        //쿠키에서 refreshToken 꺼내기
+        String refreshToken = null;
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
-
             if (cookie.getName().equals("refreshToken")) {
-
-                refresh = cookie.getValue();
+                refreshToken = cookie.getValue();
             }
         }
 
-        //refresh null check
-        if (refresh == null) {
-
+        //refreshToken Null값 확인
+        if (refreshToken == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        //expired check
+        //refreshToken 만료 확인
         try {
-            jwtUtil.isExpired(refresh);
+            jwtUtil.isExpired(refreshToken);
         } catch (ExpiredJwtException e) {
-
-            //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
-        String category = jwtUtil.getCategory(refresh);
+        // 토큰이 refreshToken인지 확인
+        String category = jwtUtil.getCategory(refreshToken);
         if (!category.equals("refreshToken")) {
-
-            //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
         //DB에 저장되어 있는지 확인
-        Boolean isExist = refreshTokenRepository.existsByRefresh(refresh);
+        Boolean isExist = refreshTokenRepository.existsByRefresh(refreshToken);
         if (!isExist) {
-
-            //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        //로그아웃 진행
-        //Refresh 토큰 DB에서 제거
-        refreshTokenRepository.deleteByRefresh(refresh);
+        //로그아웃 -> refresh 토큰 DB에서 제거
+        refreshTokenRepository.deleteByRefresh(refreshToken);
 
-        //Refresh 토큰 Cookie 값 0
+        //refreshToken Cookie 값 null로 초기화
         Cookie cookie = new Cookie("refreshToken", null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
-
         response.addCookie(cookie);
         response.setStatus(HttpServletResponse.SC_OK);
     }
