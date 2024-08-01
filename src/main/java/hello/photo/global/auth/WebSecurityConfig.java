@@ -1,9 +1,10 @@
 package hello.photo.global.auth;
 
+import hello.photo.domain.refresh.repository.RefreshTokenRepository;
+import hello.photo.global.auth.jwt.CustomLogoutFilter;
 import hello.photo.global.auth.jwt.JwtAuthenticationFilter;
 import hello.photo.global.auth.jwt.JwtUtil;
 import hello.photo.global.auth.jwt.LoginFilter;
-import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -51,9 +53,10 @@ public class WebSecurityConfig {
                 //세션을 stateless 상태로 관리
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 //커스텀한 JWT 필터에 의해 설정된 인증 정보를 사용할 수 있게 함
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), LoginFilter.class)
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class)
                 .build();
     }
 
