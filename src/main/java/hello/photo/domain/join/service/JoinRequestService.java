@@ -42,4 +42,18 @@ public class JoinRequestService {
                         joinRequest.getId(), joinRequest.getUser().getNickname()))
                 .collect(Collectors.toList());
     }
+
+    public void handleJoinRequest(Long joinRequestId, String action) {
+        JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 참여 요청을 찾을 수 없음"));
+
+        if ("accept".equals(action)) {
+            Room room = joinRequest.getRoom();
+            User user = joinRequest.getUser();
+            room.getMembers().add(user);
+            roomRepository.save(room);
+        }
+
+        joinRequestRepository.delete(joinRequest);
+    }
 }
