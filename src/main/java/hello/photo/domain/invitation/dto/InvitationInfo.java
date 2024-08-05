@@ -3,18 +3,18 @@ package hello.photo.domain.invitation.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 public class InvitationInfo {
     private Long invitationId;
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
     private Long roomId;
     private String roomName;
     private String hostName;
 
-    public InvitationInfo(Long invitationId, LocalDateTime createdAt, Long roomId, String roomName, String hostName) {
+    public InvitationInfo(Long invitationId, OffsetDateTime createdAt, Long roomId, String roomName, String hostName) {
         this.invitationId = invitationId;
         this.createdAt = createdAt;
         this.roomId = roomId;
