@@ -1,7 +1,7 @@
 package hello.photo.domain.user.dto.response;
 
 import hello.photo.domain.invitation.dto.InvitationInfo;
-import hello.photo.domain.room.dto.RoomInfo;
+import hello.photo.domain.room.dto.Rooms;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,10 +11,10 @@ import java.util.List;
 @Setter
 public class MyPageResponse {
     private MyInfo myInfo;
-    private List<RoomInfo> rooms;
+    private List<Rooms> rooms;
     private List<InvitationInfo> invitations;
 
-    public MyPageResponse(MyInfo myInfo, List<RoomInfo> rooms, List<InvitationInfo> invitations) {
+    public MyPageResponse(MyInfo myInfo, List<Rooms> rooms, List<InvitationInfo> invitations) {
         this.myInfo = myInfo;
         this.rooms = rooms;
         this.invitations = invitations;
