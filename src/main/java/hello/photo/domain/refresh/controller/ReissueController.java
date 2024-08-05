@@ -23,12 +23,11 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name="AccessToken 재발급 요청 처리 API", description = "AccessToken이 더이상 유효하지 않을때 요청")
+@Tag(name="AccessToken 재발급 요청 API", description = "AccessToken이 더이상 유효하지 않을때 요청")
 public class ReissueController {
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
-
 
     @Operation(summary = "AccessToken 재발급", description = "유효하지 않은 AccessToken을 RefreshToken을 통해 재발급",
             parameters = {
