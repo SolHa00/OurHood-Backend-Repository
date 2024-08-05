@@ -7,14 +7,14 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class RoomInfo {
+public class Rooms {
     private Long roomId;
     private String roomName;
     private String hostName;
     private int numOfMembers;
     private LocalDateTime createdAt;
 
-    public RoomInfo(Long roomId, String roomName, String hostName, int numOfMembers, LocalDateTime createdAt) {
+    public Rooms(Long roomId, String roomName, String hostName, int numOfMembers, LocalDateTime createdAt) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.hostName = hostName;

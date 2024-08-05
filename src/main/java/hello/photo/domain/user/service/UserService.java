@@ -4,7 +4,7 @@ import hello.photo.domain.invitation.dto.InvitationInfo;
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
-import hello.photo.domain.room.dto.RoomInfo;
+import hello.photo.domain.room.dto.Rooms;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
 import hello.photo.domain.user.dto.response.MyPageResponse;
@@ -81,8 +81,8 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 유저 존재하지 않음"));
 
-        List<RoomInfo> hostedRooms = user.getHostedRooms().stream()
-                .map(room -> new RoomInfo(
+        List<Rooms> hostedRooms = user.getHostedRooms().stream()
+                .map(room -> new Rooms(
                         room.getId(),
                         room.getRoomName(),
                         room.getHost().getNickname(),
