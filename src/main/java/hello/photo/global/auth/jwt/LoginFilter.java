@@ -2,14 +2,11 @@ package hello.photo.global.auth.jwt;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
-import hello.photo.domain.user.dto.CustomUserDetails;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,14 +14,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     //클라에서 넘어온 JSON 데이터 얻기 위해 선언
     private final ObjectMapper objectMapper = new ObjectMapper();
-
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
@@ -34,14 +29,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshTokenRepository = refreshTokenRepository;
-        setFilterProcessesUrl("/api/login");
+    }
+
+    public LoginFilter(AuthenticationManager authenticationManager, AuthenticationManager authenticationManager1, JwtUtil jwtUtil, RefreshTokenRepository refreshTokenRepository) {
+        super(authenticationManager);
+        this.authenticationManager = authenticationManager1;
+        this.jwtUtil = jwtUtil;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            //클라 요청에서 email과 password 추출
             Map<String, String> authRequest = objectMapper.readValue(request.getInputStream(), new TypeReference<>() {});
+//            클라 요청에서 email과 password 추출
             String email = authRequest.get("email");
             String password = authRequest.get("password");
 
@@ -57,52 +58,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     //로그인 성공시 실행하는 메서드
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication){
-
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-
-        //유저 정보
-        String email = customUserDetails.getUsername();
-
-        //토큰 생성
-        String accessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 120L); //120분
-        String refreshToken = jwtUtil.createJwt("refreshToken", email, 1000 * 60 * 60 * 24 * 2L); //2일
-
-        addRefreshToken(email, refreshToken, 1000 * 60 * 60 * 24 * 2L);
-
-        //응답 설정
-        response.setHeader("accessToken", accessToken);
-        response.addCookie(createCookie("refreshToken", refreshToken));
-        response.setStatus(HttpStatus.OK.value());
-
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws ServletException, IOException {
+        //컨트롤러에서 해결
+        chain.doFilter(request,response);
     }
 
     //로그인 실패시 실행하는 메서드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
-    private void addRefreshToken(String email, String refresh, Long expiredMs) {
-
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
-        RefreshToken refreshEntity = new RefreshToken();
-        refreshEntity.setEmail(email);
-        refreshEntity.setRefresh(refresh);
-        refreshEntity.setExpiration(date.toString());
-
-        refreshTokenRepository.save(refreshEntity);
-    }
 }
