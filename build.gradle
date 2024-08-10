@@ -48,6 +48,8 @@ dependencies {
 	//MySQL Driver -> JPA와 MYSQL 접속용 라이브러리
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	//S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 
 }

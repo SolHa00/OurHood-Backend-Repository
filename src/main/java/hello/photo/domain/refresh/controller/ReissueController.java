@@ -2,7 +2,7 @@ package hello.photo.domain.refresh.controller;
 
 import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
-import hello.photo.global.auth.jwt.JwtUtil;
+import hello.photo.global.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

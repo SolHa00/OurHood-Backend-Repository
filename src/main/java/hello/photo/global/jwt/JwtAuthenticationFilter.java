@@ -1,4 +1,4 @@
-package hello.photo.global.auth.jwt;
+package hello.photo.global.jwt;
 
 import hello.photo.domain.user.dto.CustomUserDetails;
 import hello.photo.domain.user.entity.User;

@@ -1,4 +1,4 @@
-package hello.photo.global.auth.jwt;
+package hello.photo.global.jwt;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

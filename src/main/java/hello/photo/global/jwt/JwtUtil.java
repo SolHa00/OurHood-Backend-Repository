@@ -1,4 +1,4 @@
-package hello.photo.global.auth.jwt;
+package hello.photo.global.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

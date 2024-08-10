@@ -1,4 +1,4 @@
-package hello.photo.global.config;
+package hello.photo.global.config.swagger;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

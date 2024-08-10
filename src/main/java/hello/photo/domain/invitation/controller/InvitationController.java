@@ -19,8 +19,8 @@ public class InvitationController {
 
     @PostMapping
     @Operation(summary = "방 초대 요청 API")
-    public void createInvitation(@RequestBody InvitationRequest request) {
-        invitationService.createInvitation(request.getRoomId(), request.getNickname());
+    public ApiResponse createInvitation(@RequestBody InvitationRequest request) {
+        return invitationService.createInvitation(request.getRoomId(), request.getNickname());
     }
 
     @DeleteMapping("/{invitationId}")

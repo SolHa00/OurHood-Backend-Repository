@@ -1,10 +1,10 @@
-package hello.photo.global.auth;
+package hello.photo.global.config.web;
 
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
-import hello.photo.global.auth.jwt.CustomLogoutFilter;
-import hello.photo.global.auth.jwt.JwtAuthenticationFilter;
-import hello.photo.global.auth.jwt.JwtUtil;
-import hello.photo.global.auth.jwt.LoginFilter;
+import hello.photo.global.jwt.CustomLogoutFilter;
+import hello.photo.global.jwt.JwtAuthenticationFilter;
+import hello.photo.global.jwt.JwtUtil;
+import hello.photo.global.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 //경로별 인가 작업
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/signup", "/api/login","/error", "/swagger-ui/**", "/v3/api-docs/**", "/api/reissue").permitAll()
+                        .requestMatchers("/api/signup", "/api/login","/error", "/swagger-ui/**", "/v3/api-docs/**", "/api/reissue","/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 //세션을 stateless 상태로 관리

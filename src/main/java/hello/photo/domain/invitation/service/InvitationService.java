@@ -19,7 +19,7 @@ public class InvitationService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
-    public void createInvitation(Long roomId, String nickname) {
+    public ApiResponse createInvitation(Long roomId, String nickname) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("해당 Room 존재하지 않음"));
         User user = userRepository.findByNickname(nickname)
@@ -30,6 +30,8 @@ public class InvitationService {
         invitation.setUser(user);
 
         invitationRepository.save(invitation);
+
+        return new ApiResponse("초대 성공");
     }
 
 

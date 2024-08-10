@@ -11,7 +11,7 @@ import hello.photo.domain.user.dto.response.MyPageResponse;
 import hello.photo.domain.user.dto.response.UserLoginResponse;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.auth.jwt.JwtUtil;
+import hello.photo.global.jwt.JwtUtil;
 import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponse;
 import jakarta.servlet.http.Cookie;

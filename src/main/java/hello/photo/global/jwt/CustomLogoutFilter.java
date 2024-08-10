@@ -1,4 +1,4 @@
-package hello.photo.global.auth.jwt;
+package hello.photo.global.jwt;
 
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import io.jsonwebtoken.ExpiredJwtException;
