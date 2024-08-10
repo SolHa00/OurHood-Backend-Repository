@@ -25,18 +25,17 @@ public class FileUploadController {
     private String bucket;
 
     @PostMapping
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestParam("image") MultipartFile image) {
         try {
-            String fileName= file.getOriginalFilename();
-            String fileUrl= "http://" + bucket + "/test" +fileName;
-            ObjectMetadata metadata= new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
-            amazonS3Client.putObject(bucket,fileName,file.getInputStream(),metadata);
-            return ResponseEntity.ok(fileUrl);
+            String imageName = image.getOriginalFilename();
+            String imageUrl = "https://" + bucket + "/test" + imageName;
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(image.getContentType());
+            metadata.setContentLength(image.getSize());
+            amazonS3Client.putObject(bucket, imageName, image.getInputStream(), metadata);
+            return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
-
