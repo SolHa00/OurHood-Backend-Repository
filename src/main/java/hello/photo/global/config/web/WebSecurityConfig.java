@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 //경로별 인가 작업
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/signup", "/api/login","/error", "/swagger-ui/**", "/v3/api-docs/**", "/api/reissue","/**").permitAll()
+                        .requestMatchers("/api/signup", "/api/login","/error", "/swagger-ui/**", "/v3/api-docs/**", "/api/reissue").permitAll()
                         .anyRequest().authenticated()
                 )
                 //세션을 stateless 상태로 관리
