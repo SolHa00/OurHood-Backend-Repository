@@ -1,4 +1,4 @@
-package hello.photo.global.config.aws;
+package hello.photo.global.config.s3;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

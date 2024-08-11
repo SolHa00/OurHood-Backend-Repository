@@ -16,6 +16,10 @@ public class ApiResponse {
         return new ApiResponse(successCode.getMessage());
     }
 
+    public static ApiResponse onSuccess(String message) {
+        return new ApiResponse(message);
+    }
+
     public static ApiResponse onFailure(Code errorCode) {
         return new ApiResponse(errorCode.getMessage());
     }
