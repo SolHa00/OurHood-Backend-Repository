@@ -1,11 +1,13 @@
 package hello.photo.domain.moment.controller;
 
+import hello.photo.domain.moment.dto.MomentRequest;
 import hello.photo.domain.moment.service.MomentService;
 import hello.photo.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +22,8 @@ public class MomentController {
 
     @PostMapping
     @Operation(summary = "Moment 생성 API")
-    public ApiResponse createMoment(Long userId, MultipartFile momentImage, String momentDescription) {
-        return momentService.createMomentObject(userId, momentImage, momentDescription);
+    public ApiResponse createMoment(Long userId, MultipartFile momentImage, String momentDescription, Long roomId) {
+        return momentService.createMomentObject(userId, momentImage, momentDescription, roomId);
     }
 
 }
