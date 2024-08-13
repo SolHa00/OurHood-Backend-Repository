@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RoomResponse {
+public class RoomCreateResponse {
     private Long roomId;
 
-    public RoomResponse(Long roomId) {
+    public RoomCreateResponse(Long roomId) {
         this.roomId = roomId;
     }
 }

@@ -1,8 +1,8 @@
 package hello.photo.domain.room.dto.response;
 
+import hello.photo.domain.moment.dto.response.MomentEnterInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class RoomListResponse {
-    private List<RoomsMyPageInfo> rooms;
+public class RoomEnterInfo {
+    private List<String> members;
+    private List<MomentEnterInfo> moments;
 }

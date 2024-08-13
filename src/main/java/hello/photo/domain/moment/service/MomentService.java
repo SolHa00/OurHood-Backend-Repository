@@ -37,6 +37,6 @@ public class MomentService {
         moment.setRoom(room);
         momentRepository.save(moment);
 
-        return ApiResponse.onSuccess(imageUrl);
+        return ApiResponse.of(imageUrl);
     }
 }

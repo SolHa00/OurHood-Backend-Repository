@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RoomRequest {
+public class RoomCreateRequest {
     private String roomName;
     private String roomDescription;
     private Long userId;

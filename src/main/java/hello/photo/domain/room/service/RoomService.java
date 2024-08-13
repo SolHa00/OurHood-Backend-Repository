@@ -1,10 +1,8 @@
 package hello.photo.domain.room.service;
 
-import hello.photo.domain.room.dto.Rooms;
-import hello.photo.domain.room.dto.request.RoomRequest;
-import hello.photo.domain.room.dto.response.RoomDetailResponse;
-import hello.photo.domain.room.dto.response.RoomListResponse;
-import hello.photo.domain.room.dto.response.RoomResponse;
+import hello.photo.domain.moment.dto.response.MomentEnterInfo;
+import hello.photo.domain.room.dto.response.*;
+import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
@@ -28,9 +26,11 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
-    public RoomResponse createRoom(RoomRequest request) {
+    //방 생성
+    public DataResponse<RoomCreateResponse> createRoom(RoomCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저 존재하지 않음."));
+
         Room room = new Room();
         room.setRoomName(request.getRoomName());
         room.setRoomDescription(request.getRoomDescription());
@@ -38,23 +38,39 @@ public class RoomService {
         room.getMembers().add(user);
         room = roomRepository.save(room);
 
-        return new RoomResponse(room.getId());
+        RoomCreateResponse roomResponse = new RoomCreateResponse(room.getId());
+
+        return DataResponse.of(roomResponse, Code.OK.getMessage());
     }
 
-    public RoomDetailResponse getRoomDetails(Long roomId, Long userId) {
+    //특정 방 입장
+    public DataResponse<RoomDetailResponse> getRoomDetails(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("해당 Room 존재하지 않음"));
 
         boolean isMember = room.getMembers().stream().anyMatch(member -> member.getId().equals(userId));
 
-        // 해당 유저가 Room Member에 속한다면
-        if (isMember) {
+        List<String> members = room.getMembers().stream()
+                .map(User::getNickname)
+                .collect(Collectors.toList());
 
+        List<MomentEnterInfo> moments = room.getMoments().stream()
+                .map(moment -> new MomentEnterInfo(moment.getId(), moment.getImageUrl()))
+                .collect(Collectors.toList());
+
+        RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments);
+
+        RoomDetailResponse roomDetailResponse = new RoomDetailResponse(isMember, room.getId(), room.getRoomName(), room.getRoomDescription(), room.getHost().getNickname(), roomEnterInfo);
+
+        // 해당 유저가 Room Member에 등록되어 있다면?
+        if (isMember) {
+            return DataResponse.of(roomDetailResponse, Code.OK.getMessage());
         }
 
-        return new RoomDetailResponse(isMember, room.getId(), room.getRoomName(), room.getRoomDescription(), room.getHost().getNickname());
+        return DataResponse.of(null, "해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다.");
     }
 
+    //방 리스트 조회
     public DataResponse<RoomListResponse> getRooms(String order, int roomsPerPage, int page, String condition, String query) {
         Pageable pageable;
         if (order.equals("date_desc")) {
@@ -78,8 +94,8 @@ public class RoomService {
             roomsPage = roomRepository.findAll(pageable);
         }
 
-        List<Rooms> rooms = roomsPage.getContent().stream()
-                .map(room -> new Rooms(
+        List<RoomsMyPageInfo> rooms = roomsPage.getContent().stream()
+                .map(room -> new RoomsMyPageInfo(
                         room.getId(),
                         room.getRoomName(),
                         room.getHost().getNickname(),
@@ -87,11 +103,9 @@ public class RoomService {
                         room.getCreatedAt()))
                 .collect(Collectors.toList());
 
-        RoomListResponse roomListResponse = new RoomListResponse(
-                rooms
-        );
+        RoomListResponse roomListResponse = new RoomListResponse(rooms);
 
-        return DataResponse.onSuccess(roomListResponse, Code.OK.getMessage());
+        return DataResponse.of(roomListResponse, Code.OK.getMessage());
     }
 
 }

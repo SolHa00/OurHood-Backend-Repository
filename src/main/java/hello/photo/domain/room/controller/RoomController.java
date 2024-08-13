@@ -1,10 +1,10 @@
 package hello.photo.domain.room.controller;
 
 import hello.photo.domain.room.dto.request.RoomDetailRequest;
-import hello.photo.domain.room.dto.request.RoomRequest;
+import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.RoomDetailResponse;
 import hello.photo.domain.room.dto.response.RoomListResponse;
-import hello.photo.domain.room.dto.response.RoomResponse;
+import hello.photo.domain.room.dto.response.RoomCreateResponse;
 import hello.photo.domain.room.service.RoomService;
 import hello.photo.global.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ public class RoomController {
 
     @PostMapping
     @Operation(summary = "방 생성")
-    public RoomResponse createRoom(@RequestBody RoomRequest request) {
+    public DataResponse<RoomCreateResponse> createRoom(@RequestBody RoomCreateRequest request) {
         return roomService.createRoom(request);
     }
 
@@ -33,8 +33,8 @@ public class RoomController {
     }
 
     @PostMapping("/{roomId}")
-    @Operation(summary = "특정 방 입장", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로..")
-    public RoomDetailResponse getRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
+    @Operation(summary = "특정 방 입장", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로 이동")
+    public DataResponse<RoomDetailResponse> getRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
         return roomService.getRoomDetails(roomId, request.getUserId());
     }
 

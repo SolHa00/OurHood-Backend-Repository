@@ -32,7 +32,7 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     @Operation(summary = "마이페이지 조회")
-    public MyPageResponse getMyPage(@PathVariable Long userId){
+    public DataResponse<MyPageResponse> getMyPage(@PathVariable Long userId){
         return userService.getMyPage(userId);
     }
 }

@@ -1,4 +1,4 @@
-package hello.photo.domain.invitation.dto;
+package hello.photo.domain.invitation.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
