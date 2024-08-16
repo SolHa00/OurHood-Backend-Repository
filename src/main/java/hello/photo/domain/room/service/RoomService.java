@@ -7,8 +7,10 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
+import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
-import hello.photo.global.response.DataResponse;
+import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.response.ErrorResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +29,7 @@ public class RoomService {
     private final UserRepository userRepository;
 
     //방 생성
-    public DataResponse<RoomCreateResponse> createRoom(RoomCreateRequest request) {
+    public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저 존재하지 않음."));
 
@@ -40,15 +42,19 @@ public class RoomService {
 
         RoomCreateResponse roomResponse = new RoomCreateResponse(room.getId());
 
-        return DataResponse.of(roomResponse, Code.OK.getMessage());
+        return DataResponseDto.of(roomResponse, Code.OK.getMessage());
     }
 
     //특정 방 입장
-    public DataResponse<RoomDetailResponse> getRoomDetails(Long roomId, Long userId) {
+    public ApiResponse getRoomDetails(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("해당 Room 존재하지 않음"));
 
         boolean isMember = room.getMembers().stream().anyMatch(member -> member.getId().equals(userId));
+
+        if (!isMember) {
+            return ErrorResponseDto.of(Code.UNAUTHORIZED, "해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다.");
+        }
 
         List<String> members = room.getMembers().stream()
                 .map(User::getNickname)
@@ -62,16 +68,14 @@ public class RoomService {
 
         RoomDetailResponse roomDetailResponse = new RoomDetailResponse(isMember, room.getId(), room.getRoomName(), room.getRoomDescription(), room.getHost().getNickname(), roomEnterInfo);
 
-        // 해당 유저가 Room Member에 등록되어 있다면?
-        if (isMember) {
-            return DataResponse.of(roomDetailResponse, Code.OK.getMessage());
-        }
+        return DataResponseDto.of(roomDetailResponse, Code.OK.getMessage());
 
-        return DataResponse.of(null, "해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다.");
+
+//        return ErrorResponseDto.of("해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다.");
     }
 
     //방 리스트 조회
-    public DataResponse<RoomListResponse> getRooms(String order, int roomsPerPage, int page, String condition, String query) {
+    public DataResponseDto<RoomListResponse> getRooms(String order, int roomsPerPage, int page, String condition, String query) {
         Pageable pageable;
         if (order.equals("date_desc")) {
             pageable = PageRequest.of(page - 1, roomsPerPage, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -105,7 +109,7 @@ public class RoomService {
 
         RoomListResponse roomListResponse = new RoomListResponse(rooms);
 
-        return DataResponse.of(roomListResponse, Code.OK.getMessage());
+        return DataResponseDto.of(roomListResponse, Code.OK.getMessage());
     }
 
 }

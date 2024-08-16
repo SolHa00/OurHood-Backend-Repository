@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     //클라에서 넘어온 JSON 데이터 얻기 위해 선언
@@ -42,7 +44,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             Map<String, String> authRequest = objectMapper.readValue(request.getInputStream(), new TypeReference<>() {});
-//            클라 요청에서 email과 password 추출
+            //클라 요청에서 email과 password 추출
             String email = authRequest.get("email");
             String password = authRequest.get("password");
 
@@ -52,6 +54,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             //token에 담은 유저 데이터를 검증하기 위해 AuthenticationManager로 전달
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
+            log.info("LoginFilter Log");
             throw new RuntimeException(e);
         }
     }

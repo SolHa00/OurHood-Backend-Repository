@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 @Getter
 @RequiredArgsConstructor
 public enum Code {
@@ -19,4 +22,16 @@ public enum Code {
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
+
+
+    public String getMessage(Throwable throwable) {
+        return this.getMessage(this.getMessage(this.getMessage() + " - " + throwable.getMessage()));
+    }
+
+    //전달받은 예외의 message가 존재할 경우 해당 message를 반환, 없을 경우 필드 값 message를 반환
+    public String getMessage(String message) {
+        return Optional.ofNullable(message)
+                .filter(Predicate.not(String::isBlank))
+                .orElse(this.getMessage());
+    }
 }
