@@ -7,6 +7,7 @@ import hello.photo.domain.join.dto.response.JoinResponseDto;
 import hello.photo.domain.join.repository.JoinRequestRepository;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.repository.UserRepository;
+import hello.photo.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,9 @@ public class JoinRequestService {
 
     public void createJoinRequest(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 방을 찾을 수 없음"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저 찾을 수 없음"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
 
         JoinRequest joinRequest = new JoinRequest();
         joinRequest.setRoom(room);
@@ -35,7 +36,7 @@ public class JoinRequestService {
 
     public List<JoinResponseDto.JoinRequesDetail> getJoinRequests(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("해당 방 존재하지 않음"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
 
         return joinRequestRepository.findByRoom(room).stream()
                 .map(joinRequest -> new JoinResponseDto.JoinRequesDetail(
@@ -45,7 +46,7 @@ public class JoinRequestService {
 
     public void handleJoinRequest(Long joinRequestId, String action) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 참여 요청을 찾을 수 없음"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 참여 요청을 찾을 수 없습니다"));
 
         if ("accept".equals(action)) {
             Room room = joinRequest.getRoom();

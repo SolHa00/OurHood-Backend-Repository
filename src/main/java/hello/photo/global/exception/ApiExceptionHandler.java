@@ -20,13 +20,19 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorResponseDto> handlerEntityNotFoundException(EntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDto.of(e.getMessage(), e.getClass().getSimpleName()));
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponseDto.of(e.getMessage(), e.getClass().getSimpleName()));
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponseDto> general(GeneralException e) {
+    public ResponseEntity<ErrorResponseDto> handleGeneralException(GeneralException e) {
         Code errorCode = e.getErrorCode();
         HttpStatus status = errorCode.getHttpStatus();
 
@@ -38,16 +44,14 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ApiResponse> general(RuntimeException e) {
+    public ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.of("RuntimeException 발생"
-                ));
+                .body(ApiResponse.of("RuntimeException 발생"));
     }
 
     @ExceptionHandler
-    public ResponseEntity<ApiResponse> exception(Exception e) {
-        return ResponseEntity.status(500)
+    public ResponseEntity<ApiResponse> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.of("Exception 발생"));
     }
-
 }

@@ -6,10 +6,10 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
+import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,9 +24,9 @@ public class MomentService {
 
     public ApiResponse createMomentObject(Long userId, MultipartFile image, String description, Long roomId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("해당 방 없음"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
 
         String imageUrl = s3FileService.uploadFile(image);
 

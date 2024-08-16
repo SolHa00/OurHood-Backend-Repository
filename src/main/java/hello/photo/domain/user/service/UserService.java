@@ -11,10 +11,12 @@ import hello.photo.domain.user.dto.response.MyPageResponse;
 import hello.photo.domain.user.dto.response.UserLoginResponse;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
+import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.jwt.JwtUtil;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.response.ErrorResponseDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +42,13 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public ApiResponse signup(UserSignupRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
-        }
         if (userRepository.existsByNickname(request.getNickname())) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
+
         User user = User.builder()
                 .nickname(request.getNickname())
                 .email(request.getEmail())
@@ -59,7 +62,7 @@ public class UserService {
         UserDetails userData = customUserDetailsService.loadUserByUsername(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), userData.getPassword())) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return ApiResponse.of("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+            return ErrorResponseDto.of("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.", "BadCredentialsException");
         }
 
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
@@ -81,7 +84,7 @@ public class UserService {
 
     public DataResponseDto<MyPageResponse> getMyPage(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 유저 존재하지 않음"));
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
 
         List<RoomsMyPageInfo> hostedRooms = user.getHostedRooms().stream()
                 .map(room -> new RoomsMyPageInfo(
