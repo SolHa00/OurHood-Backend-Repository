@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,12 +43,19 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public ApiResponse signup(UserSignupRequest request) {
+        List<String> errors = new ArrayList<>();
+
         if (userRepository.existsByNickname(request.getNickname())) {
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+            errors.add("이미 사용 중인 닉네임입니다");
         }
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+            errors.add("이미 사용 중인 이메일입니다");
         }
+
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException(String.join(", ", errors));
+        }
+
 
         User user = User.builder()
                 .nickname(request.getNickname())
