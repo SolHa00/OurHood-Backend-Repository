@@ -16,7 +16,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ErrorResponseDto.of(Code.UNAUTHORIZED, e.getClass().getSimpleName()));
+                .body(ErrorResponseDto.of(e.getMessage(), e.getClass().getSimpleName()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ErrorResponseDto.of(e.getMessage(), e.getClass().getSimpleName()));
     }
 
     @ExceptionHandler

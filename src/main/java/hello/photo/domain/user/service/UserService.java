@@ -43,6 +43,9 @@ public class UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
+        if (userRepository.existsByNickname(request.getNickname())) {
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+        }
         User user = User.builder()
                 .nickname(request.getNickname())
                 .email(request.getEmail())

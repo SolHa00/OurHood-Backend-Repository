@@ -19,6 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .map(CustomUserDetails::new)
-                .orElseThrow(() -> new UserNotFoundException("해당 회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 회원입니다."));
     }
 }
