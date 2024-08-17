@@ -57,7 +57,7 @@ public class RoomService {
 
         if (!isMember) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ErrorResponseDto.of(Code.UNAUTHORIZED, "해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다."));
+                    .body(ErrorResponseDto.of("해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다.", "Unauthorized" ));
         }
 
         List<String> members = room.getMembers().stream()
