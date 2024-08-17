@@ -6,6 +6,7 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
+import hello.photo.global.exception.DuplicateRequestException;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
 import jakarta.transaction.Transactional;
@@ -26,13 +27,19 @@ public class InvitationService {
         User user = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
 
+        //이미 초대된 사용자인지 확인
+        boolean invitationExists = invitationRepository.existsByRoomAndUser(room, user);
+        if (invitationExists) {
+            throw new DuplicateRequestException("이미 이 방에 초대된 사용자입니다");
+        }
+
         Invitation invitation = new Invitation();
         invitation.setRoom(room);
         invitation.setUser(user);
 
         invitationRepository.save(invitation);
 
-        return new ApiResponse("초대 성공");
+        return new ApiResponse("ok");
     }
 
 
@@ -45,8 +52,10 @@ public class InvitationService {
             User user = invitation.getUser();
             room.getMembers().add(user);
             roomRepository.save(room);
+            invitationRepository.delete(invitation);
+            return new ApiResponse("초대 요청을 승인 했습니다.");
         }
         invitationRepository.delete(invitation);
-        return new ApiResponse("초대 요청을 " + action + " 했습니다.");
+        return new ApiResponse("초대 요청을 거절 했습니다.");
     }
 }

@@ -38,7 +38,7 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(status)
                 .body(ErrorResponseDto.of(
-                        errorCode,
+                        e.getMessage(),
                         e.getClass().getSimpleName()
                 ));
     }

@@ -17,7 +17,7 @@ public enum Code {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "401", "인증 실패"),
     FORBIDDEN(HttpStatus.FORBIDDEN, "403", "접근 권한이 없음"),
     NOT_FOUND(HttpStatus.NOT_FOUND, "404", "Not Found"),
-    DUPLICATED(HttpStatus.CONFLICT, "409", "중복"),
+    DUPLICATED(HttpStatus.CONFLICT, "409", "Conflict"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "서버 에러");
 
 
@@ -36,4 +36,4 @@ public enum Code {
                 .filter(Predicate.not(String::isBlank))
                 .orElse(this.getMessage());
     }
-    }
+}

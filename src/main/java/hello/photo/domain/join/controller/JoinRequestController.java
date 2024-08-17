@@ -8,7 +8,6 @@ import hello.photo.global.response.DataResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,9 +33,7 @@ public class JoinRequestController {
     //방 참여 요청 처리
     @DeleteMapping("/{joinRequestId}")
     @Operation(summary = "방 참여 요청 처리")
-    public ApiResponse handleJoinRequest(
-            @PathVariable Long joinRequestId,
-            @RequestParam String action) {
+    public ApiResponse handleJoinRequest(@PathVariable Long joinRequestId, @RequestParam String action) {
         return joinRequestService.handleJoinRequest(joinRequestId, action);
     }
 }

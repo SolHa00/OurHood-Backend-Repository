@@ -34,7 +34,7 @@ public class GeneralException extends RuntimeException{
     }
 
     public GeneralException(Code errorCode, String message) {
-        super(errorCode.getMessage(message));
+        super(message);
         this.errorCode = errorCode;
     }
 
