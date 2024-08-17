@@ -3,13 +3,13 @@ package hello.photo.domain.join.controller;
 import hello.photo.domain.join.dto.request.JoinRequestDto;
 import hello.photo.domain.join.dto.response.JoinResponseDto;
 import hello.photo.domain.join.service.JoinRequestService;
+import hello.photo.global.response.ApiResponse;
+import hello.photo.global.response.DataResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,26 +21,22 @@ public class JoinRequestController {
 
     @PostMapping
     @Operation(summary = "방 참여 요청")
-    public void joinRequest(@RequestBody JoinRequestDto request) {
-        joinRequestService.createJoinRequest(request.getRoomId(), request.getUserId());
+    public ApiResponse joinRequest(@RequestBody JoinRequestDto request) {
+        return joinRequestService.createJoinRequest(request.getRoomId(), request.getUserId());
     }
 
     @GetMapping("/{roomId}")
     @Operation(summary = "방 참여 요청 목록")
-    public JoinResponseDto getJoinRequestList(@PathVariable Long roomId) {
-        List<JoinResponseDto.JoinRequesDetail> joinList = joinRequestService.getJoinRequests(roomId);
-        JoinResponseDto response = new JoinResponseDto();
-        response.setJoinList(joinList);
-        return response;
+    public DataResponseDto<JoinResponseDto> getJoinRequestList(@PathVariable Long roomId) {
+        return joinRequestService.getJoinRequests(roomId);
     }
 
     //방 참여 요청 처리
     @DeleteMapping("/{joinRequestId}")
     @Operation(summary = "방 참여 요청 처리")
-    public ResponseEntity<Void> handleJoinRequest(
+    public ApiResponse handleJoinRequest(
             @PathVariable Long joinRequestId,
             @RequestParam String action) {
-        joinRequestService.handleJoinRequest(joinRequestId, action);
-        return ResponseEntity.noContent().build();
+        return joinRequestService.handleJoinRequest(joinRequestId, action);
     }
 }
