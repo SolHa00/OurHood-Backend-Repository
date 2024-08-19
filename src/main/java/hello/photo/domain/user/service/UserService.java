@@ -7,6 +7,7 @@ import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import hello.photo.domain.room.dto.response.RoomsMyPageInfo;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
+import hello.photo.domain.user.dto.response.MyInfo;
 import hello.photo.domain.user.dto.response.MyPageResponse;
 import hello.photo.domain.user.dto.response.UserLoginResponse;
 import hello.photo.domain.user.entity.User;
@@ -112,7 +113,8 @@ public class UserService {
                         invitation.getRoom().getHost().getNickname()))
                 .collect(Collectors.toList());
 
-        MyPageResponse myPageResponse = new MyPageResponse(new MyPageResponse.MyInfo(user.getNickname(), user.getEmail()), hostedRooms, invitations);
+        MyInfo myInfo = new MyInfo(user.getNickname(), user.getEmail());
+        MyPageResponse myPageResponse = new MyPageResponse(myInfo, hostedRooms, invitations);
 
         return DataResponseDto.of(myPageResponse);
     }
