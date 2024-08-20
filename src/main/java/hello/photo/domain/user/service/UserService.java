@@ -9,6 +9,7 @@ import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
 import hello.photo.domain.user.dto.response.MyInfo;
 import hello.photo.domain.user.dto.response.MyPageResponse;
+import hello.photo.domain.user.dto.response.UserLoginInfo;
 import hello.photo.domain.user.dto.response.UserLoginResponse;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
@@ -86,7 +87,12 @@ public class UserService {
         response.setHeader("accessToken", accessToken);
         response.addCookie(createCookie("refreshToken", refreshToken));
 
-        UserLoginResponse userLoginResponse = new UserLoginResponse(user.getId(), user.getEmail(), user.getNickname());
+        UserLoginInfo userLoginInfo = new UserLoginInfo();
+        userLoginInfo.setUserId(user.getId());
+        userLoginInfo.setEmail(user.getEmail());
+        userLoginInfo.setNickname(user.getNickname());
+        UserLoginResponse userLoginResponse = new UserLoginResponse(userLoginInfo);
+
         return DataResponseDto.of(userLoginResponse, Code.OK.getMessage());
 
     }
