@@ -9,10 +9,12 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class RoomsMyPageInfo {
+public class RoomListInfo {
     private Long roomId;
     private String roomName;
     private String hostName;
     private int numOfMembers;
     private OffsetDateTime createdAt;
+    private String thumbnail;
 }
+

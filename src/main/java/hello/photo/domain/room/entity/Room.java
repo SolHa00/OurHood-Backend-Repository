@@ -31,6 +31,9 @@ public class Room {
     @OneToMany(mappedBy = "room")
     private List<Moment> moments;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private Thumbnail thumbnail;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = OffsetDateTime.now();

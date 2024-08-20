@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomListResponse {
-    private List<RoomsMyPageInfo> rooms;
+    private List<RoomListInfo> rooms;
 }

@@ -6,8 +6,8 @@ import hello.photo.domain.room.dto.response.*;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.entity.Thumbnail;
 import hello.photo.domain.room.repository.RoomRepository;
+import hello.photo.domain.room.repository.ThumbnailRepository;
 import hello.photo.domain.user.entity.User;
-import hello.photo.domain.user.repository.ThumbnailRepository;
 import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,7 +92,7 @@ public class RoomService {
     }
 
     //방 리스트 조회
-    public DataResponseDto<RoomListResponse> getRooms(String order, int roomsPerPage, int page, String condition, String query) {
+    public DataResponseDto<RoomListResponse> getRooms(String order, int roomsPerPage, int page, String condition, String q) {
         Pageable pageable;
         if (order.equals("date_desc")) {
             pageable = PageRequest.of(page - 1, roomsPerPage, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -102,11 +103,11 @@ public class RoomService {
         }
 
         Page<Room> roomsPage;
-        if (query != null && !query.isEmpty()) {
+        if (q != null && !q.isEmpty()) {
             if ("room".equals(condition)) {
-                roomsPage = roomRepository.findByRoomNameContaining(query, pageable);
+                roomsPage = roomRepository.findByRoomNameContaining(q, pageable);
             } else if ("host".equals(condition)) {
-                roomsPage = roomRepository.findByHostNicknameContaining(query, pageable);
+                roomsPage = roomRepository.findByHostNicknameContaining(q, pageable);
             } else {
                 roomsPage = roomRepository.findAll(pageable);
             }
@@ -114,18 +115,27 @@ public class RoomService {
             roomsPage = roomRepository.findAll(pageable);
         }
 
-        List<RoomsMyPageInfo> rooms = roomsPage.getContent().stream()
-                .map(room -> new RoomsMyPageInfo(
-                        room.getId(),
-                        room.getRoomName(),
-                        room.getHost().getNickname(),
-                        room.getMembers().size(),
-                        room.getCreatedAt()))
-                .collect(Collectors.toList());
+        List<RoomListInfo> rooms = roomsPage.getContent().stream()
+                .map(room -> {
+                    // 썸네일 URL 가져오기
+                    String thumbnailUrl = null;
+                    Optional<Thumbnail> thumbnail = thumbnailRepository.findByRoom(room);
+                    if (thumbnail.isPresent()) {
+                        thumbnailUrl = thumbnail.get().getThumbnailUrl();
+                    }
 
+                    return new RoomListInfo(
+                            room.getId(),
+                            room.getRoomName(),
+                            room.getHost().getNickname(),
+                            room.getMembers().size(),
+                            room.getCreatedAt(),
+                            thumbnailUrl  // 썸네일 URL 추가
+                    );
+                })
+                .collect(Collectors.toList());
         RoomListResponse roomListResponse = new RoomListResponse(rooms);
 
         return DataResponseDto.of(roomListResponse, Code.OK.getMessage());
     }
-
 }
