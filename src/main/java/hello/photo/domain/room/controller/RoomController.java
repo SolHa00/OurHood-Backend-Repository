@@ -23,7 +23,7 @@ public class RoomController {
 
     @PostMapping
     @Operation(summary = "방 생성")
-    public DataResponseDto<RoomCreateResponse> createRoom(@RequestBody RoomCreateRequest request) {
+    public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
         return roomService.createRoom(request);
     }
 

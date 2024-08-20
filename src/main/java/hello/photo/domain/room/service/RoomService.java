@@ -4,14 +4,17 @@ import hello.photo.domain.moment.dto.response.MomentEnterInfo;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.*;
 import hello.photo.domain.room.entity.Room;
+import hello.photo.domain.room.entity.Thumbnail;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
+import hello.photo.domain.user.repository.ThumbnailRepository;
 import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
 import hello.photo.global.response.ErrorResponseDto;
+import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +34,8 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final S3FileService s3FileService;
+    private final ThumbnailRepository thumbnailRepository;
 
     //방 생성
     public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
@@ -43,7 +49,16 @@ public class RoomService {
         room.getMembers().add(user);
         room = roomRepository.save(room);
 
-        RoomCreateResponse roomResponse = new RoomCreateResponse(room.getId());
+        MultipartFile thumbnail = request.getThumbnail();
+        String imageUrl = s3FileService.uploadFile(thumbnail);
+
+        Thumbnail thumbnailImage = new Thumbnail();
+        thumbnailImage.setThumbnailUrl(imageUrl);
+        thumbnailImage.setUser(user);
+        thumbnailImage.setRoom(room);
+        thumbnailRepository.save(thumbnailImage);
+
+        RoomCreateResponse roomResponse = new RoomCreateResponse(room.getId(), imageUrl);
 
         return DataResponseDto.of(roomResponse, Code.OK.getMessage());
     }
