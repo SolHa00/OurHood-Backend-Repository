@@ -8,6 +8,7 @@ import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
+import hello.photo.global.response.DataResponseDto;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,6 @@ public class MomentService {
         moment.setRoom(room);
         momentRepository.save(moment);
 
-        return ApiResponse.of(imageUrl);
+        return DataResponseDto.of(imageUrl);
     }
 }

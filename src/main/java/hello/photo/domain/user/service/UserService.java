@@ -65,7 +65,7 @@ public class UserService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         userRepository.save(user);
-        return ApiResponse.of("ok");
+        return ApiResponse.of(Code.OK.getMessage());
     }
 
     public ApiResponse login(UserLoginRequest request, HttpServletResponse response) {

@@ -31,12 +31,11 @@ public class Room {
     @OneToMany(mappedBy = "room")
     private List<Moment> moments;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Thumbnail thumbnail;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = OffsetDateTime.now();
     }
-
 }

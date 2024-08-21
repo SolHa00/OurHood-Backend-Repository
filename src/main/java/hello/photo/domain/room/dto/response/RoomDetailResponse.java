@@ -16,4 +16,5 @@ public class RoomDetailResponse {
     private String roomDescription;
     private String hostName;
     private RoomEnterInfo roomDetail;
+    private String thumbnail;
 }

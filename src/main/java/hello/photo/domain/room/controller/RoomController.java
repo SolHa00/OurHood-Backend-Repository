@@ -10,7 +10,6 @@ import hello.photo.global.response.DataResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,7 +34,7 @@ public class RoomController {
 
     @PostMapping("/{roomId}")
     @Operation(summary = "특정 방 입장", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로 이동")
-    public ResponseEntity<ApiResponse> getRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
+    public ApiResponse getRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
         return roomService.getRoomDetails(roomId, request.getUserId());
     }
 }

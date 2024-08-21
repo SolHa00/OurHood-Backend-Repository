@@ -18,6 +18,6 @@ public class Thumbnail {
     @ManyToOne
     private User user;
 
-    @ManyToOne
+    @OneToOne
     private Room room;
 }
