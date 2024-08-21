@@ -134,7 +134,9 @@ public class RoomService {
                     );
                 })
                 .collect(Collectors.toList());
-        RoomListResponse roomListResponse = new RoomListResponse(rooms);
+        Long totalPages = (long) Math.ceil((double) roomsPage.getTotalElements() / roomsPerPage);
+
+        RoomListResponse roomListResponse = new RoomListResponse(totalPages, rooms);
 
         return DataResponseDto.of(roomListResponse, Code.OK.getMessage());
     }
