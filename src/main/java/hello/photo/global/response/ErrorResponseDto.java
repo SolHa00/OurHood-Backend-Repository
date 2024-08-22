@@ -29,5 +29,4 @@ public class ErrorResponseDto extends ApiResponse {
     public static ErrorResponseDto of(String message, String type) {
         return new ErrorResponseDto(message, ErrorDetail.of(type));
     }
-
 }

@@ -149,7 +149,15 @@ public class RoomService {
 
         RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments);
 
-        RoomDetailResponse roomDetailResponse = new RoomDetailResponse(isMember, room.getId(), room.getRoomName(), room.getRoomDescription(), room.getHost().getNickname(), roomEnterInfo, thumbnailUrl);
+        RoomDetailResponse roomDetailResponse = new RoomDetailResponse(
+                isMember,
+                room.getId(),
+                room.getRoomName(),
+                room.getRoomDescription(),
+                room.getHost().getNickname(),
+                roomEnterInfo,
+                thumbnailUrl
+        );
 
         return DataResponseDto.of(roomDetailResponse, Code.OK.getMessage());
     }

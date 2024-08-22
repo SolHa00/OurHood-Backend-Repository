@@ -33,7 +33,7 @@ public class JoinRequestController {
     //방 참여 요청 처리
     @DeleteMapping("/{joinRequestId}")
     @Operation(summary = "방 참여 요청 처리")
-    public ApiResponse handleJoinRequest(@PathVariable Long joinRequestId, @RequestParam String action) {
+    public ApiResponse handleJoinRequest(@PathVariable Long joinRequestId, String action) {
         return joinRequestService.handleJoinRequest(joinRequestId, action);
     }
 }

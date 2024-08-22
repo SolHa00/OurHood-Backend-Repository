@@ -9,6 +9,7 @@ import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.DuplicateRequestException;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
+import hello.photo.global.response.Code;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class InvitationService {
 
         invitationRepository.save(invitation);
 
-        return new ApiResponse("ok");
+        return new ApiResponse(Code.OK.getMessage());
     }
 
 
@@ -47,15 +48,15 @@ public class InvitationService {
     public ApiResponse handleInviteRequest(Long invitationId, String action) {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 초대 요청을 찾을 수 없습니다"));
-        if("accept".equalsIgnoreCase(action)) {
+        if("accept".equals(action)) {
             Room room = invitation.getRoom();
             User user = invitation.getUser();
             room.getMembers().add(user);
             roomRepository.save(room);
             invitationRepository.delete(invitation);
-            return new ApiResponse("초대 요청을 승인 했습니다.");
+            return new ApiResponse("초대 요청을 승인 했습니다");
         }
         invitationRepository.delete(invitation);
-        return new ApiResponse("초대 요청을 거절 했습니다.");
+        return new ApiResponse("초대 요청을 거절 했습니다");
     }
 }

@@ -71,5 +71,4 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
-
 }

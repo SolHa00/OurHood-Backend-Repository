@@ -61,5 +61,4 @@ public class S3FileService {
     public void deleteFile(String fileName) {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
-
 }
