@@ -1,6 +1,6 @@
 package hello.photo.domain.room.service;
 
-import hello.photo.domain.moment.dto.response.MomentEnterInfo;
+import hello.photo.domain.room.dto.response.MomentEnterInfo;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.*;
 import hello.photo.domain.room.entity.Room;

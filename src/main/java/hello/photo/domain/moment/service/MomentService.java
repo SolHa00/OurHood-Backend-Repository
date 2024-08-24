@@ -1,5 +1,7 @@
 package hello.photo.domain.moment.service;
 
+import hello.photo.domain.moment.dto.request.MomentCreateRequest;
+import hello.photo.domain.moment.dto.response.MomentCreateResponse;
 import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.moment.repository.MomentRepository;
 import hello.photo.domain.room.entity.Room;
@@ -12,7 +14,6 @@ import hello.photo.global.response.DataResponseDto;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -23,21 +24,23 @@ public class MomentService {
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
 
-    public ApiResponse createMomentObject(Long userId, MultipartFile image, String description, Long roomId) {
-        User user = userRepository.findById(userId)
+    public ApiResponse createMomentObject(MomentCreateRequest request) {
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
-        Room room = roomRepository.findById(roomId)
+        Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
 
-        String imageUrl = s3FileService.uploadFile(image);
+        String imageUrl = s3FileService.uploadFile(request.getMomentImage());
 
         Moment moment = new Moment();
         moment.setImageUrl(imageUrl);
-        moment.setMomentDescription(description);
+        moment.setMomentDescription(request.getMomentDescription());
         moment.setUser(user);
         moment.setRoom(room);
         momentRepository.save(moment);
 
-        return DataResponseDto.of(imageUrl);
+        MomentCreateResponse momentCreateResponse = new MomentCreateResponse(moment.getId(), imageUrl);
+
+        return DataResponseDto.of(momentCreateResponse);
     }
 }

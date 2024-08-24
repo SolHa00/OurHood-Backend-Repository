@@ -1,5 +1,6 @@
 package hello.photo.domain.moment.controller;
 
+import hello.photo.domain.moment.dto.request.MomentCreateRequest;
 import hello.photo.domain.moment.service.MomentService;
 import hello.photo.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +21,8 @@ public class MomentController {
     //roomId도 requestBody로
     @PostMapping
     @Operation(summary = "Moment 생성 API")
-    public ApiResponse createMoment(Long userId, MultipartFile momentImage, String momentDescription, Long roomId) {
-        return momentService.createMomentObject(userId, momentImage, momentDescription, roomId);
+    public ApiResponse createMoment(MomentCreateRequest request) {
+        return momentService.createMomentObject(request);
     }
 
 }

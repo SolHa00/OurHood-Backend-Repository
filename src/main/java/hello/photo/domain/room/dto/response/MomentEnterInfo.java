@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class RoomEnterInfo {
-    private List<String> members;
-    private List<MomentEnterInfo> moments;
+public class MomentEnterInfo {
+    private Long momentId;
+    private String imageUrl;
 }

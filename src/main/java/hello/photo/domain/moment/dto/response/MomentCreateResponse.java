@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MomentEnterInfo {
+public class MomentCreateResponse {
     private Long momentId;
     private String imageUrl;
 }
