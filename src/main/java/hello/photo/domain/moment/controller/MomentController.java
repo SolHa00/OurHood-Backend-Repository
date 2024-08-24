@@ -6,9 +6,7 @@ import hello.photo.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +21,12 @@ public class MomentController {
     @Operation(summary = "Moment 생성 API")
     public ApiResponse createMoment(MomentCreateRequest request) {
         return momentService.createMomentObject(request);
+    }
+
+    @GetMapping("/{momentId}")
+    @Operation(summary = "특정 Moment 조회")
+    public ApiResponse getMoment(@PathVariable Long momentId) {
+        return momentService.getMomentObject(momentId);
     }
 
 }

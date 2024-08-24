@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -16,9 +18,11 @@ public class Comment {
 
     private String content;
 
+    private OffsetDateTime createdAt;
+
     @ManyToOne
     private Moment moment;
 
     @ManyToOne
-    private User commenter;
+    private User user;
 }

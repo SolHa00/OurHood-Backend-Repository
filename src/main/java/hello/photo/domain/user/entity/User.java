@@ -31,7 +31,7 @@ public class User {
     @ManyToMany(mappedBy = "members")
     private List<Room> rooms;
 
-    @OneToMany(mappedBy = "commenter")
+    @OneToMany(mappedBy = "user")
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "user")

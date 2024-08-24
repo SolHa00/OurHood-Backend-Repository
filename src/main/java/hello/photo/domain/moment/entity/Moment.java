@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,8 @@ public class Moment {
 
     private String momentDescription;
 
+    private OffsetDateTime createdAt;
+
     @ManyToOne
     private User user;
 
@@ -29,4 +32,9 @@ public class Moment {
 
     @OneToMany(mappedBy = "moment")
     private List<Comment> comments;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = OffsetDateTime.now();
+    }
 }
