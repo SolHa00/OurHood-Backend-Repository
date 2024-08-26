@@ -63,6 +63,7 @@ public class MomentService {
         OffsetDateTime createdAt = moment.getCreatedAt();
         List<CommentResponse> comments = commentRepository.findByMoment(moment).stream()
                 .map(comment -> new CommentResponse(
+                        comment.getId(),
                         comment.getUser().getNickname(),
                         comment.getContent(),
                         comment.getCreatedAt()))

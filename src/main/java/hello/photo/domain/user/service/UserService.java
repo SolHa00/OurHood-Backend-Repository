@@ -79,7 +79,7 @@ public class UserService {
         User user = userOptional.get();
 
         // 토큰 생성
-        String accessToken = jwtUtil.createJwt("accessToken", user.getEmail(), 1000 * 60 * 120L); // 120분
+        String accessToken = jwtUtil.createJwt("accessToken", user.getEmail(), 1000 * 60 * 3L); // 3분
         String refreshToken = jwtUtil.createJwt("refreshToken", user.getEmail(), 1000 * 60 * 60 * 24 * 2L); // 2일
         addRefreshToken(user.getEmail(), refreshToken, 1000 * 60 * 60 * 24 * 2L); // 2일
 
@@ -128,10 +128,10 @@ public class UserService {
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
+        cookie.setMaxAge(24*60*60); //1일
         //cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
+        //cookie.setHttpOnly(true);
 
         return cookie;
     }

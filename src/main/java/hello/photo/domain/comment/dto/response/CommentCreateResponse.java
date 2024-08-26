@@ -1,4 +1,4 @@
-package hello.photo.domain.moment.dto.response;
+package hello.photo.domain.comment.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CommentResponse {
+public class CommentCreateResponse {
     private Long commentId;
-    private String nickname;
-    private String commentContent;
     private OffsetDateTime createdAt;
 }

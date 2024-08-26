@@ -25,4 +25,9 @@ public class Comment {
 
     @ManyToOne
     private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = OffsetDateTime.now();
+    }
 }

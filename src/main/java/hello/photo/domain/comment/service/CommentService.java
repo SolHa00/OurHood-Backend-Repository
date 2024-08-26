@@ -1,0 +1,41 @@
+package hello.photo.domain.comment.service;
+
+import hello.photo.domain.comment.dto.request.CommentCreateRequest;
+import hello.photo.domain.comment.dto.response.CommentCreateResponse;
+import hello.photo.domain.comment.entity.Comment;
+import hello.photo.domain.comment.repository.CommentRepository;
+import hello.photo.domain.moment.entity.Moment;
+import hello.photo.domain.moment.repository.MomentRepository;
+import hello.photo.domain.user.entity.User;
+import hello.photo.domain.user.repository.UserRepository;
+import hello.photo.global.exception.EntityNotFoundException;
+import hello.photo.global.response.ApiResponse;
+import hello.photo.global.response.DataResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CommentService {
+
+    private final CommentRepository commentRepository;
+    private final MomentRepository momentRepository;
+    private final UserRepository userRepository;
+
+    public ApiResponse createComment(CommentCreateRequest request) {
+        Moment moment = momentRepository.findById(request.getMomentId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 Moment를 찾을 수 없습니다"));
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
+
+        Comment comment = new Comment();
+        comment.setContent(request.getCommentContent());
+        comment.setUser(user);
+        comment.setMoment(moment);
+
+        commentRepository.save(comment);
+
+        CommentCreateResponse response = new CommentCreateResponse(comment.getId(), comment.getCreatedAt());
+        return DataResponseDto.of(response);
+    }
+}
