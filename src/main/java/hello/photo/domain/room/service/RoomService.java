@@ -1,6 +1,5 @@
 package hello.photo.domain.room.service;
 
-import hello.photo.domain.room.dto.response.MomentEnterInfo;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.*;
 import hello.photo.domain.room.entity.Room;
@@ -15,9 +14,6 @@ import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,30 +66,30 @@ public class RoomService {
     }
 
     //방 리스트 조회
-    public DataResponseDto<RoomListResponse> getRooms(String order, int roomsPerPage, int page, String condition, String q) {
-        Pageable pageable;
+    public DataResponseDto<RoomListResponse> getRooms(String order, String condition, String q) {
+        Sort sort;
         if (order.equals("date_desc")) {
-            pageable = PageRequest.of(page - 1, roomsPerPage, Sort.by(Sort.Direction.DESC, "createdAt"));
+            sort = Sort.by(Sort.Direction.DESC, "createdAt");
         } else if (order.equals("date_asc")) {
-            pageable = PageRequest.of(page - 1, roomsPerPage, Sort.by(Sort.Direction.ASC, "createdAt"));
+            sort = Sort.by(Sort.Direction.ASC, "createdAt");
         } else {
-            pageable = PageRequest.of(page - 1, roomsPerPage);
+            sort = Sort.unsorted();
         }
 
-        Page<Room> roomsPage;
+        List<Room> rooms;
         if (q != null && !q.isEmpty()) {
             if ("room".equals(condition)) {
-                roomsPage = roomRepository.findByRoomNameContaining(q, pageable);
+                rooms = roomRepository.findByRoomNameContaining(q, sort);
             } else if ("host".equals(condition)) {
-                roomsPage = roomRepository.findByHostNicknameContaining(q, pageable);
+                rooms = roomRepository.findByHostNicknameContaining(q, sort);
             } else {
-                roomsPage = roomRepository.findAll(pageable);
+                rooms = roomRepository.findAll(sort);
             }
         } else {
-            roomsPage = roomRepository.findAll(pageable);
+            rooms = roomRepository.findAll(sort);
         }
 
-        List<RoomListInfo> rooms = roomsPage.getContent().stream()
+        List<RoomListInfo> roomListInfos = rooms.stream()
                 .map(room -> {
                     // 썸네일 URL 가져오기
                     String thumbnailUrl = null;
@@ -112,9 +108,8 @@ public class RoomService {
                     );
                 })
                 .collect(Collectors.toList());
-        Long totalPages = (long) Math.ceil((double) roomsPage.getTotalElements() / roomsPerPage);
 
-        RoomListResponse roomListResponse = new RoomListResponse(totalPages, rooms);
+        RoomListResponse roomListResponse = new RoomListResponse(roomListInfos);
 
         return DataResponseDto.of(roomListResponse, Code.OK.getMessage());
     }

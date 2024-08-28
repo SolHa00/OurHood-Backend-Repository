@@ -10,6 +10,5 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class RoomListResponse {
-    private Long totalPages;
     private List<RoomListInfo> rooms;
 }
