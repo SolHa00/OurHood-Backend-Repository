@@ -47,16 +47,22 @@ public class RoomService {
         room.getMembers().add(user);
         room = roomRepository.save(room);
 
-        MultipartFile thumbnail = request.getThumbnail();
-        String imageUrl = s3FileService.uploadFile(thumbnail);
+        //썸네일이 있는 경우에만 처리
+        String imageUrl = null;
+        if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
+            MultipartFile thumbnail = request.getThumbnail();
+            imageUrl = s3FileService.uploadFile(thumbnail);
 
-        Thumbnail thumbnailImage = new Thumbnail();
-        thumbnailImage.setThumbnailUrl(imageUrl);
-        thumbnailImage.setUser(user);
-        thumbnailImage.setRoom(room);
-        thumbnailRepository.save(thumbnailImage);
+            Thumbnail thumbnailImage = new Thumbnail();
+            thumbnailImage.setThumbnailUrl(imageUrl);
+            thumbnailImage.setUser(user);
+            thumbnailImage.setRoom(room);
+            thumbnailRepository.save(thumbnailImage);
 
-        room.setThumbnail(thumbnailImage);
+            room.setThumbnail(thumbnailImage);
+            roomRepository.save(room);
+        }
+
 
         RoomCreateResponse roomResponse = new RoomCreateResponse(room.getId(), imageUrl);
 
