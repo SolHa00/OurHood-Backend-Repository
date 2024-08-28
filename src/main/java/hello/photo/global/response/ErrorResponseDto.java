@@ -5,28 +5,23 @@ import lombok.Getter;
 @Getter
 public class ErrorResponseDto extends ApiResponse {
 
-    private final ErrorDetail errorDetail;
+    private final String code;
 
-    private ErrorResponseDto(Code errorCode, String message, String type) {
-        super(errorCode.getMessage(message));
-        this.errorDetail = ErrorDetail.of(type);
-    }
-
-    private ErrorResponseDto(String message, ErrorDetail errorDetail) {
+    private ErrorResponseDto(String message, String code) {
         super(message);
-        this.errorDetail = errorDetail;
+        this.code = code;
     }
 
-    private ErrorResponseDto(Code errorCode, String type){
-        super(errorCode.getMessage());
-        this.errorDetail = ErrorDetail.of(type);
+    private ErrorResponseDto(Code errorCode, String message) {
+        super(message);
+        this.code = errorCode.getCode();
     }
 
-    public static ErrorResponseDto of(Code errorCode, String type) {
-        return new ErrorResponseDto(errorCode, type);
+    public static ErrorResponseDto of(String message, String code) {
+        return new ErrorResponseDto(message, code);
     }
 
-    public static ErrorResponseDto of(String message, String type) {
-        return new ErrorResponseDto(message, ErrorDetail.of(type));
+    public static ErrorResponseDto of(Code errorCode, String message) {
+        return new ErrorResponseDto(errorCode, message);
     }
 }

@@ -8,7 +8,7 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.exception.DuplicateRequestException;
+import hello.photo.global.exception.DuplicateException;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
@@ -35,7 +35,7 @@ public class JoinRequestService {
         //이미 해당 방에 참여 요청이 있는지 확인
         boolean joinRequestExists = joinRequestRepository.existsByRoomAndUser(room, user);
         if (joinRequestExists) {
-            throw new DuplicateRequestException("이미 해당 방에 참여 요청을 보냈습니다");
+            throw new DuplicateException(Code.JOIN_REQUEST_DUPLICATED, Code.JOIN_REQUEST_DUPLICATED.getMessage());
         }
 
         JoinRequest joinRequest = new JoinRequest();

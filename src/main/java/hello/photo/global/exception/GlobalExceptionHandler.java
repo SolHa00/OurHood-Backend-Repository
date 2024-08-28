@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status)
                 .body(ErrorResponseDto.of(
                         e.getMessage(),
-                        e.getClass().getSimpleName()
+                        e.getErrorCode().getCode()
                 ));
     }
 

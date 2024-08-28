@@ -6,7 +6,7 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.exception.DuplicateRequestException;
+import hello.photo.global.exception.DuplicateException;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
@@ -31,7 +31,7 @@ public class InvitationService {
         //이미 초대된 사용자인지 확인
         boolean invitationExists = invitationRepository.existsByRoomAndUser(room, user);
         if (invitationExists) {
-            throw new DuplicateRequestException("이미 이 방에 초대된 사용자입니다");
+            throw new DuplicateException(Code.INVITATION_REQUEST_DUPLICATED, Code.INVITATION_REQUEST_DUPLICATED.getMessage());
         }
 
         Invitation invitation = new Invitation();

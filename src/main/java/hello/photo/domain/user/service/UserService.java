@@ -13,6 +13,7 @@ import hello.photo.domain.user.dto.response.UserLoginInfo;
 import hello.photo.domain.user.dto.response.UserLoginResponse;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
+import hello.photo.global.exception.DuplicateException;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.jwt.JwtUtil;
 import hello.photo.global.response.ApiResponse;
@@ -27,7 +28,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -45,19 +45,13 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public ApiResponse signup(UserSignupRequest request) {
-        List<String> errors = new ArrayList<>();
 
-        if (userRepository.existsByNickname(request.getNickname())) {
-            errors.add("이미 사용 중인 닉네임입니다");
-        }
         if (userRepository.existsByEmail(request.getEmail())) {
-            errors.add("이미 사용 중인 이메일입니다");
+            throw new DuplicateException(Code.USER_EMAIL_DUPLICATED, Code.USER_EMAIL_DUPLICATED.getMessage());
         }
-
-        if (!errors.isEmpty()) {
-            throw new IllegalArgumentException(String.join(", ", errors));
+        if (userRepository.existsByNickname(request.getNickname())) {
+            throw new DuplicateException(Code.USER_NICKNAME_DUPLICATED, Code.USER_NICKNAME_DUPLICATED.getMessage());
         }
-
 
         User user = User.builder()
                 .nickname(request.getNickname())

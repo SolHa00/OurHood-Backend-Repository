@@ -18,7 +18,12 @@ public enum Code {
     FORBIDDEN(HttpStatus.FORBIDDEN, "403", "접근 권한이 없음"),
     NOT_FOUND(HttpStatus.NOT_FOUND, "404", "Not Found"),
     DUPLICATED(HttpStatus.CONFLICT, "409", "Conflict"),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "서버 에러");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "서버 에러"),
+    //커스텀 에러
+    USER_EMAIL_DUPLICATED(HttpStatus.CONFLICT, "1201", "해당 이메일이 이미 존재합니다."),
+    USER_NICKNAME_DUPLICATED(HttpStatus.CONFLICT, "1202", "해당 닉네임이 이미 존재합니다."),
+    JOIN_REQUEST_DUPLICATED(HttpStatus.CONFLICT, "5201", "이미 해당 방에 참여 요청을 보냈습니다."),
+    INVITATION_REQUEST_DUPLICATED(HttpStatus.CONFLICT, "6201", "이미 이 방에 초대된 사용자입니다.");
 
 
     private final HttpStatus httpStatus;
