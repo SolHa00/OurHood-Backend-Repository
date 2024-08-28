@@ -28,7 +28,7 @@ public class RoomController {
 
     @GetMapping
     @Operation(summary = "방 리스트 조회")
-    public DataResponseDto<RoomListResponse> roomList(String order, @RequestParam(required = false) String condition, @RequestParam(required = false) String q) {
+    public DataResponseDto<RoomListResponse> roomList(String order, String condition, @RequestParam(required = false) String q) {
         return roomService.getRooms(order, condition, q);
     }
 

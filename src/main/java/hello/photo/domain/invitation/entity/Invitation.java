@@ -16,13 +16,13 @@ public class Invitation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private OffsetDateTime createdAt;
+
     @ManyToOne
     private User user;
 
     @ManyToOne
     private Room room;
-
-    private OffsetDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {

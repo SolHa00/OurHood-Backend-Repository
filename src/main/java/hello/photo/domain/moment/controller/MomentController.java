@@ -28,5 +28,4 @@ public class MomentController {
     public ApiResponse getMoment(@PathVariable Long momentId) {
         return momentService.getMomentObject(momentId);
     }
-
 }

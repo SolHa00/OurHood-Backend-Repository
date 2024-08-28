@@ -16,5 +16,4 @@ public class RefreshToken {
     private String email;
     private String refresh;
     private String expiration;
-
 }

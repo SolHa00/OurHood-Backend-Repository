@@ -9,6 +9,5 @@ import java.util.List;
 
 public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     List<Invitation> findByUser(User user);
-
     boolean existsByRoomAndUser(Room room, User user);
 }
