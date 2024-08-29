@@ -10,6 +10,7 @@ import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.response.ApiResponse;
+import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,9 @@ public class CommentService {
 
     public ApiResponse createComment(CommentCreateRequest request) {
         Moment moment = momentRepository.findById(request.getMomentId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 Moment를 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         Comment comment = new Comment();
         comment.setContent(request.getCommentContent());

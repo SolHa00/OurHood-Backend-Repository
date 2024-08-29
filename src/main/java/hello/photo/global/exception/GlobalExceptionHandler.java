@@ -1,6 +1,5 @@
 package hello.photo.global.exception;
 
-import hello.photo.domain.user.exception.UserNotFoundException;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
 import hello.photo.global.response.ErrorResponseDto;
@@ -12,12 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ErrorResponseDto.of(e.getMessage(), e.getClass().getSimpleName()));
-    }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDto> handlerEntityNotFoundException(EntityNotFoundException e) {

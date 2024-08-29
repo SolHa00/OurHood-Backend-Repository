@@ -5,9 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class DuplicateException extends GeneralException{
-
     public DuplicateException(Code errorCode, String message) {
         super(errorCode, message);
     }
-
 }

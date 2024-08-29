@@ -15,15 +15,14 @@ import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.DuplicateException;
 import hello.photo.global.exception.EntityNotFoundException;
+import hello.photo.global.exception.LogInFailException;
 import hello.photo.global.jwt.JwtUtil;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
-import hello.photo.global.response.ErrorResponseDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -65,8 +64,7 @@ public class UserService {
     public ApiResponse login(UserLoginRequest request, HttpServletResponse response) {
         UserDetails userData = customUserDetailsService.loadUserByUsername(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), userData.getPassword())) {
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return ErrorResponseDto.of("아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.", "BadCredentialsException");
+            throw new LogInFailException(Code.LOGIN_FAIL, Code.LOGIN_FAIL.getMessage());
         }
 
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
@@ -93,7 +91,7 @@ public class UserService {
 
     public DataResponseDto<MyPageResponse> getMyPage(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         List<RoomsMyPageInfo> hostedRooms = user.getHostedRooms().stream()
                 .map(room -> new RoomsMyPageInfo(

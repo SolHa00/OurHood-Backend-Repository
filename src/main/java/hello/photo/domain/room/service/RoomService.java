@@ -34,7 +34,7 @@ public class RoomService {
     //방 생성
     public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         Room room = new Room();
         room.setRoomName(request.getRoomName());
@@ -117,7 +117,7 @@ public class RoomService {
     //특정 방 입장
     public ApiResponse getRoomDetails(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         boolean isMember = room.getMembers().stream().anyMatch(member -> member.getId().equals(userId));
 

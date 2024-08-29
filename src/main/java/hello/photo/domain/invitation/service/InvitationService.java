@@ -24,9 +24,9 @@ public class InvitationService {
 
     public ApiResponse createInvitation(Long roomId, String nickname) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         User user = userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.MEMBER_NOT_FOUND, Code.MEMBER_NOT_FOUND.getMessage()));
 
         //이미 초대된 사용자인지 확인
         boolean invitationExists = invitationRepository.existsByRoomAndUser(room, user);
@@ -47,7 +47,7 @@ public class InvitationService {
     @Transactional
     public ApiResponse handleInviteRequest(Long invitationId, String action) {
         Invitation invitation = invitationRepository.findById(invitationId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 초대 요청을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         if("accept".equals(action)) {
             Room room = invitation.getRoom();
             User user = invitation.getUser();

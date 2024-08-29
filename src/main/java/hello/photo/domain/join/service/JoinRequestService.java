@@ -28,9 +28,9 @@ public class JoinRequestService {
 
     public ApiResponse createJoinRequest(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         //이미 해당 방에 참여 요청이 있는지 확인
         boolean joinRequestExists = joinRequestRepository.existsByRoomAndUser(room, user);
@@ -49,7 +49,7 @@ public class JoinRequestService {
 
     public DataResponseDto<JoinResponseDto> getJoinRequests(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         List<JoinRequestDetail> joinList = joinRequestRepository.findByRoom(room).stream()
                 .map(joinRequest -> new JoinRequestDetail(joinRequest.getId(), joinRequest.getUser().getNickname()))
@@ -63,7 +63,7 @@ public class JoinRequestService {
 
     public ApiResponse handleJoinRequest(Long joinRequestId, String action) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 참여 요청을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         if ("accept".equals(action)) {
             Room room = joinRequest.getRoom();
             User user = joinRequest.getUser();

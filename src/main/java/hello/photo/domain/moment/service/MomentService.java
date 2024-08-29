@@ -36,9 +36,9 @@ public class MomentService {
     //Moment 생성
     public ApiResponse createMomentObject(MomentCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 Room을 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         String imageUrl = s3FileService.uploadFile(request.getMomentImage());
 
@@ -57,7 +57,7 @@ public class MomentService {
     //특정 Moment 조회
     public ApiResponse getMomentObject(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 Moment를 찾을 수 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         String nickname = moment.getUser().getNickname();
         OffsetDateTime createdAt = moment.getCreatedAt();
