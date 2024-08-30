@@ -17,4 +17,5 @@ public class RoomDetailResponse {
     private String hostName;
     private RoomEnterInfo roomDetail;
     private String thumbnail;
+    private Long numOfNewJoinRequests;
 }

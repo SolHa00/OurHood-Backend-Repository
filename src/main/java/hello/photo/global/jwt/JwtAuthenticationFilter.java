@@ -1,7 +1,10 @@
 package hello.photo.global.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.photo.domain.user.dto.CustomUserDetails;
 import hello.photo.domain.user.entity.User;
+import hello.photo.global.response.Code;
+import hello.photo.global.response.ErrorResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -46,12 +49,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
+            // 필터 내에서 JSON 형식으로 응답 처리
+            ErrorResponseDto errorResponse = ErrorResponseDto.of(Code.ACCESS_TOKEN_EXPIRED, Code.ACCESS_TOKEN_EXPIRED.getMessage());
 
-            //response body
-            PrintWriter writer = response.getWriter();
-            writer.print("access token expired");
-
+            // 응답의 상태 코드 설정
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+
+            // 응답의 Content-Type 설정
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            // 응답을 JSON 형식으로 변환하여 출력
+            PrintWriter writer = response.getWriter();
+            writer.write(new ObjectMapper().writeValueAsString(errorResponse));
+            writer.flush();
+            writer.close();
+
             return;
         }
 

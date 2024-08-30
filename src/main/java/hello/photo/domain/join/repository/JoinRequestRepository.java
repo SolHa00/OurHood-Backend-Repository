@@ -12,4 +12,5 @@ import java.util.List;
 public interface JoinRequestRepository extends JpaRepository<JoinRequest, Long> {
     List<JoinRequest> findByRoom(Room room);
     boolean existsByRoomAndUser(Room room, User user);
+    Long countByRoom(Room room);
 }

@@ -25,7 +25,8 @@ public enum Code {
     JOIN_REQUEST_DUPLICATED(HttpStatus.CONFLICT, "5201", "이미 해당 방에 참여 요청을 보냈습니다."),
     INVITATION_REQUEST_DUPLICATED(HttpStatus.CONFLICT, "6201", "이미 이 방에 초대된 사용자입니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "6101", "해당 닉네임이 존재하지 않습니다."),
-    LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "1301", "로그인 실패");
+    LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "1301", "로그인 실패"),
+    ACCESS_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "0301", "AccessToken이 만료되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -1,5 +1,6 @@
 package hello.photo.domain.room.service;
 
+import hello.photo.domain.join.repository.JoinRequestRepository;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.*;
 import hello.photo.domain.room.entity.Room;
@@ -30,6 +31,7 @@ public class RoomService {
     private final UserRepository userRepository;
     private final S3FileService s3FileService;
     private final ThumbnailRepository thumbnailRepository;
+    private final JoinRequestRepository joinRequestRepository;
 
     //방 생성
     public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
@@ -127,6 +129,9 @@ public class RoomService {
             thumbnailUrl = thumbnail.get().getThumbnailUrl();
         }
 
+        //새로 들어온 방 참여 요청 수 계산
+        Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
+
         if (!isMember) {
             RoomDetailResponse roomDetailResponse = new RoomDetailResponse(
                     isMember,
@@ -135,7 +140,8 @@ public class RoomService {
                     room.getRoomDescription(),
                     room.getHost().getNickname(),
                     null,
-                    thumbnailUrl
+                    thumbnailUrl,
+                    null
             );
             return DataResponseDto.of(roomDetailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
         }
@@ -157,7 +163,8 @@ public class RoomService {
                 room.getRoomDescription(),
                 room.getHost().getNickname(),
                 roomEnterInfo,
-                thumbnailUrl
+                thumbnailUrl,
+                numOfNewJoinRequests
         );
 
         return DataResponseDto.of(roomDetailResponse, Code.OK.getMessage());
