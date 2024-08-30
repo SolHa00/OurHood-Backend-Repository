@@ -15,13 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDto> handlerEntityNotFoundException(EntityNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponseDto.of(e.getMessage(), e.getClass().getSimpleName()));
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ErrorResponseDto.of(e.getMessage(), e.getClass().getSimpleName()));
+                .body(ErrorResponseDto.of(e.getMessage(), e.getErrorCode().getCode()));
     }
 
     @ExceptionHandler
