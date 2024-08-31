@@ -32,7 +32,6 @@ public enum Code {
     private final String code;
     private final String message;
 
-
     public String getMessage(Throwable throwable) {
         return this.getMessage(this.getMessage(this.getMessage() + " - " + throwable.getMessage()));
     }
