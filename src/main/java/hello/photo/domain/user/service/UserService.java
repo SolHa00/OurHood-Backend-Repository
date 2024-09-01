@@ -103,12 +103,13 @@ public class UserService {
                 .collect(Collectors.toList());
 
         List<InvitationInfo> invitations = invitationRepository.findByUser(user).stream()
-                .map(invitation -> new InvitationInfo(
-                        invitation.getId(),
-                        invitation.getCreatedAt(),
-                        invitation.getRoom().getId(),
-                        invitation.getRoom().getRoomName(),
-                        invitation.getRoom().getHost().getNickname()))
+                .map(invitation -> InvitationInfo.builder()
+                                .invitationId(invitation.getId())
+                                .createdAt(invitation.getCreatedAt())
+                                .roomId(invitation.getRoom().getId())
+                                .roomName(invitation.getRoom().getRoomName())
+                                .hostName(invitation.getRoom().getHost().getNickname())
+                                .build())
                 .collect(Collectors.toList());
 
         MyInfo myInfo = new MyInfo(user.getNickname(), user.getEmail());

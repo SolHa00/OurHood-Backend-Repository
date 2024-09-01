@@ -36,7 +36,10 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        CommentCreateResponse response = new CommentCreateResponse(comment.getId(), comment.getCreatedAt());
+        CommentCreateResponse response = CommentCreateResponse.builder()
+                .commentId(comment.getId())
+                .createdAt(comment.getCreatedAt())
+                .build();
         return DataResponseDto.of(response);
     }
 }
