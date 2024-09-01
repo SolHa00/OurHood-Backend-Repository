@@ -140,8 +140,7 @@ public class RoomService {
                     room.getRoomDescription(),
                     room.getHost().getNickname(),
                     null,
-                    thumbnailUrl,
-                    null
+                    thumbnailUrl
             );
             return DataResponseDto.of(roomDetailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
         }
@@ -154,7 +153,7 @@ public class RoomService {
                 .map(moment -> new MomentEnterInfo(moment.getId(), moment.getImageUrl()))
                 .collect(Collectors.toList());
 
-        RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments);
+        RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments, numOfNewJoinRequests);
 
         RoomDetailResponse roomDetailResponse = new RoomDetailResponse(
                 isMember,
@@ -163,8 +162,7 @@ public class RoomService {
                 room.getRoomDescription(),
                 room.getHost().getNickname(),
                 roomEnterInfo,
-                thumbnailUrl,
-                numOfNewJoinRequests
+                thumbnailUrl
         );
 
         return DataResponseDto.of(roomDetailResponse, Code.OK.getMessage());

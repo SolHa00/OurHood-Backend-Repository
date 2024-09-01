@@ -12,4 +12,5 @@ import java.util.List;
 public class RoomEnterInfo {
     private List<String> members;
     private List<MomentEnterInfo> moments;
+    private Long numOfNewJoinRequests;
 }
