@@ -7,6 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class JoinResponseDto {
+ public class JoinResponseDto {
     private List<JoinRequestDetail> joinList;
 }

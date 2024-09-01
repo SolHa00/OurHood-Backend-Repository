@@ -52,7 +52,10 @@ public class JoinRequestService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         List<JoinRequestDetail> joinList = joinRequestRepository.findByRoom(room).stream()
-                .map(joinRequest -> new JoinRequestDetail(joinRequest.getId(), joinRequest.getUser().getNickname()))
+                .map(joinRequest -> JoinRequestDetail.builder()
+                        .joinId(joinRequest.getId())
+                        .nickName(joinRequest.getUser().getNickname())
+                        .build())
                 .collect(Collectors.toList());
 
         JoinResponseDto joinResponseDto = new JoinResponseDto();

@@ -1,13 +1,19 @@
 package hello.photo.domain.join.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JoinRequestDetail {
     private Long joinId;
     private String nickName;
+
+    @Builder
+    public JoinRequestDetail(Long joinId, String nickName) {
+        this.joinId = joinId;
+        this.nickName = nickName;
+    }
 }
