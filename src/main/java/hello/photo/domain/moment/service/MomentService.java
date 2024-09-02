@@ -49,7 +49,9 @@ public class MomentService {
         moment.setRoom(room);
         momentRepository.save(moment);
 
-        MomentCreateResponse momentCreateResponse = new MomentCreateResponse(moment.getId(), imageUrl);
+        MomentCreateResponse momentCreateResponse = MomentCreateResponse.builder()
+                .momentId(moment.getId())
+                .imageUrl(imageUrl).build();
 
         return DataResponseDto.of(momentCreateResponse);
     }
@@ -62,20 +64,21 @@ public class MomentService {
         String nickname = moment.getUser().getNickname();
         OffsetDateTime createdAt = moment.getCreatedAt();
         List<CommentResponse> comments = commentRepository.findByMoment(moment).stream()
-                .map(comment -> new CommentResponse(
-                        comment.getId(),
-                        comment.getUser().getNickname(),
-                        comment.getContent(),
-                        comment.getCreatedAt()))
+                .map(comment -> CommentResponse.builder()
+                                .commentId(comment.getId())
+                                .nickname(comment.getUser().getNickname())
+                                .commentContent(comment.getContent())
+                                .createdAt(comment.getCreatedAt())
+                                .build())
                 .collect(Collectors.toList());
 
-        MomentDetailResponse momentDetailResponse = new MomentDetailResponse(
-                nickname,
-                moment.getImageUrl(),
-                moment.getMomentDescription(),
-                createdAt,
-                comments
-        );
+        MomentDetailResponse momentDetailResponse = MomentDetailResponse.builder()
+                .nickname(nickname)
+                .momentImage(moment.getImageUrl())
+                .momentDescription(moment.getMomentDescription())
+                .createdAt(createdAt)
+                .comments(comments)
+                .build();
 
         return DataResponseDto.of(momentDetailResponse, Code.OK.getMessage());
     }
