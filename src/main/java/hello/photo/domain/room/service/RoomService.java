@@ -61,8 +61,10 @@ public class RoomService {
             roomRepository.save(room);
         }
 
-
-        RoomCreateResponse roomResponse = new RoomCreateResponse(room.getId(), imageUrl);
+        RoomCreateResponse roomResponse = RoomCreateResponse.builder()
+                .roomId(room.getId())
+                .thumbnail(imageUrl)
+                .build();
 
         return DataResponseDto.of(roomResponse, Code.OK.getMessage());
     }
@@ -100,14 +102,14 @@ public class RoomService {
                         thumbnailUrl = thumbnail.get().getThumbnailUrl();
                     }
 
-                    return new RoomListInfo(
-                            room.getId(),
-                            room.getRoomName(),
-                            room.getHost().getNickname(),
-                            room.getMembers().size(),
-                            room.getCreatedAt(),
-                            thumbnailUrl  // 썸네일 URL 추가
-                    );
+                    return RoomListInfo.builder()
+                            .roomId(room.getId())
+                            .roomName(room.getRoomName())
+                            .hostName(room.getHost().getNickname())
+                            .numOfMembers(room.getMembers().size())
+                            .createdAt(room.getCreatedAt())
+                            .thumbnail(thumbnailUrl)
+                            .build();
                 })
                 .collect(Collectors.toList());
 
@@ -133,15 +135,14 @@ public class RoomService {
         Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
 
         if (!isMember) {
-            RoomDetailResponse roomDetailResponse = new RoomDetailResponse(
-                    isMember,
-                    room.getId(),
-                    room.getRoomName(),
-                    room.getRoomDescription(),
-                    room.getHost().getNickname(),
-                    null,
-                    thumbnailUrl
-            );
+            RoomDetailResponse roomDetailResponse = RoomDetailResponse.builder()
+                    .isMember(isMember)
+                    .roomId(room.getId())
+                    .roomName(room.getRoomName())
+                    .roomDescription(room.getRoomDescription())
+                    .hostName(room.getHost().getNickname())
+                    .thumbnail(thumbnailUrl).build();
+
             return DataResponseDto.of(roomDetailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
         }
 
@@ -150,7 +151,10 @@ public class RoomService {
                 .collect(Collectors.toList());
 
         List<MomentEnterInfo> moments = room.getMoments().stream()
-                .map(moment -> new MomentEnterInfo(moment.getId(), moment.getImageUrl()))
+                .map(moment -> MomentEnterInfo.builder()
+                        .momentId(moment.getId())
+                        .imageUrl(moment.getImageUrl())
+                        .build())
                 .collect(Collectors.toList());
 
         RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments, numOfNewJoinRequests);

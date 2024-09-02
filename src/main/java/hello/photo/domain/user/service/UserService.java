@@ -94,12 +94,13 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         List<RoomsMyPageInfo> hostedRooms = user.getHostedRooms().stream()
-                .map(room -> new RoomsMyPageInfo(
-                        room.getId(),
-                        room.getRoomName(),
-                        room.getHost().getNickname(),
-                        room.getMembers().size(),
-                        room.getCreatedAt()))
+                .map(room -> RoomsMyPageInfo.builder()
+                        .roomId(room.getId())
+                        .roomName(room.getRoomName())
+                        .hostName(room.getHost().getNickname())
+                        .numOfMembers(room.getMembers().size())
+                        .createdAt(room.getCreatedAt())
+                        .build())
                 .collect(Collectors.toList());
 
         List<InvitationInfo> invitations = invitationRepository.findByUser(user).stream()
