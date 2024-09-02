@@ -58,8 +58,7 @@ public class JoinRequestService {
                         .build())
                 .collect(Collectors.toList());
 
-        JoinResponseDto joinResponseDto = new JoinResponseDto();
-        joinResponseDto.setJoinList(joinList);
+        JoinResponseDto joinResponseDto = new JoinResponseDto(joinList);
 
         return DataResponseDto.of(joinResponseDto, Code.OK.getMessage());
     }

@@ -79,10 +79,12 @@ public class UserService {
         response.setHeader("accessToken", accessToken);
         response.addCookie(createCookie("refreshToken", refreshToken));
 
-        UserLoginInfo userLoginInfo = new UserLoginInfo();
-        userLoginInfo.setUserId(user.getId());
-        userLoginInfo.setEmail(user.getEmail());
-        userLoginInfo.setNickname(user.getNickname());
+        UserLoginInfo userLoginInfo = UserLoginInfo.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .build();
+
         UserLoginResponse userLoginResponse = new UserLoginResponse(userLoginInfo);
 
         return DataResponseDto.of(userLoginResponse, Code.OK.getMessage());
@@ -113,8 +115,16 @@ public class UserService {
                                 .build())
                 .collect(Collectors.toList());
 
-        MyInfo myInfo = new MyInfo(user.getNickname(), user.getEmail());
-        MyPageResponse myPageResponse = new MyPageResponse(myInfo, hostedRooms, invitations);
+        MyInfo myInfo = MyInfo.builder()
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
+
+        MyPageResponse myPageResponse = MyPageResponse.builder()
+                .myInfo(myInfo)
+                .rooms(hostedRooms)
+                .invitations(invitations)
+                .build();
 
         return DataResponseDto.of(myPageResponse);
     }
@@ -125,7 +135,7 @@ public class UserService {
         cookie.setMaxAge(24*60*60); //1일
         //cookie.setSecure(true);
         cookie.setPath("/");
-        //cookie.setHttpOnly(true);
+        cookie.setHttpOnly(true);
 
         return cookie;
     }

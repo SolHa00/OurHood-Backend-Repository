@@ -8,11 +8,11 @@ import lombok.*;
 
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 아무런 매개변수가 없는 생성자를 생성하되 다른 패키지에 소속된 클래스는 접근을 불허
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter
-@Entity
 @Table(name = "users")
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Invitation> invitations;
-
 
     @Builder
     public User(String nickname, String email, String password) {

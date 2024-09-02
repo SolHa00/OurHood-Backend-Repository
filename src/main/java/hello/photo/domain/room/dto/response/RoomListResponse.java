@@ -1,14 +1,17 @@
 package hello.photo.domain.room.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@Setter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomListResponse {
     private List<RoomListInfo> rooms;
+
+    public RoomListResponse(List<RoomListInfo> rooms) {
+        this.rooms = rooms;
+    }
 }

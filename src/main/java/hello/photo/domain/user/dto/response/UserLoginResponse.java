@@ -1,12 +1,15 @@
 package hello.photo.domain.user.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserLoginResponse {
     private UserLoginInfo user;
+
+    public UserLoginResponse(UserLoginInfo user) {
+        this.user = user;
+    }
 }
