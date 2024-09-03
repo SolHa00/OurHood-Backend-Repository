@@ -144,10 +144,11 @@ public class UserService {
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
-        RefreshToken refreshEntity = new RefreshToken();
-        refreshEntity.setEmail(email);
-        refreshEntity.setRefresh(refresh);
-        refreshEntity.setExpiration(date.toString());
+        RefreshToken refreshEntity = RefreshToken.builder()
+                .email(email)
+                .refresh(refresh)
+                .expiration(date.toString())
+                .build();
 
         refreshTokenRepository.save(refreshEntity);
     }

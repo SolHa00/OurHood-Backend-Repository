@@ -3,12 +3,12 @@ package hello.photo.domain.join.entity;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class JoinRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +19,10 @@ public class JoinRequest {
 
     @ManyToOne
     private User user;
+
+    @Builder
+    public JoinRequest(Room room, User user) {
+        this.room = room;
+        this.user = user;
+    }
 }

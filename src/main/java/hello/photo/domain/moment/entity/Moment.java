@@ -4,14 +4,14 @@ import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter
 public class Moment {
     @Id
@@ -32,6 +32,14 @@ public class Moment {
 
     @OneToMany(mappedBy = "moment")
     private List<Comment> comments;
+
+    @Builder
+    public Moment(String imageUrl, String momentDescription, User user, Room room) {
+        this.imageUrl = imageUrl;
+        this.momentDescription = momentDescription;
+        this.user = user;
+        this.room = room;
+    }
 
     @PrePersist
     protected void onCreate() {

@@ -3,14 +3,14 @@ package hello.photo.domain.invitation.entity;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 
-@Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,12 @@ public class Invitation {
 
     @ManyToOne
     private Room room;
+
+    @Builder
+    public Invitation(User user, Room room) {
+        this.user = user;
+        this.room = room;
+    }
 
     @PrePersist
     protected void onCreate() {

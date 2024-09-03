@@ -42,11 +42,12 @@ public class MomentService {
 
         String imageUrl = s3FileService.uploadFile(request.getMomentImage());
 
-        Moment moment = new Moment();
-        moment.setImageUrl(imageUrl);
-        moment.setMomentDescription(request.getMomentDescription());
-        moment.setUser(user);
-        moment.setRoom(room);
+        Moment moment = Moment.builder()
+                .imageUrl(imageUrl)
+                .momentDescription(request.getMomentDescription())
+                .user(user)
+                .room(room)
+                .build();
         momentRepository.save(moment);
 
         MomentCreateResponse momentCreateResponse = MomentCreateResponse.builder()

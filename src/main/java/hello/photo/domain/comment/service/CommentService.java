@@ -29,10 +29,11 @@ public class CommentService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        Comment comment = new Comment();
-        comment.setContent(request.getCommentContent());
-        comment.setUser(user);
-        comment.setMoment(moment);
+        Comment comment = Comment.builder()
+                .content(request.getCommentContent())
+                .user(user)
+                .moment(moment)
+                .build();
 
         commentRepository.save(comment);
 

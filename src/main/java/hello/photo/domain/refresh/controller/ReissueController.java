@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,7 @@ public class ReissueController {
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor;
 
     @Operation(summary = "AccessToken 재발급", description = "유효하지 않은 AccessToken을 RefreshToken을 통해 재발급",
             parameters = {
@@ -110,10 +112,11 @@ public class ReissueController {
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
-        RefreshToken refreshEntity = new RefreshToken();
-        refreshEntity.setEmail(email);
-        refreshEntity.setRefresh(refresh);
-        refreshEntity.setExpiration(date.toString());
+        RefreshToken refreshEntity = RefreshToken.builder()
+                .email(email)
+                .refresh(refresh)
+                .expiration(date.toString())
+                .build();
 
         refreshTokenRepository.save(refreshEntity);
     }

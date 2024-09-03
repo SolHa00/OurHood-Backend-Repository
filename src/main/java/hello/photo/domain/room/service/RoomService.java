@@ -38,10 +38,11 @@ public class RoomService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        Room room = new Room();
-        room.setRoomName(request.getRoomName());
-        room.setRoomDescription(request.getRoomDescription());
-        room.setHost(user);
+        Room room = Room.builder()
+                .roomName(request.getRoomName())
+                .roomDescription(request.getRoomDescription())
+                .host(user)
+                .build();
         room.getMembers().add(user);
         room = roomRepository.save(room);
 
@@ -51,10 +52,11 @@ public class RoomService {
             MultipartFile thumbnail = request.getThumbnail();
             imageUrl = s3FileService.uploadFile(thumbnail);
 
-            Thumbnail thumbnailImage = new Thumbnail();
-            thumbnailImage.setThumbnailUrl(imageUrl);
-            thumbnailImage.setUser(user);
-            thumbnailImage.setRoom(room);
+            Thumbnail thumbnailImage = Thumbnail.builder()
+                    .thumbnailUrl(imageUrl)
+                    .user(user)
+                    .room(room)
+                    .build();
             thumbnailRepository.save(thumbnailImage);
 
             room.setThumbnail(thumbnailImage);
@@ -136,7 +138,7 @@ public class RoomService {
 
         if (!isMember) {
             RoomDetailResponse roomDetailResponse = RoomDetailResponse.builder()
-                    .isMember(isMember)
+                    .isMember(false)
                     .roomId(room.getId())
                     .roomName(room.getRoomName())
                     .roomDescription(room.getRoomDescription())
@@ -159,15 +161,15 @@ public class RoomService {
 
         RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments, numOfNewJoinRequests);
 
-        RoomDetailResponse roomDetailResponse = new RoomDetailResponse(
-                isMember,
-                room.getId(),
-                room.getRoomName(),
-                room.getRoomDescription(),
-                room.getHost().getNickname(),
-                roomEnterInfo,
-                thumbnailUrl
-        );
+        RoomDetailResponse roomDetailResponse = RoomDetailResponse.builder()
+                .isMember(true)
+                .roomId(room.getId())
+                .roomName(room.getRoomName())
+                .roomDescription(room.getRoomDescription())
+                .hostName(room.getHost().getNickname())
+                .roomDetail(roomEnterInfo)
+                .thumbnail(thumbnailUrl)
+                .build();
 
         return DataResponseDto.of(roomDetailResponse, Code.OK.getMessage());
     }

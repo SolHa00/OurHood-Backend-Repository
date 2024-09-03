@@ -34,9 +34,10 @@ public class InvitationService {
             throw new DuplicateException(Code.INVITATION_REQUEST_DUPLICATED, Code.INVITATION_REQUEST_DUPLICATED.getMessage());
         }
 
-        Invitation invitation = new Invitation();
-        invitation.setRoom(room);
-        invitation.setUser(user);
+        Invitation invitation = Invitation.builder()
+                .room(room)
+                .user(user)
+                .build();
 
         invitationRepository.save(invitation);
 

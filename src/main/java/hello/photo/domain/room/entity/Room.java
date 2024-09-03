@@ -3,16 +3,17 @@ package hello.photo.domain.room.entity;
 import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,13 @@ public class Room {
 
     @OneToOne(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Thumbnail thumbnail;
+
+    @Builder
+    public Room(String roomName, String roomDescription, User host) {
+        this.roomName = roomName;
+        this.roomDescription = roomDescription;
+        this.host = host;
+    }
 
     @PrePersist
     protected void onCreate() {

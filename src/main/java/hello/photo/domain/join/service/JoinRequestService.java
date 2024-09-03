@@ -38,9 +38,10 @@ public class JoinRequestService {
             throw new DuplicateException(Code.JOIN_REQUEST_DUPLICATED, Code.JOIN_REQUEST_DUPLICATED.getMessage());
         }
 
-        JoinRequest joinRequest = new JoinRequest();
-        joinRequest.setRoom(room);
-        joinRequest.setUser(user);
+        JoinRequest joinRequest = JoinRequest.builder()
+                .room(room)
+                .user(user)
+                .build();
 
         joinRequestRepository.save(joinRequest);
 
