@@ -1,4 +1,4 @@
-package hello.photo.domain.room.dto.response;
+package hello.photo.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;

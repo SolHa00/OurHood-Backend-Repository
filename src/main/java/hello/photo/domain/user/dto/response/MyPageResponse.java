@@ -1,7 +1,6 @@
 package hello.photo.domain.user.dto.response;
 
 import hello.photo.domain.invitation.dto.response.InvitationInfo;
-import hello.photo.domain.room.dto.response.RoomsMyPageInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

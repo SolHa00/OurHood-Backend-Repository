@@ -4,7 +4,7 @@ import hello.photo.domain.invitation.dto.response.InvitationInfo;
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
-import hello.photo.domain.room.dto.response.RoomsMyPageInfo;
+import hello.photo.domain.user.dto.response.RoomsMyPageInfo;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
 import hello.photo.domain.user.dto.response.MyInfo;
