@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomCreateResponse {
     private Long roomId;
-    private String thumbnail;
 
     @Builder
-    public RoomCreateResponse(Long roomId, String thumbnail) {
+    public RoomCreateResponse(Long roomId) {
         this.roomId = roomId;
-        this.thumbnail = thumbnail;
     }
 }

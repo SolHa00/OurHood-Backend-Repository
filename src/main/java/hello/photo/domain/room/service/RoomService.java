@@ -65,7 +65,6 @@ public class RoomService {
 
         RoomCreateResponse roomResponse = RoomCreateResponse.builder()
                 .roomId(room.getId())
-                .thumbnail(imageUrl)
                 .build();
 
         return DataResponseDto.of(roomResponse, Code.OK.getMessage());
