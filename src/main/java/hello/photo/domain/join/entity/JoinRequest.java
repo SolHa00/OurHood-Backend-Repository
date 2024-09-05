@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Setter
+@Setter //추후에 삭제할 예정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class JoinRequest {

@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Getter
-@Setter
+@Setter //추후에 삭제할 예정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Room {

@@ -11,8 +11,8 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter //추후에 삭제할 예정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Setter
 public class Moment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
