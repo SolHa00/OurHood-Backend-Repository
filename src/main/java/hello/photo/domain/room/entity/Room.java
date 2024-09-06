@@ -11,7 +11,6 @@ import java.util.List;
 
 
 @Getter
-@Setter //추후에 삭제할 예정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Room {
@@ -32,14 +31,15 @@ public class Room {
     @OneToMany(mappedBy = "room")
     private List<Moment> moments;
 
-    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "room")
     private Thumbnail thumbnail;
 
     @Builder
-    public Room(String roomName, String roomDescription, User host) {
+    public Room(String roomName, String roomDescription, User host, Thumbnail thumbnail) {
         this.roomName = roomName;
         this.roomDescription = roomDescription;
         this.host = host;
+        this.thumbnail = thumbnail;
     }
 
     @PrePersist

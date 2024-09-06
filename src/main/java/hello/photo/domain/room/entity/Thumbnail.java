@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Thumbnail {
@@ -18,13 +17,16 @@ public class Thumbnail {
     @ManyToOne
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Room room;
 
     @Builder
-    public Thumbnail(String thumbnailUrl, User user, Room room) {
+    public Thumbnail(String thumbnailUrl, User user) {
         this.thumbnailUrl = thumbnailUrl;
         this.user = user;
+    }
+
+    public void assignRoom(Room room) {
         this.room = room;
     }
 }

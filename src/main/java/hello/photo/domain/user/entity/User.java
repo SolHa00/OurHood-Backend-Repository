@@ -9,7 +9,6 @@ import lombok.*;
 import java.util.List;
 
 @Getter
-@Setter //추후에 삭제할 예정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 @Entity

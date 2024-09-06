@@ -17,6 +17,7 @@ import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,33 +35,37 @@ public class RoomService {
     private final JoinRequestRepository joinRequestRepository;
 
     //방 생성
+    @Transactional
     public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
+        // 썸네일 적용
+        Thumbnail thumbnailImage = null;
+        if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
+            MultipartFile thumbnail = request.getThumbnail();
+            String imageUrl = s3FileService.uploadFile(thumbnail);
+
+            thumbnailImage = Thumbnail.builder()
+                    .thumbnailUrl(imageUrl)
+                    .user(user)
+                    .build();
+        }
+
+        // 방 생성
         Room room = Room.builder()
                 .roomName(request.getRoomName())
                 .roomDescription(request.getRoomDescription())
                 .host(user)
+                .thumbnail(thumbnailImage)
                 .build();
+
         room.getMembers().add(user);
         room = roomRepository.save(room);
 
-        //썸네일이 있는 경우에만 처리
-        String imageUrl = null;
-        if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
-            MultipartFile thumbnail = request.getThumbnail();
-            imageUrl = s3FileService.uploadFile(thumbnail);
-
-            Thumbnail thumbnailImage = Thumbnail.builder()
-                    .thumbnailUrl(imageUrl)
-                    .user(user)
-                    .room(room)
-                    .build();
+        if (thumbnailImage != null) {
+            thumbnailImage.assignRoom(room);
             thumbnailRepository.save(thumbnailImage);
-
-            room.setThumbnail(thumbnailImage);
-            roomRepository.save(room);
         }
 
         RoomCreateResponse roomResponse = RoomCreateResponse.builder()
