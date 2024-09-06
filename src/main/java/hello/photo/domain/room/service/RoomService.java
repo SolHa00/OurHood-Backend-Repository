@@ -46,17 +46,15 @@ public class RoomService {
                 .build();
 
         room.getMembers().add(user);
-        room = roomRepository.save(room);  // 방을 먼저 저장
+        room = roomRepository.save(room);
 
-        // 썸네일 적용
         if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
             MultipartFile thumbnail = request.getThumbnail();
             String imageUrl = s3FileService.uploadFile(thumbnail);
 
-            room.updateThumbnailImage(imageUrl);  // Thumbnail URL directly saved in Room
-            room = roomRepository.save(room);  // 방을 다시 저장하여 썸네일 URL 반영
+            room.updateThumbnailImage(imageUrl);
+            room = roomRepository.save(room);
         }
-
 
         RoomCreateResponse roomResponse = RoomCreateResponse.builder()
                 .roomId(room.getId())
