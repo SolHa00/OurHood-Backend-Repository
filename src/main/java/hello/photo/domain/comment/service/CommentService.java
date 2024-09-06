@@ -14,6 +14,7 @@ import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class CommentService {
     private final MomentRepository momentRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public ApiResponse createComment(CommentCreateRequest request) {
         Moment moment = momentRepository.findById(request.getMomentId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));

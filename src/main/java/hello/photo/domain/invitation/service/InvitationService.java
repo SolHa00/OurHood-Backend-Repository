@@ -22,6 +22,7 @@ public class InvitationService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public ApiResponse createInvitation(Long roomId, String nickname) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));

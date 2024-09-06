@@ -4,9 +4,7 @@ import hello.photo.domain.join.repository.JoinRequestRepository;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.*;
 import hello.photo.domain.room.entity.Room;
-import hello.photo.domain.room.entity.Thumbnail;
 import hello.photo.domain.room.repository.RoomRepository;
-import hello.photo.domain.room.repository.ThumbnailRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.EntityNotFoundException;
@@ -15,23 +13,23 @@ import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RoomService {
 
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final S3FileService s3FileService;
-    private final ThumbnailRepository thumbnailRepository;
     private final JoinRequestRepository joinRequestRepository;
 
     //방 생성
@@ -40,33 +38,25 @@ public class RoomService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        // 썸네일 적용
-        Thumbnail thumbnailImage = null;
-        if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
-            MultipartFile thumbnail = request.getThumbnail();
-            String imageUrl = s3FileService.uploadFile(thumbnail);
-
-            thumbnailImage = Thumbnail.builder()
-                    .thumbnailUrl(imageUrl)
-                    .user(user)
-                    .build();
-        }
-
         // 방 생성
         Room room = Room.builder()
                 .roomName(request.getRoomName())
                 .roomDescription(request.getRoomDescription())
                 .host(user)
-                .thumbnail(thumbnailImage)
                 .build();
 
         room.getMembers().add(user);
-        room = roomRepository.save(room);
+        room = roomRepository.save(room);  // 방을 먼저 저장
 
-        if (thumbnailImage != null) {
-            thumbnailImage.assignRoom(room);
-            thumbnailRepository.save(thumbnailImage);
+        // 썸네일 적용
+        if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
+            MultipartFile thumbnail = request.getThumbnail();
+            String imageUrl = s3FileService.uploadFile(thumbnail);
+
+            room.updateThumbnailImage(imageUrl);  // Thumbnail URL directly saved in Room
+            room = roomRepository.save(room);  // 방을 다시 저장하여 썸네일 URL 반영
         }
+
 
         RoomCreateResponse roomResponse = RoomCreateResponse.builder()
                 .roomId(room.getId())
@@ -100,23 +90,14 @@ public class RoomService {
         }
 
         List<RoomListInfo> roomListInfos = rooms.stream()
-                .map(room -> {
-                    // 썸네일 URL 가져오기
-                    String thumbnailUrl = null;
-                    Optional<Thumbnail> thumbnail = thumbnailRepository.findByRoom(room);
-                    if (thumbnail.isPresent()) {
-                        thumbnailUrl = thumbnail.get().getThumbnailUrl();
-                    }
-
-                    return RoomListInfo.builder()
-                            .roomId(room.getId())
-                            .roomName(room.getRoomName())
-                            .hostName(room.getHost().getNickname())
-                            .numOfMembers(room.getMembers().size())
-                            .createdAt(room.getCreatedAt())
-                            .thumbnail(thumbnailUrl)
-                            .build();
-                })
+                .map(room -> RoomListInfo.builder()
+                        .roomId(room.getId())
+                        .roomName(room.getRoomName())
+                        .hostName(room.getHost().getNickname())
+                        .numOfMembers(room.getMembers().size())
+                        .createdAt(room.getCreatedAt())
+                        .thumbnail(room.getThumbnailImage())
+                        .build())
                 .collect(Collectors.toList());
 
         RoomListResponse roomListResponse = new RoomListResponse(roomListInfos);
@@ -131,13 +112,8 @@ public class RoomService {
 
         boolean isMember = room.getMembers().stream().anyMatch(member -> member.getId().equals(userId));
 
-        String thumbnailUrl = null;
-        Optional<Thumbnail> thumbnail = thumbnailRepository.findByRoom(room);
-        if (thumbnail.isPresent()) {
-            thumbnailUrl = thumbnail.get().getThumbnailUrl();
-        }
+        String thumbnailUrl = room.getThumbnailImage();
 
-        //새로 들어온 방 참여 요청 수 계산
         Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
 
         if (!isMember) {
@@ -147,7 +123,8 @@ public class RoomService {
                     .roomName(room.getRoomName())
                     .roomDescription(room.getRoomDescription())
                     .hostName(room.getHost().getNickname())
-                    .thumbnail(thumbnailUrl).build();
+                    .thumbnail(thumbnailUrl)
+                    .build();
 
             return DataResponseDto.of(roomDetailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
         }

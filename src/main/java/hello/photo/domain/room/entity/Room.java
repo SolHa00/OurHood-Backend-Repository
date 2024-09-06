@@ -21,6 +21,7 @@ public class Room {
     private String roomName;
     private String roomDescription;
     private OffsetDateTime createdAt;
+    private String thumbnailImage;
 
     @ManyToOne
     private User host;
@@ -31,19 +32,20 @@ public class Room {
     @OneToMany(mappedBy = "room")
     private List<Moment> moments;
 
-    @OneToOne(mappedBy = "room")
-    private Thumbnail thumbnail;
-
     @Builder
-    public Room(String roomName, String roomDescription, User host, Thumbnail thumbnail) {
+    public Room(String roomName, String roomDescription, User host, String thumbnailImage) {
         this.roomName = roomName;
         this.roomDescription = roomDescription;
         this.host = host;
-        this.thumbnail = thumbnail;
+        this.thumbnailImage = thumbnailImage;
     }
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = OffsetDateTime.now();
+    }
+
+    public void updateThumbnailImage(String thumbnailUrl) {
+        this.thumbnailImage = thumbnailUrl;
     }
 }
