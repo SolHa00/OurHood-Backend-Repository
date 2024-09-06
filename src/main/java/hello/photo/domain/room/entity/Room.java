@@ -3,9 +3,13 @@ package hello.photo.domain.room.entity;
 import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +46,7 @@ public class Room {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = OffsetDateTime.now();
+        this.createdAt = OffsetDateTime.now(ZoneOffset.ofHours(9));
     }
 
     public void updateThumbnailImage(String thumbnailUrl) {

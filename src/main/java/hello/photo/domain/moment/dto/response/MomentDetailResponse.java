@@ -15,7 +15,7 @@ public class MomentDetailResponse {
     private String nickname;
     private String momentImage;
     private String momentDescription;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private OffsetDateTime createdAt;
     private List<CommentResponse> comments;
 

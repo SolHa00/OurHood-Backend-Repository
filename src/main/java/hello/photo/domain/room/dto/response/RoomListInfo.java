@@ -15,7 +15,7 @@ public class RoomListInfo {
     private String roomName;
     private String hostName;
     private int numOfMembers;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private OffsetDateTime createdAt;
     private String thumbnail;
 

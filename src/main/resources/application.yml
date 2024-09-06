@@ -4,6 +4,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+    properties:
+      hibernate:
+        timezone:
+          default_storage: NORMALIZE
   datasource:
     url: ${DB_HOST}
     username: ${DB_USERNAME}
