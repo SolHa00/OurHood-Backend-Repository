@@ -63,8 +63,9 @@ public class ReissueController {
             jwtUtil.isExpired(refreshToken);
         } catch (ExpiredJwtException e) {
             //response status code
+            refreshTokenRepository.deleteByRefresh(refreshToken);
             throw new GeneralException(Code.REFRESH_TOKEN_EXPIRED, Code.REFRESH_TOKEN_EXPIRED.getMessage());
-//            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
+            //return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
         }
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
