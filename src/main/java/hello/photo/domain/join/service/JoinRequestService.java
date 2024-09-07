@@ -15,6 +15,7 @@ import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class JoinRequestService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public ApiResponse createJoinRequest(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
@@ -64,6 +66,7 @@ public class JoinRequestService {
         return DataResponseDto.of(joinResponseDto, Code.OK.getMessage());
     }
 
+    @Transactional
     public ApiResponse handleJoinRequest(Long joinRequestId, String action) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));

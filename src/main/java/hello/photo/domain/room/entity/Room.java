@@ -1,5 +1,7 @@
 package hello.photo.domain.room.entity;
 
+import hello.photo.domain.invitation.entity.Invitation;
+import hello.photo.domain.join.entity.JoinRequest;
 import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -33,8 +35,14 @@ public class Room {
     @ManyToMany
     private List<User> members = new ArrayList<>();
 
-    @OneToMany(mappedBy = "room")
-    private List<Moment> moments;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Moment> moments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JoinRequest> joinRequests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Invitation> invitations = new ArrayList<>();
 
     @Builder
     public Room(String roomName, String roomDescription, User host, String thumbnailImage) {

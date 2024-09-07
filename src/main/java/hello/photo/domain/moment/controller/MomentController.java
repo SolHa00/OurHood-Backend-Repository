@@ -16,7 +16,6 @@ public class MomentController {
 
     private final MomentService momentService;
 
-    //roomId도 requestBody로
     @PostMapping
     @Operation(summary = "Moment 생성 API")
     public ApiResponse createMoment(MomentCreateRequest request) {

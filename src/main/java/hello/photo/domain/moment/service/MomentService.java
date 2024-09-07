@@ -18,6 +18,7 @@ import hello.photo.global.response.DataResponseDto;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -34,6 +35,7 @@ public class MomentService {
     private final CommentRepository commentRepository;
 
     //Moment 생성
+    @Transactional
     public ApiResponse createMomentObject(MomentCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));

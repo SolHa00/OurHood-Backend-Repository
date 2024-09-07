@@ -8,12 +8,12 @@ import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Getter
-@Setter //추후에 삭제할 예정
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Moment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,8 @@ public class Moment {
     @ManyToOne
     private Room room;
 
-    @OneToMany(mappedBy = "moment")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Moment(String imageUrl, String momentDescription, User user, Room room) {
