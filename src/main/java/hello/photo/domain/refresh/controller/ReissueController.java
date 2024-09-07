@@ -2,7 +2,9 @@ package hello.photo.domain.refresh.controller;
 
 import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
+import hello.photo.global.exception.GeneralException;
 import hello.photo.global.jwt.JwtUtil;
+import hello.photo.global.response.Code;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -61,7 +63,8 @@ public class ReissueController {
             jwtUtil.isExpired(refreshToken);
         } catch (ExpiredJwtException e) {
             //response status code
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
+            throw new GeneralException(Code.REFRESH_TOKEN_EXPIRED, Code.REFRESH_TOKEN_EXPIRED.getMessage());
+//            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
         }
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
