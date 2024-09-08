@@ -10,8 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class Room {
 
     private String roomName;
     private String roomDescription;
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
     private String thumbnailImage;
 
     @ManyToOne
@@ -54,7 +53,7 @@ public class Room {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = OffsetDateTime.now(ZoneOffset.ofHours(9));
+        this.createdAt = LocalDateTime.now();
     }
 
     public void updateThumbnailImage(String thumbnailUrl) {

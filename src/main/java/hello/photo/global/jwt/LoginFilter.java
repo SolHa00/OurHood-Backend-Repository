@@ -33,13 +33,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public LoginFilter(AuthenticationManager authenticationManager, AuthenticationManager authenticationManager1, JwtUtil jwtUtil, RefreshTokenRepository refreshTokenRepository) {
-        super(authenticationManager);
-        this.authenticationManager = authenticationManager1;
-        this.jwtUtil = jwtUtil;
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
@@ -54,7 +47,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             //token에 담은 유저 데이터를 검증하기 위해 AuthenticationManager로 전달
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
-            log.info("LoginFilter Log");
             throw new RuntimeException(e);
         }
     }
@@ -62,7 +54,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 성공시 실행하는 메서드
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws ServletException, IOException {
-        //컨트롤러에서 해결
         chain.doFilter(request,response);
     }
 

@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,10 +15,10 @@ public class CommentResponse {
     private String nickname;
     private String commentContent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Builder
-    public CommentResponse(Long commentId, String nickname, String commentContent, OffsetDateTime createdAt) {
+    public CommentResponse(Long commentId, String nickname, String commentContent, LocalDateTime createdAt) {
         this.commentId = commentId;
         this.nickname = nickname;
         this.commentContent = commentContent;

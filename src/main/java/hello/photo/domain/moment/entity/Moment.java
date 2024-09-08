@@ -4,10 +4,12 @@ import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class Moment {
 
     private String momentDescription;
 
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     private User user;
@@ -44,6 +46,6 @@ public class Moment {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = OffsetDateTime.now(ZoneOffset.ofHours(9));
+        this.createdAt = LocalDateTime.now();
     }
 }

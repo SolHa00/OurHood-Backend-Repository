@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +65,7 @@ public class MomentService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         String nickname = moment.getUser().getNickname();
-        OffsetDateTime createdAt = moment.getCreatedAt();
+        LocalDateTime createdAt = moment.getCreatedAt();
         List<CommentResponse> comments = commentRepository.findByMoment(moment).stream()
                 .map(comment -> CommentResponse.builder()
                                 .commentId(comment.getId())

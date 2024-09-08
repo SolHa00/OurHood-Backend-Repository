@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,10 +16,10 @@ public class RoomsMyPageInfo {
     private String hostName;
     private int numOfMembers;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Builder
-    public RoomsMyPageInfo(Long roomId, String roomName, String hostName, int numOfMembers, OffsetDateTime createdAt) {
+    public RoomsMyPageInfo(Long roomId, String roomName, String hostName, int numOfMembers, LocalDateTime createdAt) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.hostName = hostName;

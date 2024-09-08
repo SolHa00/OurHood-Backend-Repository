@@ -6,17 +6,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentCreateResponse {
     private Long commentId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Builder
-    public CommentCreateResponse(Long commentId, OffsetDateTime createdAt) {
+    public CommentCreateResponse(Long commentId, LocalDateTime createdAt) {
         this.commentId = commentId;
         this.createdAt = createdAt;
     }
