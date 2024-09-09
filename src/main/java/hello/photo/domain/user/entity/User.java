@@ -4,8 +4,12 @@ import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.room.entity.Room;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,16 +29,16 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "host")
-    private List<Room> hostedRooms;
+    private List<Room> hostedRooms = new ArrayList<>();
 
     @ManyToMany(mappedBy = "members")
-    private List<Room> rooms;
+    private List<Room> rooms = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Invitation> invitations;
+    private List<Invitation> invitations = new ArrayList<>();
 
     @Builder
     public User(String nickname, String email, String password) {
