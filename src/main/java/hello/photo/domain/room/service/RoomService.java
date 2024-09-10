@@ -113,7 +113,7 @@ public class RoomService {
         Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
 
         if (!isMember) {
-            RoomDetailResponse roomDetailResponse = RoomDetailResponse.builder()
+            RoomEnterFailResponse roomEnterFailResponse = RoomEnterFailResponse.builder()
                     .isMember(false)
                     .roomId(room.getId())
                     .roomName(room.getRoomName())
@@ -122,7 +122,7 @@ public class RoomService {
                     .thumbnail(thumbnailUrl)
                     .build();
 
-            return DataResponseDto.of(roomDetailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
+            return DataResponseDto.of(roomEnterFailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
         }
 
         List<String> members = room.getMembers().stream()
@@ -138,7 +138,7 @@ public class RoomService {
 
         RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments, numOfNewJoinRequests);
 
-        RoomDetailResponse roomDetailResponse = RoomDetailResponse.builder()
+        RoomEnterSuccessResponse roomEnterSuccessResponse = RoomEnterSuccessResponse.builder()
                 .isMember(true)
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
@@ -148,6 +148,6 @@ public class RoomService {
                 .thumbnail(thumbnailUrl)
                 .build();
 
-        return DataResponseDto.of(roomDetailResponse, Code.OK.getMessage());
+        return DataResponseDto.of(roomEnterSuccessResponse, Code.OK.getMessage());
     }
 }

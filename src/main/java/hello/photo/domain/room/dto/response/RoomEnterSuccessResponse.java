@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomDetailResponse {
+public class RoomEnterSuccessResponse {
 
     private Boolean isMember;
     private Long roomId;
@@ -18,7 +18,7 @@ public class RoomDetailResponse {
     private String thumbnail;
 
     @Builder
-    public RoomDetailResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, RoomEnterInfo roomDetail, String thumbnail) {
+    public RoomEnterSuccessResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, RoomEnterInfo roomDetail, String thumbnail) {
         this.isMember = isMember;
         this.roomId = roomId;
         this.roomName = roomName;
