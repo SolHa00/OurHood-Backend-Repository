@@ -51,18 +51,10 @@ public class CustomLogoutFilter extends GenericFilterBean {
                 category = "refreshToken";
             }
 
-            if (!"refreshToken".equals(category)) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-
             boolean isExist = refreshTokenRepository.existsByRefresh(refreshToken);
-            if (!isExist) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                return;
+            if (isExist) {
+                refreshTokenRepository.deleteByRefresh(refreshToken);
             }
-
-            refreshTokenRepository.deleteByRefresh(refreshToken);
 
             Cookie cookie = new Cookie("refreshToken", null);
             cookie.setMaxAge(0);
