@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyPageResponse {
+
     private MyInfo myInfo;
     private List<RoomsMyPageInfo> rooms;
     private List<InvitationInfo> invitations;

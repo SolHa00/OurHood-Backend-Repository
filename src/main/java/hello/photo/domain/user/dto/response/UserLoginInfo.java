@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserLoginInfo {
+
     private Long userId;
     private String email;
     private String nickname;

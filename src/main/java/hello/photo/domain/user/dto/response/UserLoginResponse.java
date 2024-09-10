@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserLoginResponse {
+
     private UserLoginInfo user;
 
     public UserLoginResponse(UserLoginInfo user) {
