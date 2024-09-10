@@ -87,16 +87,12 @@ public class ReissueController {
 
         //make new JWT
         String newAccessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 3L); //3분
-        String newRefreshToken = jwtUtil.createJwt("refreshToken", email,  1000 * 60 * 10L); //10분
 
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
         refreshTokenRepository.deleteByRefresh(refreshToken);
-        addRefreshEntity(email, newRefreshToken, 1000 * 60 * 10L); //10분
 
         //response
         response.setHeader("accessToken", newAccessToken);
-        response.addCookie(createCookie("refreshToken", newRefreshToken));
-
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
