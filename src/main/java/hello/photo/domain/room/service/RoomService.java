@@ -1,5 +1,6 @@
 package hello.photo.domain.room.service;
 
+import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.join.repository.JoinRequestRepository;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.*;
@@ -29,6 +30,7 @@ public class RoomService {
     private final UserRepository userRepository;
     private final S3FileService s3FileService;
     private final JoinRequestRepository joinRequestRepository;
+    private final InvitationRepository invitationRepository;
 
     //방 생성
     @Transactional
@@ -105,14 +107,15 @@ public class RoomService {
     public ApiResponse getRoomDetails(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        boolean isMember = room.getMembers().stream().anyMatch(member -> member.getId().equals(userId));
+        Boolean isMember = room.getMembers().stream().anyMatch(member -> member.getId().equals(userId));
 
         String thumbnailUrl = room.getThumbnailImage();
 
-        Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
-
         if (!isMember) {
+            Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUser(room, user);
             RoomEnterFailResponse roomEnterFailResponse = RoomEnterFailResponse.builder()
                     .isMember(false)
                     .roomId(room.getId())
@@ -120,6 +123,7 @@ public class RoomService {
                     .roomDescription(room.getRoomDescription())
                     .hostName(room.getHost().getNickname())
                     .thumbnail(thumbnailUrl)
+                    .isJoinRequestSent(isJoinRequestSent)
                     .build();
 
             return DataResponseDto.of(roomEnterFailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
@@ -136,7 +140,18 @@ public class RoomService {
                         .build())
                 .collect(Collectors.toList());
 
-        RoomEnterInfo roomEnterInfo = new RoomEnterInfo(members, moments, numOfNewJoinRequests);
+        Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
+
+        List<String> invitedUsers = invitationRepository.findByRoom(room).stream()
+                .map(invitation -> invitation.getUser().getNickname())
+                .collect(Collectors.toList());
+
+        RoomEnterInfo roomEnterInfo = RoomEnterInfo.builder()
+                .members(members)
+                .moments(moments)
+                .numOfNewJoinRequests(numOfNewJoinRequests)
+                .invitedUsers(invitedUsers)
+                .build();
 
         RoomEnterSuccessResponse roomEnterSuccessResponse = RoomEnterSuccessResponse.builder()
                 .isMember(true)

@@ -15,14 +15,16 @@ public class RoomEnterFailResponse {
     private String roomDescription;
     private String hostName;
     private String thumbnail;
+    private Boolean isJoinRequestSent;
 
     @Builder
-    public RoomEnterFailResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, String thumbnail) {
+    public RoomEnterFailResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, String thumbnail, Boolean isJoinRequestSent) {
         this.isMember = isMember;
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomDescription = roomDescription;
         this.hostName = hostName;
         this.thumbnail = thumbnail;
+        this.isJoinRequestSent = isJoinRequestSent;
     }
 }
