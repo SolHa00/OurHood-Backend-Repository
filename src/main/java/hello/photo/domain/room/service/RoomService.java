@@ -165,4 +165,13 @@ public class RoomService {
 
         return DataResponseDto.of(roomEnterSuccessResponse, Code.OK.getMessage());
     }
+
+    //방 삭제
+    @Transactional
+    public ApiResponse deleteRoom(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+        roomRepository.delete(room);
+        return ApiResponse.of(Code.OK.getMessage());
+    }
 }

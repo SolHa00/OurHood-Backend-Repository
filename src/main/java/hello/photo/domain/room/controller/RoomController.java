@@ -26,6 +26,12 @@ public class RoomController {
         return roomService.createRoom(request);
     }
 
+    @DeleteMapping("/{roomId}")
+    @Operation(summary = "방 삭제")
+    public ApiResponse deleteRoom(@PathVariable Long roomId) {
+        return roomService.deleteRoom(roomId);
+    }
+
     @GetMapping
     @Operation(summary = "방 리스트 조회")
     public DataResponseDto<RoomListResponse> roomList(String order, String condition, @RequestParam(required = false) String q) {
