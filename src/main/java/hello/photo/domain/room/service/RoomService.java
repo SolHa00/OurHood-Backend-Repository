@@ -38,7 +38,6 @@ public class RoomService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        // 방 생성
         Room room = Room.builder()
                 .roomName(request.getRoomName())
                 .roomDescription(request.getRoomDescription())

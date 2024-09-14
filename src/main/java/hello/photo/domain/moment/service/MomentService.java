@@ -36,7 +36,7 @@ public class MomentService {
 
     //Moment 생성
     @Transactional
-    public ApiResponse createMomentObject(MomentCreateRequest request) {
+    public ApiResponse createMoment(MomentCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         Room room = roomRepository.findById(request.getRoomId())
@@ -60,7 +60,7 @@ public class MomentService {
     }
 
     //특정 Moment 조회
-    public ApiResponse getMomentObject(Long momentId) {
+    public ApiResponse getMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
@@ -85,4 +85,26 @@ public class MomentService {
 
         return DataResponseDto.of(momentDetailResponse, Code.OK.getMessage());
     }
+
+    //Moment 삭제
+    @Transactional
+    public ApiResponse deleteMoment(Long momentId) {
+        Moment moment = momentRepository.findById(momentId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+
+        String imageUrl = moment.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            String fileName = extractFileNameFromUrl(imageUrl);
+            s3FileService.deleteFile(fileName);
+        }
+
+        momentRepository.delete(moment);
+
+        return ApiResponse.of(Code.OK.getMessage());
+    }
+
+    private String extractFileNameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
 }

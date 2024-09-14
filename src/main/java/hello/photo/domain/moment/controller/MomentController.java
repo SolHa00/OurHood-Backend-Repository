@@ -19,12 +19,18 @@ public class MomentController {
     @PostMapping
     @Operation(summary = "Moment 생성 API")
     public ApiResponse createMoment(MomentCreateRequest request) {
-        return momentService.createMomentObject(request);
+        return momentService.createMoment(request);
     }
 
     @GetMapping("/{momentId}")
     @Operation(summary = "특정 Moment 조회")
     public ApiResponse getMoment(@PathVariable Long momentId) {
-        return momentService.getMomentObject(momentId);
+        return momentService.getMoment(momentId);
+    }
+
+    @DeleteMapping("/{momentId}")
+    @Operation(summary = "Moment 삭제")
+    public ApiResponse deleteMoment(@PathVariable Long momentId) {
+        return momentService.deleteMoment(momentId);
     }
 }
