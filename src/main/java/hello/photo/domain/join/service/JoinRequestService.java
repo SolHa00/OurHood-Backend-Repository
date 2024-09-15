@@ -1,7 +1,9 @@
 package hello.photo.domain.join.service;
 
+import hello.photo.domain.join.dto.request.JoinRequestCreateDto;
+import hello.photo.domain.join.dto.request.JoinRequestHandleDto;
 import hello.photo.domain.join.dto.response.JoinRequestDetail;
-import hello.photo.domain.join.dto.response.JoinResponseDto;
+import hello.photo.domain.join.dto.response.JoinRequestListResponse;
 import hello.photo.domain.join.entity.JoinRequest;
 import hello.photo.domain.join.repository.JoinRequestRepository;
 import hello.photo.domain.room.entity.Room;
@@ -28,10 +30,10 @@ public class JoinRequestService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ApiResponse createJoinRequest(Long roomId, Long userId) {
-        Room room = roomRepository.findById(roomId)
+    public ApiResponse createJoinRequest(JoinRequestCreateDto request) {
+        Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         //이미 해당 방에 참여 요청이 있는지 확인
@@ -50,7 +52,7 @@ public class JoinRequestService {
         return ApiResponse.of(Code.OK.getMessage());
     }
 
-    public DataResponseDto<JoinResponseDto> getJoinRequests(Long roomId) {
+    public DataResponseDto<JoinRequestListResponse> getJoinRequests(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
@@ -61,16 +63,16 @@ public class JoinRequestService {
                         .build())
                 .collect(Collectors.toList());
 
-        JoinResponseDto joinResponseDto = new JoinResponseDto(joinList);
+        JoinRequestListResponse joinResponseDto = new JoinRequestListResponse(joinList);
 
         return DataResponseDto.of(joinResponseDto, Code.OK.getMessage());
     }
 
     @Transactional
-    public ApiResponse handleJoinRequest(Long joinRequestId, String action) {
+    public ApiResponse handleJoinRequest(Long joinRequestId, JoinRequestHandleDto request) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
-        if ("accept".equals(action)) {
+        if ("accept".equals(request.getAction())) {
             Room room = joinRequest.getRoom();
             User user = joinRequest.getUser();
             room.getMembers().add(user);

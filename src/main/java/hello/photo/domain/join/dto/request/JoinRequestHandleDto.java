@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JoinRequestDto {
-    private Long roomId;
-    private Long userId;
+public class JoinRequestHandleDto {
+    private String action;
 }

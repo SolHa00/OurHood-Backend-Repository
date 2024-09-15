@@ -1,6 +1,7 @@
 package hello.photo.domain.invitation.controller;
 
 
+import hello.photo.domain.invitation.dto.request.InvitationHandleRequest;
 import hello.photo.domain.invitation.dto.request.InvitationRequest;
 import hello.photo.domain.invitation.service.InvitationService;
 import hello.photo.global.response.ApiResponse;
@@ -23,9 +24,9 @@ public class InvitationController {
         return invitationService.createInvitation(request.getRoomId(), request.getNickname());
     }
 
-    @DeleteMapping("/{invitationId}")
+    @PostMapping("/{invitationId}")
     @Operation(summary = "방 초대 요청 처리 API")
-    public ApiResponse handleInvitation(@PathVariable Long invitationId, String action) {
-        return invitationService.handleInviteRequest(invitationId, action);
+    public ApiResponse handleInvitation(@PathVariable Long invitationId, @RequestBody InvitationHandleRequest request) {
+        return invitationService.handleInviteRequest(invitationId, request);
     }
 }

@@ -1,5 +1,6 @@
 package hello.photo.domain.invitation.service;
 
+import hello.photo.domain.invitation.dto.request.InvitationHandleRequest;
 import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.room.entity.Room;
@@ -47,10 +48,10 @@ public class InvitationService {
 
 
     @Transactional
-    public ApiResponse handleInviteRequest(Long invitationId, String action) {
+    public ApiResponse handleInviteRequest(Long invitationId, InvitationHandleRequest request) {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
-        if("accept".equals(action)) {
+        if("accept".equals(request.getAction())) {
             Room room = invitation.getRoom();
             User user = invitation.getUser();
             room.getMembers().add(user);
