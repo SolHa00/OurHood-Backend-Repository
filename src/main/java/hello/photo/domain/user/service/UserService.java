@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -43,6 +44,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     public ApiResponse signup(UserSignupRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
