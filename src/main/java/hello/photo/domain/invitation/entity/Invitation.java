@@ -16,14 +16,17 @@ import java.time.LocalDateTime;
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "invitation_id")
     private Long id;
 
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @Builder

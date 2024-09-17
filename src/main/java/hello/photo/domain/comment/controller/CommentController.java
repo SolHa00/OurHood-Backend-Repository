@@ -19,7 +19,7 @@ public class CommentController {
     }
 
     //Comment 삭제
-    @DeleteMapping("/{commentId}}")
+    @DeleteMapping("/{commentId}")
     public ApiResponse deleteComment(@PathVariable Long commentId) {
         return commentService.deleteComment(commentId);
     }

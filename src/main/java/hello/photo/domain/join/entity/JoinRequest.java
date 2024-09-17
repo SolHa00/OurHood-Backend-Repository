@@ -11,12 +11,15 @@ import lombok.*;
 public class JoinRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "join_request_id")
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Builder

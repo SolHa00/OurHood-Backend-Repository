@@ -41,7 +41,7 @@ public class RoomService {
         Room room = Room.builder()
                 .roomName(request.getRoomName())
                 .roomDescription(request.getRoomDescription())
-                .host(user)
+                .user(user)
                 .build();
 
         room.getMembers().add(user);
@@ -78,7 +78,7 @@ public class RoomService {
             if ("room".equals(condition)) {
                 rooms = roomRepository.findByRoomNameContaining(q, sort);
             } else if ("host".equals(condition)) {
-                rooms = roomRepository.findByHostNicknameContaining(q, sort);
+                rooms = roomRepository.findByUserNicknameContaining(q, sort);
             } else {
                 rooms = roomRepository.findAll(sort);
             }
@@ -90,7 +90,7 @@ public class RoomService {
                 .map(room -> RoomListInfo.builder()
                         .roomId(room.getId())
                         .roomName(room.getRoomName())
-                        .hostName(room.getHost().getNickname())
+                        .hostName(room.getUser().getNickname())
                         .numOfMembers(room.getMembers().size())
                         .createdAt(room.getCreatedAt())
                         .thumbnail(room.getThumbnailImage())
@@ -120,7 +120,7 @@ public class RoomService {
                     .roomId(room.getId())
                     .roomName(room.getRoomName())
                     .roomDescription(room.getRoomDescription())
-                    .hostName(room.getHost().getNickname())
+                    .hostName(room.getUser().getNickname())
                     .thumbnail(thumbnailUrl)
                     .isJoinRequestSent(isJoinRequestSent)
                     .build();
@@ -157,7 +157,7 @@ public class RoomService {
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
                 .roomDescription(room.getRoomDescription())
-                .hostName(room.getHost().getNickname())
+                .hostName(room.getUser().getNickname())
                 .roomDetail(roomEnterInfo)
                 .thumbnail(thumbnailUrl)
                 .build();

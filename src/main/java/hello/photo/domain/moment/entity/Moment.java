@@ -19,6 +19,7 @@ import java.util.List;
 public class Moment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "moment_id")
     private Long id;
 
     private String imageUrl;
@@ -28,9 +29,11 @@ public class Moment {
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -19,6 +19,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(unique = true)
@@ -28,7 +29,7 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "host")
+    @OneToMany(mappedBy = "user")
     private List<Room> hostedRooms = new ArrayList<>();
 
     @ManyToMany(mappedBy = "members")

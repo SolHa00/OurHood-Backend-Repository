@@ -101,7 +101,7 @@ public class UserService {
                 .map(room -> RoomsMyPageInfo.builder()
                         .roomId(room.getId())
                         .roomName(room.getRoomName())
-                        .hostName(room.getHost().getNickname())
+                        .hostName(room.getUser().getNickname())
                         .numOfMembers(room.getMembers().size())
                         .createdAt(room.getCreatedAt())
                         .build())
@@ -113,7 +113,7 @@ public class UserService {
                                 .createdAt(invitation.getCreatedAt())
                                 .roomId(invitation.getRoom().getId())
                                 .roomName(invitation.getRoom().getRoomName())
-                                .hostName(invitation.getRoom().getHost().getNickname())
+                                .hostName(invitation.getRoom().getUser().getNickname())
                                 .build())
                 .collect(Collectors.toList());
 

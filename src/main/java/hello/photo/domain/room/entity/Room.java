@@ -21,6 +21,7 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private Long id;
 
     private String roomName;
@@ -29,9 +30,10 @@ public class Room {
     private String thumbnailImage;
 
     @ManyToOne
-    private User host;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @ManyToMany
+    @ManyToMany // 추후에 수정 예정 -> 1대다 다대1 중간 테이블 생성 예정
     private List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -44,10 +46,10 @@ public class Room {
     private List<Invitation> invitations = new ArrayList<>();
 
     @Builder
-    public Room(String roomName, String roomDescription, User host, String thumbnailImage) {
+    public Room(String roomName, String roomDescription, User user, String thumbnailImage) {
         this.roomName = roomName;
         this.roomDescription = roomDescription;
-        this.host = host;
+        this.user = user;
         this.thumbnailImage = thumbnailImage;
     }
 
