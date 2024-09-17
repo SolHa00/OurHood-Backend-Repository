@@ -24,6 +24,7 @@ public class CommentService {
     private final MomentRepository momentRepository;
     private final UserRepository userRepository;
 
+    //Comment 생성
     @Transactional
     public ApiResponse createComment(CommentCreateRequest request) {
         Moment moment = momentRepository.findById(request.getMomentId())
@@ -44,5 +45,14 @@ public class CommentService {
                 .createdAt(comment.getCreatedAt())
                 .build();
         return DataResponseDto.of(response);
+    }
+
+    //Comment 삭제
+    @Transactional
+    public ApiResponse deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+        commentRepository.delete(comment);
+        return ApiResponse.of(Code.OK.getMessage());
     }
 }

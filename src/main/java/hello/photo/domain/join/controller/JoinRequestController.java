@@ -19,7 +19,7 @@ public class JoinRequestController {
 
     private final JoinRequestService joinRequestService;
 
-    //방 참여 요청
+    //방 참여 요청 생성
     @PostMapping
     @Operation(summary = "방 참여 요청")
     public ApiResponse joinRequest(@RequestBody JoinRequestCreateDto request) {

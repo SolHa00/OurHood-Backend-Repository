@@ -29,6 +29,7 @@ public class JoinRequestService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
+    //방 참여 요청 생성
     @Transactional
     public ApiResponse createJoinRequest(JoinRequestCreateDto request) {
         Room room = roomRepository.findById(request.getRoomId())
@@ -52,6 +53,7 @@ public class JoinRequestService {
         return ApiResponse.of(Code.OK.getMessage());
     }
 
+    //방 참여 요청 목록
     public DataResponseDto<JoinRequestListResponse> getJoinRequests(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
@@ -68,6 +70,7 @@ public class JoinRequestService {
         return DataResponseDto.of(joinResponseDto, Code.OK.getMessage());
     }
 
+    //방 참여 요청 처리
     @Transactional
     public ApiResponse handleJoinRequest(Long joinRequestId, JoinRequestHandleDto request) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
