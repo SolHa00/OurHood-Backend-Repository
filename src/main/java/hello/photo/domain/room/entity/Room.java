@@ -28,7 +28,7 @@ public class Room {
     private LocalDateTime createdAt;
     private String thumbnailImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
