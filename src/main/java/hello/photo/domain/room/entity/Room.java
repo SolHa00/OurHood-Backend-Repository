@@ -32,8 +32,8 @@ public class Room {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany // 추후에 수정 예정 -> 1대다 다대1 중간 테이블 생성 예정
-    private List<User> members = new ArrayList<>();
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomMembers> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Moment> moments = new ArrayList<>();
@@ -59,5 +59,13 @@ public class Room {
 
     public void updateThumbnailImage(String thumbnailUrl) {
         this.thumbnailImage = thumbnailUrl;
+    }
+
+    public void addMember(User user) {
+        RoomMembers roomMember = RoomMembers.builder()
+                .room(this)
+                .user(user)
+                .build();
+        this.members.add(roomMember);
     }
 }

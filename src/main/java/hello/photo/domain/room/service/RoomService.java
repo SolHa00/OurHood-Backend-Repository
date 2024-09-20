@@ -44,7 +44,7 @@ public class RoomService {
                 .user(user)
                 .build();
 
-        room.getMembers().add(user);
+        room.addMember(user);
         room = roomRepository.save(room);
 
         if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
@@ -129,7 +129,7 @@ public class RoomService {
         }
 
         List<String> members = room.getMembers().stream()
-                .map(User::getNickname)
+                .map(roomMember -> roomMember.getUser().getNickname())
                 .collect(Collectors.toList());
 
         List<MomentEnterInfo> moments = room.getMoments().stream()

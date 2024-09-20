@@ -4,6 +4,7 @@ import hello.photo.domain.invitation.dto.response.InvitationInfo;
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
+import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.dto.response.RoomsMyPageInfo;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
@@ -97,14 +98,17 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        List<RoomsMyPageInfo> hostedRooms = user.getHostedRooms().stream()
-                .map(room -> RoomsMyPageInfo.builder()
-                        .roomId(room.getId())
-                        .roomName(room.getRoomName())
-                        .hostName(room.getUser().getNickname())
-                        .numOfMembers(room.getMembers().size())
-                        .createdAt(room.getCreatedAt())
-                        .build())
+        List<RoomsMyPageInfo> hostedRooms = user.getRooms().stream()
+                .map(roomMembers -> {
+                    Room room = roomMembers.getRoom();
+                    return RoomsMyPageInfo.builder()
+                            .roomId(room.getId())
+                            .roomName(room.getRoomName())
+                            .hostName(room.getUser().getNickname())
+                            .numOfMembers(room.getMembers().size())
+                            .createdAt(room.getCreatedAt())
+                            .build();
+                })
                 .collect(Collectors.toList());
 
         List<InvitationInfo> invitations = invitationRepository.findByUser(user).stream()

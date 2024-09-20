@@ -54,7 +54,7 @@ public class InvitationService {
         if("accept".equals(request.getAction())) {
             Room room = invitation.getRoom();
             User user = invitation.getUser();
-            room.getMembers().add(user);
+            room.addMember(user);
             roomRepository.save(room);
             invitationRepository.delete(invitation);
             return new ApiResponse("초대 요청을 승인 했습니다");

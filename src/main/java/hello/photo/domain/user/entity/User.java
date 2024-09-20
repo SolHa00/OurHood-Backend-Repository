@@ -2,7 +2,7 @@ package hello.photo.domain.user.entity;
 
 import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.invitation.entity.Invitation;
-import hello.photo.domain.room.entity.Room;
+import hello.photo.domain.room.entity.RoomMembers;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,16 +28,13 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<Room> hostedRooms = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomMembers> rooms = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "members")
-    private List<Room> rooms = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Invitation> invitations = new ArrayList<>();
 
     @Builder

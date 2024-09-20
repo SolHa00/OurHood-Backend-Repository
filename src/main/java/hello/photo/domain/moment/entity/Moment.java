@@ -19,7 +19,6 @@ import java.util.List;
 public class Moment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "moment_id")
     private Long id;
 
     private String imageUrl;
