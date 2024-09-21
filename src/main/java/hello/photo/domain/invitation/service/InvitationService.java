@@ -43,7 +43,7 @@ public class InvitationService {
 
         invitationRepository.save(invitation);
 
-        return new ApiResponse(Code.OK.getMessage());
+        return ApiResponse.of(Code.OK.getMessage());
     }
 
 
@@ -54,12 +54,11 @@ public class InvitationService {
         if("accept".equals(request.getAction())) {
             Room room = invitation.getRoom();
             User user = invitation.getUser();
-            room.addMember(user);
-            roomRepository.save(room);
+            room.addRoomMember(user);
             invitationRepository.delete(invitation);
-            return new ApiResponse("초대 요청을 승인 했습니다");
+            return ApiResponse.of("초대 요청을 승인 했습니다");
         }
         invitationRepository.delete(invitation);
-        return new ApiResponse("초대 요청을 거절 했습니다");
+        return ApiResponse.of("초대 요청을 거절 했습니다");
     }
 }

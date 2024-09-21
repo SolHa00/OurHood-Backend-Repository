@@ -43,8 +43,7 @@ public class RoomService {
                 .roomDescription(request.getRoomDescription())
                 .user(user)
                 .build();
-
-        room.addMember(user);
+        room.addRoomMember(user);
         room = roomRepository.save(room);
 
         if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
@@ -173,4 +172,5 @@ public class RoomService {
         roomRepository.delete(room);
         return ApiResponse.of(Code.OK.getMessage());
     }
+
 }

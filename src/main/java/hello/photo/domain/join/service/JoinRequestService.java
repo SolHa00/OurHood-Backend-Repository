@@ -78,8 +78,7 @@ public class JoinRequestService {
         if ("accept".equals(request.getAction())) {
             Room room = joinRequest.getRoom();
             User user = joinRequest.getUser();
-            room.addMember(user);
-            roomRepository.save(room);
+            room.addRoomMember(user);
             joinRequestRepository.delete(joinRequest);
             return ApiResponse.of("참여 요청이 승인 되었습니다");
         }

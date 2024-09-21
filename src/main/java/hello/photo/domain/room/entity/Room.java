@@ -61,11 +61,14 @@ public class Room {
         this.thumbnailImage = thumbnailUrl;
     }
 
-    public void addMember(User user) {
-        RoomMembers roomMember = RoomMembers.builder()
-                .room(this)
-                .user(user)
-                .build();
-        this.members.add(roomMember);
+    public void addRoomMember(User user) {
+        RoomMembers roomMembers = new RoomMembers(user, this);
+        boolean alreadyMember = this.members.stream()
+                .anyMatch(roomMember -> roomMember.getUser().equals(user));
+
+        if (!alreadyMember) {
+            this.members.add(roomMembers);  // Room 엔티티에서 관계를 관리
+            user.getRooms().add(roomMembers);
+        }
     }
 }
