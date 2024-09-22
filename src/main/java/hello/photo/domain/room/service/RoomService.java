@@ -122,6 +122,7 @@ public class RoomService {
                     .hostName(room.getUser().getNickname())
                     .thumbnail(thumbnailUrl)
                     .isJoinRequestSent(isJoinRequestSent)
+                    .createdAt(room.getCreatedAt())
                     .build();
 
             return DataResponseDto.of(roomEnterFailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
@@ -159,6 +160,7 @@ public class RoomService {
                 .hostName(room.getUser().getNickname())
                 .roomDetail(roomEnterInfo)
                 .thumbnail(thumbnailUrl)
+                .createdAt(room.getCreatedAt())
                 .build();
 
         return DataResponseDto.of(roomEnterSuccessResponse, Code.OK.getMessage());

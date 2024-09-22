@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomEnterSuccessResponse {
@@ -16,9 +18,10 @@ public class RoomEnterSuccessResponse {
     private String hostName;
     private RoomEnterInfo roomDetail;
     private String thumbnail;
+    private LocalDateTime createdAt;
 
     @Builder
-    public RoomEnterSuccessResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, RoomEnterInfo roomDetail, String thumbnail) {
+    public RoomEnterSuccessResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, RoomEnterInfo roomDetail, String thumbnail, LocalDateTime createdAt) {
         this.isMember = isMember;
         this.roomId = roomId;
         this.roomName = roomName;
@@ -26,5 +29,6 @@ public class RoomEnterSuccessResponse {
         this.hostName = hostName;
         this.roomDetail = roomDetail;
         this.thumbnail = thumbnail;
+        this.createdAt = createdAt;
     }
 }
