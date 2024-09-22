@@ -33,7 +33,7 @@ public class Room {
     private User user;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoomMembers> members = new ArrayList<>();
+    private List<RoomMembers> roomMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Moment> moments = new ArrayList<>();
@@ -63,12 +63,7 @@ public class Room {
 
     public void addRoomMember(User user) {
         RoomMembers roomMembers = new RoomMembers(user, this);
-        boolean alreadyMember = this.members.stream()
-                .anyMatch(roomMember -> roomMember.getUser().equals(user));
-
-        if (!alreadyMember) {
-            this.members.add(roomMembers);  // Room 엔티티에서 관계를 관리
-            user.getRooms().add(roomMembers);
-        }
+        this.roomMembers.add(roomMembers);
+        user.getRooms().add(roomMembers);
     }
 }

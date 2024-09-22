@@ -54,7 +54,7 @@ public class MomentService {
 
         MomentCreateResponse momentCreateResponse = MomentCreateResponse.builder()
                 .momentId(moment.getId())
-                .imageUrl(imageUrl).build();
+                .build();
 
         return DataResponseDto.of(momentCreateResponse);
     }

@@ -105,7 +105,7 @@ public class UserService {
                             .roomId(room.getId())
                             .roomName(room.getRoomName())
                             .hostName(room.getUser().getNickname())
-                            .numOfMembers(room.getMembers().size())
+                            .numOfMembers(room.getRoomMembers().size())
                             .createdAt(room.getCreatedAt())
                             .build();
                 })

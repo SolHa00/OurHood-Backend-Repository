@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MomentCreateResponse {
     private Long momentId;
-    private String imageUrl;
 
     @Builder
     public MomentCreateResponse(Long momentId, String imageUrl) {
         this.momentId = momentId;
-        this.imageUrl = imageUrl;
     }
 }

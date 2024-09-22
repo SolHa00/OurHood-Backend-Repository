@@ -90,7 +90,7 @@ public class RoomService {
                         .roomId(room.getId())
                         .roomName(room.getRoomName())
                         .hostName(room.getUser().getNickname())
-                        .numOfMembers(room.getMembers().size())
+                        .numOfMembers(room.getRoomMembers().size())
                         .createdAt(room.getCreatedAt())
                         .thumbnail(room.getThumbnailImage())
                         .build())
@@ -108,7 +108,7 @@ public class RoomService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        Boolean isMember = room.getMembers().stream().anyMatch(member -> member.getId().equals(userId));
+        Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getId().equals(userId));
 
         String thumbnailUrl = room.getThumbnailImage();
 
@@ -127,7 +127,7 @@ public class RoomService {
             return DataResponseDto.of(roomEnterFailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
         }
 
-        List<String> members = room.getMembers().stream()
+        List<String> members = room.getRoomMembers().stream()
                 .map(roomMember -> roomMember.getUser().getNickname())
                 .collect(Collectors.toList());
 
