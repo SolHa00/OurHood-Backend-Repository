@@ -65,7 +65,6 @@ public class ReissueController {
             //response status code
             refreshTokenRepository.deleteByRefresh(refreshToken);
             throw new GeneralException(Code.REFRESH_TOKEN_EXPIRED, Code.REFRESH_TOKEN_EXPIRED.getMessage());
-            //return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
         }
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
@@ -86,9 +85,9 @@ public class ReissueController {
         String email = jwtUtil.getEmail(refreshToken);
 
         //make new JWT
-        String newAccessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 120L); // 2시간
+        String newAccessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 3L); // 3분
 
-        //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
+        //refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제
         refreshTokenRepository.deleteByRefresh(refreshToken);
 
         //response

@@ -74,9 +74,9 @@ public class UserService {
         User user = userOptional.get();
 
         // 토큰 생성
-        String accessToken = jwtUtil.createJwt("accessToken", user.getEmail(), 1000 * 60 * 120L); // 2시간
-        String refreshToken = jwtUtil.createJwt("refreshToken", user.getEmail(), 1000 * 60 * 60 * 24 * 14L); // 14일
-        addRefreshToken(user.getEmail(), refreshToken, 1000 * 60 * 60 * 24 * 14L); // 14일
+        String accessToken = jwtUtil.createJwt("accessToken", user.getEmail(), 1000 * 60 * 3L); // 3분
+        String refreshToken = jwtUtil.createJwt("refreshToken", user.getEmail(), 1000 * 60 * 10L); // 10분
+        addRefreshToken(user.getEmail(), refreshToken, 1000 * 60 * 10L); // 10분
 
         // 응답 생성
         response.setHeader("accessToken", accessToken);
