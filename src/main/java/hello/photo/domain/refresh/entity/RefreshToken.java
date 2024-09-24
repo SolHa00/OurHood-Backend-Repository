@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
+    @Column(name = "refresh_token_id", updatable = false)
     private Long id;
 
     private String email;

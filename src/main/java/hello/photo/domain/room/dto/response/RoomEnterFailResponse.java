@@ -1,5 +1,6 @@
 package hello.photo.domain.room.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class RoomEnterFailResponse {
     private String hostName;
     private String thumbnail;
     private Boolean isJoinRequestSent;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Builder

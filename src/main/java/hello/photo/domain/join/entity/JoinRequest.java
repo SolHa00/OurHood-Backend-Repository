@@ -11,6 +11,7 @@ import lombok.*;
 public class JoinRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "join_request_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
