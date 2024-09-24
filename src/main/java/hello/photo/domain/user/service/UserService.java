@@ -5,13 +5,9 @@ import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import hello.photo.domain.room.entity.Room;
-import hello.photo.domain.user.dto.response.RoomsMyPageInfo;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignupRequest;
-import hello.photo.domain.user.dto.response.MyInfo;
-import hello.photo.domain.user.dto.response.MyPageResponse;
-import hello.photo.domain.user.dto.response.UserLoginInfo;
-import hello.photo.domain.user.dto.response.UserLoginResponse;
+import hello.photo.domain.user.dto.response.*;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.DuplicateException;
@@ -29,7 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -148,12 +145,12 @@ public class UserService {
 
     private void addRefreshToken(String email, String refresh, Long expiredMs) {
 
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
+        LocalDateTime expirationDate = LocalDateTime.now().plus(Duration.ofMillis(expiredMs));
 
         RefreshToken refreshEntity = RefreshToken.builder()
                 .email(email)
                 .refresh(refresh)
-                .expiration(date.toString())
+                .expiration(expirationDate)
                 .build();
 
         refreshTokenRepository.save(refreshEntity);

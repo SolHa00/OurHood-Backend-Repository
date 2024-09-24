@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -17,10 +19,10 @@ public class RefreshToken {
 
     private String email;
     private String refresh;
-    private String expiration;
+    private LocalDateTime expiration;
 
     @Builder
-    public RefreshToken(String email, String refresh, String expiration) {
+    public RefreshToken(String email, String refresh, LocalDateTime expiration) {
         this.email = email;
         this.refresh = refresh;
         this.expiration = expiration;

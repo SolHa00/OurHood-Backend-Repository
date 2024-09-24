@@ -1,6 +1,5 @@
 package hello.photo.domain.refresh.controller;
 
-import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import hello.photo.global.exception.GeneralException;
 import hello.photo.global.jwt.JwtUtil;
@@ -18,11 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +27,6 @@ public class ReissueController {
 
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor;
 
     @Operation(summary = "AccessToken 재발급", description = "유효하지 않은 AccessToken을 RefreshToken을 통해 재발급",
             parameters = {
@@ -87,36 +82,9 @@ public class ReissueController {
         //make new JWT
         String newAccessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 3L); // 3분
 
-        //refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제
-        refreshTokenRepository.deleteByRefresh(refreshToken);
-
         //response
         response.setHeader("accessToken", newAccessToken);
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
-    private void addRefreshEntity(String email, String refresh, Long expiredMs) {
-
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
-        RefreshToken refreshEntity = RefreshToken.builder()
-                .email(email)
-                .refresh(refresh)
-                .expiration(date.toString())
-                .build();
-
-        refreshTokenRepository.save(refreshEntity);
     }
 }
