@@ -19,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Room {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
@@ -63,7 +64,10 @@ public class Room {
     }
 
     public void addRoomMember(User user) {
-        RoomMembers roomMembers = new RoomMembers(user, this);
+        RoomMembers roomMembers = RoomMembers.builder()
+                .user(user)
+                .room(this)
+                .build();
         this.roomMembers.add(roomMembers);
         user.getRooms().add(roomMembers);
     }

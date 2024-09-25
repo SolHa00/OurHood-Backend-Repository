@@ -21,6 +21,7 @@ public class RoomMembers {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Builder
     public RoomMembers(User user, Room room) {
         this.user = user;
         this.room = room;

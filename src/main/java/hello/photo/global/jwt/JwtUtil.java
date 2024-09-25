@@ -31,7 +31,6 @@ public class JwtUtil {
     }
 
     public String createJwt(String category, String email, Long expiredMs) {
-
         return Jwts.builder()
                 .claim("category", category)
                 .claim("email", email)
