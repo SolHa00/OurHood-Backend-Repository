@@ -67,7 +67,7 @@ public class ReissueController {
         String email = jwtUtil.getEmail(refreshToken);
 
         //make new JWT
-        String newAccessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 3L); // 3분
+        String newAccessToken = jwtUtil.createJwt("accessToken", email, 1000 * 60 * 60 *2L); // 2시간
 
         //response
         response.setHeader("accessToken", newAccessToken);
