@@ -1,5 +1,6 @@
 package hello.photo.domain.user.entity;
 
+import hello.photo.domain.BaseTimeEntity;
 import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.room.entity.RoomMembers;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

@@ -1,5 +1,6 @@
 package hello.photo.domain.room.entity;
 
+import hello.photo.domain.BaseTimeEntity;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,7 +8,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class RoomMembers {
+public class RoomMembers extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_members_id")

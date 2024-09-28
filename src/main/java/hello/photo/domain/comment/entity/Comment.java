@@ -1,5 +1,6 @@
 package hello.photo.domain.comment.entity;
 
+import hello.photo.domain.BaseTimeEntity;
 import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -8,20 +9,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Comment {
+public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
     private String content;
-
-    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moment_id")
@@ -38,8 +35,4 @@ public class Comment {
         this.user = user;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

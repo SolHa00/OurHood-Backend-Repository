@@ -1,5 +1,6 @@
 package hello.photo.domain.moment.entity;
 
+import hello.photo.domain.BaseTimeEntity;
 import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.entity.User;
@@ -9,14 +10,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Moment {
+public class Moment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "moment_id")
@@ -25,8 +25,6 @@ public class Moment {
     private String imageUrl;
 
     private String momentDescription;
-
-    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -47,8 +45,4 @@ public class Moment {
         this.room = room;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

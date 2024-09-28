@@ -1,5 +1,6 @@
 package hello.photo.domain.room.entity;
 
+import hello.photo.domain.BaseTimeEntity;
 import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.join.entity.JoinRequest;
 import hello.photo.domain.moment.entity.Moment;
@@ -10,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Room {
+public class Room extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,6 @@ public class Room {
 
     private String roomName;
     private String roomDescription;
-    private LocalDateTime createdAt;
     private String thumbnailImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,11 +51,6 @@ public class Room {
         this.roomDescription = roomDescription;
         this.user = user;
         this.thumbnailImage = thumbnailImage;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
     }
 
     public void updateThumbnailImage(String thumbnailUrl) {

@@ -1,5 +1,6 @@
 package hello.photo.domain.invitation.entity;
 
+import hello.photo.domain.BaseTimeEntity;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -8,18 +9,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Invitation {
+public class Invitation extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "invitation_id")
     private Long id;
-
-    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -35,8 +32,4 @@ public class Invitation {
         this.room = room;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 }
