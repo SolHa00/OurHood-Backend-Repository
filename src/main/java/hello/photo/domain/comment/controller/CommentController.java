@@ -1,5 +1,6 @@
 package hello.photo.domain.comment.controller;
 
+import hello.photo.domain.comment.dto.request.CommentUpdateRequest;
 import hello.photo.domain.comment.dto.request.CommentCreateRequest;
 import hello.photo.domain.comment.service.CommentService;
 import hello.photo.global.response.ApiResponse;
@@ -16,6 +17,12 @@ public class CommentController {
     @PostMapping
     public ApiResponse createComment(@RequestBody CommentCreateRequest request) {
         return commentService.createComment(request);
+    }
+
+    //Comment 수정
+    @PutMapping("/{commentId}")
+    public ApiResponse updateContent(@PathVariable Long commentId, @RequestBody CommentUpdateRequest request){
+        return commentService.updateComment(commentId, request);
     }
 
     //Comment 삭제

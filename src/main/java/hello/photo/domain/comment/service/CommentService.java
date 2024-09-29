@@ -1,6 +1,7 @@
 package hello.photo.domain.comment.service;
 
 import hello.photo.domain.comment.dto.request.CommentCreateRequest;
+import hello.photo.domain.comment.dto.request.CommentUpdateRequest;
 import hello.photo.domain.comment.dto.response.CommentCreateResponse;
 import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.comment.repository.CommentRepository;
@@ -45,6 +46,16 @@ public class CommentService {
                 .createdAt(comment.getCreatedAt())
                 .build();
         return DataResponseDto.of(response);
+    }
+
+    @Transactional
+    public ApiResponse updateComment(Long commentId, CommentUpdateRequest request) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+
+        comment.updateContent(request.getCommentContent());
+
+        return ApiResponse.of(Code.OK.getMessage());
     }
 
     //Comment 삭제
