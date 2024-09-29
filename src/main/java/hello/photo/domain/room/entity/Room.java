@@ -65,4 +65,12 @@ public class Room extends BaseTimeEntity {
         this.roomMembers.add(roomMembers);
         user.getRooms().add(roomMembers);
     }
+
+    public void updateRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public void updateRoomDescription(String roomDescription) {
+        this.roomDescription = roomDescription;
+    }
 }

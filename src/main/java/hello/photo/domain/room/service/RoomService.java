@@ -3,6 +3,7 @@ package hello.photo.domain.room.service;
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.join.repository.JoinRequestRepository;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
+import hello.photo.domain.room.dto.request.RoomUpdateRequest;
 import hello.photo.domain.room.dto.response.*;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
@@ -59,6 +60,22 @@ public class RoomService {
                 .build();
 
         return DataResponseDto.of(roomResponse, Code.OK.getMessage());
+    }
+
+    @Transactional
+    public ApiResponse updateRoom(Long roomId, RoomUpdateRequest request) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, "Room not found"));
+
+        if (request.getRoomName() != null) {
+            room.updateRoomName(request.getRoomName());
+        }
+
+        if (request.getRoomDescription() != null) {
+            room.updateRoomDescription(request.getRoomDescription());
+        }
+
+        return ApiResponse.of(Code.OK.getMessage());
     }
 
     //방 리스트 조회
@@ -174,5 +191,6 @@ public class RoomService {
         roomRepository.delete(room);
         return ApiResponse.of(Code.OK.getMessage());
     }
+
 
 }
