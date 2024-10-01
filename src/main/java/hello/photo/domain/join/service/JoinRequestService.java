@@ -61,7 +61,7 @@ public class JoinRequestService {
         List<JoinRequestDetail> joinList = joinRequestRepository.findByRoom(room).stream()
                 .map(joinRequest -> JoinRequestDetail.builder()
                         .joinId(joinRequest.getId())
-                        .nickName(joinRequest.getUser().getNickname())
+                        .nickname(joinRequest.getUser().getNickname())
                         .build())
                 .collect(Collectors.toList());
 

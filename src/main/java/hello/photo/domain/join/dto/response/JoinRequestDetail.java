@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JoinRequestDetail {
     private Long joinId;
-    private String nickName;
+    private String nickname;
 
     @Builder
-    public JoinRequestDetail(Long joinId, String nickName) {
+    public JoinRequestDetail(Long joinId, String nickname) {
         this.joinId = joinId;
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 }
