@@ -65,7 +65,7 @@ public class RoomService {
     @Transactional
     public ApiResponse updateRoom(Long roomId, RoomUpdateRequest request) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, "Room not found"));
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         if (request.getRoomName() != null) {
             room.updateRoomName(request.getRoomName());
@@ -119,13 +119,13 @@ public class RoomService {
     }
 
     //특정 방 입장
-    public ApiResponse getRoomDetails(Long roomId, Long userId) {
+    public ApiResponse enterRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getId().equals(userId));
+        Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getUser().getId().equals(userId));
 
         String thumbnailUrl = room.getThumbnailImage();
 

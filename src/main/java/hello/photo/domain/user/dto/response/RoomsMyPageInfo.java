@@ -18,13 +18,15 @@ public class RoomsMyPageInfo {
     private int numOfMembers;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+    private String thumbnail;
 
     @Builder
-    public RoomsMyPageInfo(Long roomId, String roomName, String hostName, int numOfMembers, LocalDateTime createdAt) {
+    public RoomsMyPageInfo(Long roomId, String roomName, String hostName, int numOfMembers, LocalDateTime createdAt, String thumbnail) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.hostName = hostName;
         this.numOfMembers = numOfMembers;
         this.createdAt = createdAt;
+        this.thumbnail = thumbnail;
     }
 }

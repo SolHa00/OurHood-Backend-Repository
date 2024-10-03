@@ -95,18 +95,10 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        List<RoomsMyPageInfo> hostedRooms = user.getRooms().stream()
-                .map(roomMembers -> {
-                    Room room = roomMembers.getRoom();
-                    return RoomsMyPageInfo.builder()
-                            .roomId(room.getId())
-                            .roomName(room.getRoomName())
-                            .hostName(room.getUser().getNickname())
-                            .numOfMembers(room.getRoomMembers().size())
-                            .createdAt(room.getCreatedAt())
-                            .build();
-                })
-                .collect(Collectors.toList());
+        MyInfo myInfo = MyInfo.builder()
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
 
         List<InvitationInfo> invitations = invitationRepository.findByUser(user).stream()
                 .map(invitation -> InvitationInfo.builder()
@@ -118,10 +110,19 @@ public class UserService {
                                 .build())
                 .collect(Collectors.toList());
 
-        MyInfo myInfo = MyInfo.builder()
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
+        List<RoomsMyPageInfo> hostedRooms = user.getRooms().stream()
+                .map(roomMembers -> {
+                    Room room = roomMembers.getRoom();
+                    return RoomsMyPageInfo.builder()
+                            .roomId(room.getId())
+                            .roomName(room.getRoomName())
+                            .hostName(room.getUser().getNickname())
+                            .numOfMembers(room.getRoomMembers().size())
+                            .createdAt(room.getCreatedAt())
+                            .thumbnail(room.getThumbnailImage())
+                            .build();
+                })
+                .collect(Collectors.toList());
 
         MyPageResponse myPageResponse = MyPageResponse.builder()
                 .myInfo(myInfo)

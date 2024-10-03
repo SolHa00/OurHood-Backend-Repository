@@ -48,7 +48,7 @@ public class RoomController {
 
     @PostMapping("/{roomId}")
     @Operation(summary = "특정 방 입장", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로 이동")
-    public ApiResponse getRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
-        return roomService.getRoomDetails(roomId, request.getUserId());
+    public ApiResponse enterRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
+        return roomService.enterRoom(roomId, request.getUserId());
     }
 }

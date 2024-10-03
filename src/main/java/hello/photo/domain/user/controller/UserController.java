@@ -6,7 +6,6 @@ import hello.photo.domain.user.dto.response.MyPageResponse;
 import hello.photo.domain.user.service.UserService;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.DataResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    @Operation(summary = "마이페이지 조회")
     public DataResponseDto<MyPageResponse> getMyPage(@PathVariable Long userId){
         return userService.getMyPage(userId);
     }

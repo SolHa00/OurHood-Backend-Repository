@@ -36,6 +36,13 @@ public class InvitationService {
             throw new DuplicateException(Code.INVITATION_REQUEST_DUPLICATED, Code.INVITATION_REQUEST_DUPLICATED.getMessage());
         }
 
+        // 이미 해당 방의 멤버인지 확인
+        boolean isMember = room.getRoomMembers().stream()
+                .anyMatch(roomMember -> roomMember.getUser().getId().equals(user.getId()));
+        if (isMember) {
+            throw new DuplicateException(Code.ALREADY_INVITED_USER, Code.ALREADY_INVITED_USER.getMessage());
+        }
+
         Invitation invitation = Invitation.builder()
                 .room(room)
                 .user(user)
