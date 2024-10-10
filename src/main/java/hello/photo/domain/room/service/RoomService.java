@@ -145,8 +145,11 @@ public class RoomService {
             return DataResponseDto.of(roomEnterFailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
         }
 
-        List<String> members = room.getRoomMembers().stream()
-                .map(roomMember -> roomMember.getUser().getNickname())
+        List<MemberInfo> members = room.getRoomMembers().stream()
+                .map(member -> MemberInfo.builder()
+                        .userId(member.getUser().getId())
+                        .nickname(member.getUser().getNickname())
+                        .build())
                 .collect(Collectors.toList());
 
         List<MomentEnterInfo> moments = room.getMoments().stream()
@@ -178,6 +181,7 @@ public class RoomService {
                 .roomDetail(roomEnterInfo)
                 .thumbnail(thumbnailUrl)
                 .createdAt(room.getCreatedAt())
+                .userId(room.getUser().getId())
                 .build();
 
         return DataResponseDto.of(roomEnterSuccessResponse, Code.OK.getMessage());
@@ -191,6 +195,4 @@ public class RoomService {
         roomRepository.delete(room);
         return ApiResponse.of(Code.OK.getMessage());
     }
-
-
 }

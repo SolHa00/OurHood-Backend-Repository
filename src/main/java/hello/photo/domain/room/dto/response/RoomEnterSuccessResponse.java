@@ -21,9 +21,10 @@ public class RoomEnterSuccessResponse {
     private String thumbnail;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+    private Long userId;
 
     @Builder
-    public RoomEnterSuccessResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, RoomEnterInfo roomDetail, String thumbnail, LocalDateTime createdAt) {
+    public RoomEnterSuccessResponse(Boolean isMember, Long roomId, String roomName, String roomDescription, String hostName, RoomEnterInfo roomDetail, String thumbnail, LocalDateTime createdAt, Long userId) {
         this.isMember = isMember;
         this.roomId = roomId;
         this.roomName = roomName;
@@ -32,5 +33,6 @@ public class RoomEnterSuccessResponse {
         this.roomDetail = roomDetail;
         this.thumbnail = thumbnail;
         this.createdAt = createdAt;
+        this.userId = userId;
     }
 }
