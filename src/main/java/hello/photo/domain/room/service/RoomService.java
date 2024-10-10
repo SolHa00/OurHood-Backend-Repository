@@ -62,17 +62,31 @@ public class RoomService {
         return DataResponseDto.of(roomResponse, Code.OK.getMessage());
     }
 
+    // 방 정보 수정
     @Transactional
     public ApiResponse updateRoom(Long roomId, RoomUpdateRequest request) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        if (request.getRoomName() != null) {
-            room.updateRoomName(request.getRoomName());
-        }
+        room.updateRoomName(request.getRoomName());
+        room.updateRoomDescription(request.getRoomDescription());
 
-        if (request.getRoomDescription() != null) {
-            room.updateRoomDescription(request.getRoomDescription());
+        if (request.getThumbnail() == null || request.getThumbnail().isEmpty()) {
+            if (room.getThumbnailImage() != null) {
+                String existingFileName = extractFileNameFromUrl(room.getThumbnailImage());
+                s3FileService.deleteFile(existingFileName);
+                room.updateThumbnailImage(null);
+            }
+        } else {
+            if (room.getThumbnailImage() != null) {
+                String existingFileName = extractFileNameFromUrl(room.getThumbnailImage());
+                s3FileService.deleteFile(existingFileName);
+            }
+
+            MultipartFile thumbnail = request.getThumbnail();
+            String imageUrl = s3FileService.uploadFile(thumbnail);
+
+            room.updateThumbnailImage(imageUrl);
         }
 
         return ApiResponse.of(Code.OK.getMessage());
@@ -194,5 +208,9 @@ public class RoomService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         roomRepository.delete(room);
         return ApiResponse.of(Code.OK.getMessage());
+    }
+
+    private String extractFileNameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 }

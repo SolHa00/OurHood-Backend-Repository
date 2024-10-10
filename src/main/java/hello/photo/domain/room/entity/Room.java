@@ -53,10 +53,6 @@ public class Room extends BaseTimeEntity {
         this.thumbnailImage = thumbnailImage;
     }
 
-    public void updateThumbnailImage(String thumbnailUrl) {
-        this.thumbnailImage = thumbnailUrl;
-    }
-
     public void addRoomMember(User user) {
         RoomMembers roomMembers = RoomMembers.builder()
                 .user(user)
@@ -72,5 +68,9 @@ public class Room extends BaseTimeEntity {
 
     public void updateRoomDescription(String roomDescription) {
         this.roomDescription = roomDescription;
+    }
+
+    public void updateThumbnailImage(String thumbnailUrl) {
+        this.thumbnailImage = thumbnailUrl;
     }
 }

@@ -36,7 +36,7 @@ public class RoomController {
 
     @PutMapping("/{roomId}")
     @Operation(summary = "방 정보 수정")
-    public ApiResponse updateRoom(@PathVariable Long roomId, @RequestBody RoomUpdateRequest request){
+    public ApiResponse updateRoom(@PathVariable Long roomId, RoomUpdateRequest request){
         return roomService.updateRoom(roomId, request);
     }
 
