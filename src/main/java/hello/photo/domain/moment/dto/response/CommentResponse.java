@@ -16,12 +16,14 @@ public class CommentResponse {
     private String commentContent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+    private Long userId;
 
     @Builder
-    public CommentResponse(Long commentId, String nickname, String commentContent, LocalDateTime createdAt) {
+    public CommentResponse(Long commentId, String nickname, String commentContent, LocalDateTime createdAt, Long userId) {
         this.commentId = commentId;
         this.nickname = nickname;
         this.commentContent = commentContent;
         this.createdAt = createdAt;
+        this.userId = userId;
     }
 }

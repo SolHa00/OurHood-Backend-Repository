@@ -68,11 +68,12 @@ public class MomentService {
         LocalDateTime createdAt = moment.getCreatedAt();
         List<CommentResponse> comments = commentRepository.findByMoment(moment).stream()
                 .map(comment -> CommentResponse.builder()
-                                .commentId(comment.getId())
-                                .nickname(comment.getUser().getNickname())
-                                .commentContent(comment.getContent())
-                                .createdAt(comment.getCreatedAt())
-                                .build())
+                        .commentId(comment.getId())
+                        .nickname(comment.getUser().getNickname())
+                        .commentContent(comment.getContent())
+                        .createdAt(comment.getCreatedAt())
+                        .userId(comment.getUser().getId())
+                        .build())
                 .collect(Collectors.toList());
 
         MomentDetailResponse momentDetailResponse = MomentDetailResponse.builder()
@@ -81,6 +82,7 @@ public class MomentService {
                 .momentDescription(moment.getMomentDescription())
                 .createdAt(createdAt)
                 .comments(comments)
+                .userId(moment.getUser().getId())
                 .build();
 
         return DataResponseDto.of(momentDetailResponse, Code.OK.getMessage());
