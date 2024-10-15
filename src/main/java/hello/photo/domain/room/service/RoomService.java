@@ -68,8 +68,13 @@ public class RoomService {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        room.updateRoomName(request.getRoomName());
-        room.updateRoomDescription(request.getRoomDescription());
+        if(request.getRoomName() != null){
+            room.updateRoomName(request.getRoomName());
+        }
+
+        if(request.getRoomDescription() != null){
+            room.updateRoomDescription(request.getRoomDescription());
+        }
 
         if (request.getThumbnail() == null || request.getThumbnail().isEmpty()) {
             if (room.getThumbnailImage() != null) {

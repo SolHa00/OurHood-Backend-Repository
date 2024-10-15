@@ -1,6 +1,6 @@
 package hello.photo.domain.comment.entity;
 
-import hello.photo.domain.BaseTimeEntity;
+import hello.photo.domain.user.entity.BaseTimeEntity;
 import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;

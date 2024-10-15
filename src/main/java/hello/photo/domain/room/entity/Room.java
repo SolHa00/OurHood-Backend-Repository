@@ -1,6 +1,6 @@
 package hello.photo.domain.room.entity;
 
-import hello.photo.domain.BaseTimeEntity;
+import hello.photo.domain.user.entity.BaseTimeEntity;
 import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.join.entity.JoinRequest;
 import hello.photo.domain.moment.entity.Moment;

@@ -1,4 +1,4 @@
-package hello.photo.domain;
+package hello.photo.domain.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

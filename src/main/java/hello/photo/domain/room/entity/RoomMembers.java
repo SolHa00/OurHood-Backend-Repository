@@ -1,6 +1,6 @@
 package hello.photo.domain.room.entity;
 
-import hello.photo.domain.BaseTimeEntity;
+import hello.photo.domain.user.entity.BaseTimeEntity;
 import hello.photo.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
