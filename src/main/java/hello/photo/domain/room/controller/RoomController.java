@@ -2,6 +2,7 @@ package hello.photo.domain.room.controller;
 
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.request.RoomDetailRequest;
+import hello.photo.domain.room.dto.request.RoomLeaveRequest;
 import hello.photo.domain.room.dto.request.RoomUpdateRequest;
 import hello.photo.domain.room.dto.response.RoomCreateResponse;
 import hello.photo.domain.room.dto.response.RoomListResponse;
@@ -27,13 +28,6 @@ public class RoomController {
         return roomService.createRoom(request);
     }
 
-    @DeleteMapping("/{roomId}")
-    @Operation(summary = "방 삭제")
-    public ApiResponse deleteRoom(@PathVariable Long roomId) {
-        return roomService.deleteRoom(roomId);
-    }
-
-
     @PutMapping("/{roomId}")
     @Operation(summary = "방 정보 수정")
     public ApiResponse updateRoom(@PathVariable Long roomId, RoomUpdateRequest request){
@@ -50,5 +44,17 @@ public class RoomController {
     @Operation(summary = "특정 방 입장", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로 이동")
     public ApiResponse enterRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
         return roomService.enterRoom(roomId, request.getUserId());
+    }
+
+    @DeleteMapping("/{roomId}")
+    @Operation(summary = "방 삭제")
+    public ApiResponse deleteRoom(@PathVariable Long roomId) {
+        return roomService.deleteRoom(roomId);
+    }
+
+    @PostMapping("/{roomId}/leave")
+    @Operation(summary = "방 탈퇴")
+    public ApiResponse leaveRoom(@PathVariable Long roomId, @RequestBody RoomLeaveRequest request) {
+        return roomService.leaveRoom(roomId, request.getUserId());
     }
 }

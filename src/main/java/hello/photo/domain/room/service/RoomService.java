@@ -215,6 +215,19 @@ public class RoomService {
         return ApiResponse.of(Code.OK.getMessage());
     }
 
+    //방 탈퇴
+    @Transactional
+    public ApiResponse leaveRoom(Long roomId, Long userId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+
+        room.removeRoomMember(user);
+        
+        return ApiResponse.of(Code.OK.getMessage());
+    }
+
     private String extractFileNameFromUrl(String url) {
         return url.substring(url.lastIndexOf("/") + 1);
     }

@@ -62,6 +62,11 @@ public class Room extends BaseTimeEntity {
         user.getRooms().add(roomMembers);
     }
 
+    public void removeRoomMember(User user) {
+        this.roomMembers.removeIf(roomMembers -> roomMembers.getUser().equals(user));
+        user.getRooms().removeIf(roomMembers -> roomMembers.getRoom().equals(this));
+    }
+
     public void updateRoomName(String roomName) {
         this.roomName = roomName;
     }
