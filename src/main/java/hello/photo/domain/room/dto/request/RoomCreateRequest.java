@@ -7,8 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 public class RoomCreateRequest {
+    private Long userId;
     private String roomName;
     private String roomDescription;
-    private Long userId;
     private MultipartFile thumbnail;
 }

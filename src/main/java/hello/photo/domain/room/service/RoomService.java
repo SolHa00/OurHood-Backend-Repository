@@ -2,6 +2,7 @@ package hello.photo.domain.room.service;
 
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.join.repository.JoinRequestRepository;
+import hello.photo.domain.room.converter.RoomConverter;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.request.RoomUpdateRequest;
 import hello.photo.domain.room.dto.response.*;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,28 +38,23 @@ public class RoomService {
     //방 생성
     @Transactional
     public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
+
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        Room room = Room.builder()
-                .roomName(request.getRoomName())
-                .roomDescription(request.getRoomDescription())
-                .user(user)
-                .build();
-        room.addRoomMember(user);
-        room = roomRepository.save(room);
+        Room room = RoomConverter.toRoom(request);
 
         if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
             MultipartFile thumbnail = request.getThumbnail();
             String imageUrl = s3FileService.uploadFile(thumbnail);
 
             room.updateThumbnailImage(imageUrl);
-            room = roomRepository.save(room);
         }
 
-        RoomCreateResponse roomResponse = RoomCreateResponse.builder()
-                .roomId(room.getId())
-                .build();
+        room.addRoomMember(user);
+        room = roomRepository.save(room);
+
+        RoomCreateResponse roomResponse = RoomConverter.toRoomCreateResponse(room);
 
         return DataResponseDto.of(roomResponse, Code.OK.getMessage());
     }
@@ -65,6 +62,7 @@ public class RoomService {
     // 방 정보 수정
     @Transactional
     public ApiResponse updateRoom(Long roomId, RoomUpdateRequest request) {
+
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
@@ -121,18 +119,15 @@ public class RoomService {
             rooms = roomRepository.findAll(sort);
         }
 
-        List<RoomListInfo> roomListInfos = rooms.stream()
-                .map(room -> RoomListInfo.builder()
-                        .roomId(room.getId())
-                        .roomName(room.getRoomName())
-                        .hostName(room.getUser().getNickname())
-                        .numOfMembers(room.getRoomMembers().size())
-                        .createdAt(room.getCreatedAt())
-                        .thumbnail(room.getThumbnailImage())
-                        .build())
-                .collect(Collectors.toList());
+        List<RoomListInfo> roomListInfos = new ArrayList<>();
+        for (Room room : rooms) {
+            User host = userRepository.findById(room.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+            RoomListInfo roomListInfo = RoomConverter.toRoomListInfo(room, host.getNickname());
+            roomListInfos.add(roomListInfo);
+        }
 
-        RoomListResponse roomListResponse = new RoomListResponse(roomListInfos);
+        RoomListResponse roomListResponse = RoomConverter.toRoomListResponse(roomListInfos);
 
         return DataResponseDto.of(roomListResponse, Code.OK.getMessage());
     }
@@ -142,6 +137,8 @@ public class RoomService {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+        User host = userRepository.findById(room.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getUser().getId().equals(userId));
@@ -155,7 +152,7 @@ public class RoomService {
                     .roomId(room.getId())
                     .roomName(room.getRoomName())
                     .roomDescription(room.getRoomDescription())
-                    .hostName(room.getUser().getNickname())
+                    .hostName(host.getNickname())
                     .thumbnail(thumbnailUrl)
                     .isJoinRequestSent(isJoinRequestSent)
                     .createdAt(room.getCreatedAt())
@@ -196,11 +193,11 @@ public class RoomService {
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
                 .roomDescription(room.getRoomDescription())
-                .hostName(room.getUser().getNickname())
+                .hostName(host.getNickname())
                 .roomDetail(roomEnterInfo)
                 .thumbnail(thumbnailUrl)
                 .createdAt(room.getCreatedAt())
-                .userId(room.getUser().getId())
+                .userId(room.getUserId())
                 .build();
 
         return DataResponseDto.of(roomEnterSuccessResponse, Code.OK.getMessage());

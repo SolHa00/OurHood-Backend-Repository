@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CommentCreateRequest {
-    private Long momentId;
     private Long userId;
+    private Long momentId;
     private String commentContent;
 }
