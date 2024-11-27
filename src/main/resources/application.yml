@@ -27,9 +27,3 @@ cloud:
         static: ap-northeast-2
       s3:
         bucket: ${S3_BUCKET}
-
-springdoc:
-  swagger-ui:
-    tags-sorter: alpha
-    operations-sorter: alpha
-  use-fqn: true
