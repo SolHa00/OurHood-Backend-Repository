@@ -1,8 +1,7 @@
 package hello.photo.domain.comment.entity;
 
-import hello.photo.domain.user.entity.BaseTimeEntity;
 import hello.photo.domain.moment.entity.Moment;
-import hello.photo.domain.user.entity.User;
+import hello.photo.domain.user.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,21 +17,18 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id")
     private Long id;
 
+    private Long userId;
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moment_id")
     private Moment moment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Builder
-    public Comment(String content, Moment moment, User user) {
+    public Comment(Long userId, String content, Moment moment) {
+        this.userId = userId;
         this.content = content;
         this.moment = moment;
-        this.user = user;
     }
 
     public void updateContent(String content) {

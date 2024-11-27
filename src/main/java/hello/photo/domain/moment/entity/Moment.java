@@ -1,9 +1,8 @@
 package hello.photo.domain.moment.entity;
 
-import hello.photo.domain.user.entity.BaseTimeEntity;
 import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.room.entity.Room;
-import hello.photo.domain.user.entity.User;
+import hello.photo.domain.user.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,13 +21,9 @@ public class Moment extends BaseTimeEntity {
     @Column(name = "moment_id")
     private Long id;
 
+    private Long userId;
     private String imageUrl;
-
     private String momentDescription;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
@@ -38,10 +33,10 @@ public class Moment extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Moment(String imageUrl, String momentDescription, User user, Room room) {
+    public Moment(Long userId, String imageUrl, String momentDescription, Room room) {
+        this.userId = userId;
         this.imageUrl = imageUrl;
         this.momentDescription = momentDescription;
-        this.user = user;
         this.room = room;
     }
 

@@ -10,38 +10,32 @@ import hello.photo.domain.room.service.RoomService;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.DataResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/rooms")
-@Tag(name = "Room API", description = "Room 관련 API")
 public class RoomController {
 
     private final RoomService roomService;
 
     @PostMapping
-    @Operation(summary = "방 생성")
     public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
         return roomService.createRoom(request);
     }
 
     @PutMapping("/{roomId}")
-    @Operation(summary = "방 정보 수정")
     public ApiResponse updateRoom(@PathVariable Long roomId, RoomUpdateRequest request){
         return roomService.updateRoom(roomId, request);
     }
 
     @GetMapping
-    @Operation(summary = "방 리스트 조회")
     public DataResponseDto<RoomListResponse> roomList(String order, String condition, @RequestParam(required = false) String q) {
         return roomService.getRooms(order, condition, q);
     }
 
     @PostMapping("/{roomId}")
-    @Operation(summary = "특정 방 입장", description = "방 멤버에 속하면 입장, 속하지 않는다면 참여 요청을 누르는 페이지로 이동")
     public ApiResponse enterRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
         return roomService.enterRoom(roomId, request.getUserId());
     }

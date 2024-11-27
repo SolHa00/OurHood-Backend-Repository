@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Invitation extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "invitation_id")
@@ -31,5 +32,4 @@ public class Invitation extends BaseTimeEntity {
         this.user = user;
         this.room = room;
     }
-
 }

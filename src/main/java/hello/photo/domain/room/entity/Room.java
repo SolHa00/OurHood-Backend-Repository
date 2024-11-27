@@ -29,10 +29,6 @@ public class Room extends BaseTimeEntity {
     private String roomDescription;
     private String thumbnailImage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomMembers> roomMembers = new ArrayList<>();
 
@@ -46,10 +42,9 @@ public class Room extends BaseTimeEntity {
     private List<Invitation> invitations = new ArrayList<>();
 
     @Builder
-    public Room(String roomName, String roomDescription, User user, String thumbnailImage) {
+    public Room(String roomName, String roomDescription, String thumbnailImage) {
         this.roomName = roomName;
         this.roomDescription = roomDescription;
-        this.user = user;
         this.thumbnailImage = thumbnailImage;
     }
 

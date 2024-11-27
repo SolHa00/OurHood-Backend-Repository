@@ -6,7 +6,7 @@ import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
-import hello.photo.domain.user.dto.request.UserSignupRequest;
+import hello.photo.domain.user.dto.request.UserSignUpRequest;
 import hello.photo.domain.user.dto.response.*;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
@@ -43,7 +43,7 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public ApiResponse signup(UserSignupRequest request) {
+    public ApiResponse signup(UserSignUpRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateException(Code.USER_EMAIL_DUPLICATED, Code.USER_EMAIL_DUPLICATED.getMessage());
