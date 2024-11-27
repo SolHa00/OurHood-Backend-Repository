@@ -2,6 +2,7 @@ package hello.photo.domain.moment.service;
 
 import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.comment.repository.CommentRepository;
+import hello.photo.domain.moment.converter.MomentConverter;
 import hello.photo.domain.moment.dto.request.MomentCreateRequest;
 import hello.photo.domain.moment.dto.response.CommentResponse;
 import hello.photo.domain.moment.dto.response.MomentCreateResponse;
@@ -45,17 +46,10 @@ public class MomentService {
 
         String imageUrl = s3FileService.uploadFile(request.getMomentImage());
 
-        Moment moment = Moment.builder()
-                .imageUrl(imageUrl)
-                .momentDescription(request.getMomentDescription())
-                .userId(user.getId())
-                .room(room)
-                .build();
+        Moment moment = MomentConverter.toMoment(imageUrl, request, user, room);
         momentRepository.save(moment);
 
-        MomentCreateResponse momentCreateResponse = MomentCreateResponse.builder()
-                .momentId(moment.getId())
-                .build();
+        MomentCreateResponse momentCreateResponse = MomentConverter.toMomentCreateResponse(moment);
 
         return DataResponseDto.of(momentCreateResponse);
     }
@@ -75,25 +69,11 @@ public class MomentService {
         for (Comment comment : commentList) {
             User commentUser = userRepository.findById(comment.getUserId())
                     .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
-            CommentResponse commentResponse = CommentResponse.builder()
-                    .commentId(comment.getId())
-                    .nickname(commentUser.getNickname())
-                    .commentContent(comment.getContent())
-                    .createdAt(comment.getCreatedAt())
-                    .userId(commentUser.getId())
-                    .build();
-
+            CommentResponse commentResponse = MomentConverter.toCommentResponse(comment, commentUser);
             comments.add(commentResponse);
         }
 
-        MomentDetailResponse momentDetailResponse = MomentDetailResponse.builder()
-                .nickname(nickname)
-                .momentImage(moment.getImageUrl())
-                .momentDescription(moment.getMomentDescription())
-                .createdAt(createdAt)
-                .comments(comments)
-                .userId(momentUser.getId())
-                .build();
+        MomentDetailResponse momentDetailResponse = MomentConverter.toMomentDetailResponse(nickname, moment, createdAt, comments, momentUser);
 
         return DataResponseDto.of(momentDetailResponse, Code.OK.getMessage());
     }
