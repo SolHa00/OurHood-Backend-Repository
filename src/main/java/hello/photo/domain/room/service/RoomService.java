@@ -43,7 +43,7 @@ public class RoomService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        Room room = RoomConverter.toRoom(request);
+        Room room = RoomConverter.toRoom(request, user);
 
         if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
             MultipartFile thumbnail = request.getThumbnail();

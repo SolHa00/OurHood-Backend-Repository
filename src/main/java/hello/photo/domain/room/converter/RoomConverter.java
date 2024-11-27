@@ -9,13 +9,15 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.user.dto.response.MyInfo;
 import hello.photo.domain.user.dto.response.MyPageResponse;
 import hello.photo.domain.user.dto.response.RoomsMyPageInfo;
+import hello.photo.domain.user.entity.User;
 
 import java.util.List;
 
 public class RoomConverter {
 
-    public static Room toRoom(RoomCreateRequest request) {
+    public static Room toRoom(RoomCreateRequest request, User user) {
         return Room.builder()
+                .userId(user.getId())
                 .roomName(request.getRoomName())
                 .roomDescription(request.getRoomDescription())
                 .build();
