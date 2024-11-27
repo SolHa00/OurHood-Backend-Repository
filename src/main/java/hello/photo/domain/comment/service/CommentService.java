@@ -1,5 +1,6 @@
 package hello.photo.domain.comment.service;
 
+import hello.photo.domain.comment.converter.CommentConverter;
 import hello.photo.domain.comment.dto.request.CommentCreateRequest;
 import hello.photo.domain.comment.dto.request.CommentUpdateRequest;
 import hello.photo.domain.comment.dto.response.CommentCreateResponse;
@@ -25,7 +26,6 @@ public class CommentService {
     private final MomentRepository momentRepository;
     private final UserRepository userRepository;
 
-    //Comment 생성
     @Transactional
     public ApiResponse createComment(CommentCreateRequest request) {
         Moment moment = momentRepository.findById(request.getMomentId())
@@ -33,18 +33,10 @@ public class CommentService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        Comment comment = Comment.builder()
-                .content(request.getCommentContent())
-                .user(user)
-                .moment(moment)
-                .build();
-
+        Comment comment = CommentConverter.toComment(request, moment, user);
         commentRepository.save(comment);
 
-        CommentCreateResponse response = CommentCreateResponse.builder()
-                .commentId(comment.getId())
-                .createdAt(comment.getCreatedAt())
-                .build();
+        CommentCreateResponse response = CommentConverter.toCommentCreateResponse(comment);
         return DataResponseDto.of(response);
     }
 
@@ -52,13 +44,10 @@ public class CommentService {
     public ApiResponse updateComment(Long commentId, CommentUpdateRequest request) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
-
         comment.updateContent(request.getCommentContent());
-
         return ApiResponse.of(Code.OK.getMessage());
     }
 
-    //Comment 삭제
     @Transactional
     public ApiResponse deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
