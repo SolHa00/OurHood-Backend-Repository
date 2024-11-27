@@ -75,4 +75,9 @@ public class Room extends BaseTimeEntity {
     public void updateThumbnailImage(String thumbnailUrl) {
         this.thumbnailImage = thumbnailUrl;
     }
+
+    public boolean isUserMember(Long userId) {
+        return this.roomMembers.stream()
+                .anyMatch(roomMember -> roomMember.getUser().getId().equals(userId));
+    }
 }

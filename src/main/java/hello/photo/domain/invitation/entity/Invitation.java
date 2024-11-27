@@ -1,8 +1,7 @@
 package hello.photo.domain.invitation.entity;
 
-import hello.photo.domain.user.entity.BaseTimeEntity;
 import hello.photo.domain.room.entity.Room;
-import hello.photo.domain.user.entity.User;
+import hello.photo.domain.user.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,17 +18,15 @@ public class Invitation extends BaseTimeEntity {
     @Column(name = "invitation_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
 
     @Builder
-    public Invitation(User user, Room room) {
-        this.user = user;
+    public Invitation(Long userId, Room room) {
+        this.userId = userId;
         this.room = room;
     }
 }

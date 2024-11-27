@@ -1,10 +1,14 @@
 package hello.photo.domain.room.converter;
 
+import hello.photo.domain.invitation.dto.response.InvitationInfo;
 import hello.photo.domain.room.dto.request.RoomCreateRequest;
 import hello.photo.domain.room.dto.response.RoomCreateResponse;
 import hello.photo.domain.room.dto.response.RoomListInfo;
 import hello.photo.domain.room.dto.response.RoomListResponse;
 import hello.photo.domain.room.entity.Room;
+import hello.photo.domain.user.dto.response.MyInfo;
+import hello.photo.domain.user.dto.response.MyPageResponse;
+import hello.photo.domain.user.dto.response.RoomsMyPageInfo;
 
 import java.util.List;
 
@@ -38,6 +42,14 @@ public class RoomConverter {
     public static RoomListResponse toRoomListResponse(List<RoomListInfo> roomListInfos) {
         return RoomListResponse.builder()
                 .rooms(roomListInfos)
+                .build();
+    }
+
+    public static MyPageResponse toMyPageResponse(MyInfo myInfo, List<RoomsMyPageInfo> hostedRooms, List<InvitationInfo> invitations) {
+        return MyPageResponse.builder()
+                .myInfo(myInfo)
+                .rooms(hostedRooms)
+                .invitations(invitations)
                 .build();
     }
 }

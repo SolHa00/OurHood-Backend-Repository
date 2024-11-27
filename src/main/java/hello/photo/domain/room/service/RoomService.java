@@ -1,5 +1,6 @@
 package hello.photo.domain.room.service;
 
+import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.join.repository.JoinRequestRepository;
 import hello.photo.domain.room.converter.RoomConverter;
@@ -146,7 +147,7 @@ public class RoomService {
         String thumbnailUrl = room.getThumbnailImage();
 
         if (!isMember) {
-            Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUser(room, user);
+            Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
             RoomEnterFailResponse roomEnterFailResponse = RoomEnterFailResponse.builder()
                     .isMember(false)
                     .roomId(room.getId())
@@ -177,9 +178,15 @@ public class RoomService {
 
         Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
 
-        List<String> invitedUsers = invitationRepository.findByRoom(room).stream()
-                .map(invitation -> invitation.getUser().getNickname())
-                .collect(Collectors.toList());
+        List<Invitation> invitations = invitationRepository.findByRoom(room);
+        List<String> invitedUsers = new ArrayList<>();
+
+        for (Invitation invitation : invitations) {
+            User invitaionUser = userRepository.findById(invitation.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+            String nickname = invitaionUser.getNickname();
+            invitedUsers.add(nickname);
+        }
 
         RoomEnterInfo roomEnterInfo = RoomEnterInfo.builder()
                 .members(members)

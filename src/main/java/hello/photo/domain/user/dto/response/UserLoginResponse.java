@@ -1,6 +1,7 @@
 package hello.photo.domain.user.dto.response;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ public class UserLoginResponse {
 
     private UserLoginInfo user;
 
+    @Builder
     public UserLoginResponse(UserLoginInfo user) {
         this.user = user;
     }

@@ -1,5 +1,6 @@
 package hello.photo.domain.moment.service;
 
+import hello.photo.domain.comment.entity.Comment;
 import hello.photo.domain.comment.repository.CommentRepository;
 import hello.photo.domain.moment.dto.request.MomentCreateRequest;
 import hello.photo.domain.moment.dto.response.CommentResponse;
@@ -21,8 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class MomentService {
         Moment moment = Moment.builder()
                 .imageUrl(imageUrl)
                 .momentDescription(request.getMomentDescription())
-                .user(user)
+                .userId(user.getId())
                 .room(room)
                 .build();
         momentRepository.save(moment);
@@ -63,18 +64,27 @@ public class MomentService {
     public ApiResponse getMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+        User momentUser = userRepository.findById(moment.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        String nickname = moment.getUser().getNickname();
+        String nickname = momentUser.getNickname();
         LocalDateTime createdAt = moment.getCreatedAt();
-        List<CommentResponse> comments = commentRepository.findByMoment(moment).stream()
-                .map(comment -> CommentResponse.builder()
-                        .commentId(comment.getId())
-                        .nickname(comment.getUser().getNickname())
-                        .commentContent(comment.getContent())
-                        .createdAt(comment.getCreatedAt())
-                        .userId(comment.getUser().getId())
-                        .build())
-                .collect(Collectors.toList());
+
+        List<CommentResponse> comments = new ArrayList<>();
+        List<Comment> commentList = commentRepository.findByMoment(moment);
+        for (Comment comment : commentList) {
+            User commentUser = userRepository.findById(comment.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+            CommentResponse commentResponse = CommentResponse.builder()
+                    .commentId(comment.getId())
+                    .nickname(commentUser.getNickname())
+                    .commentContent(comment.getContent())
+                    .createdAt(comment.getCreatedAt())
+                    .userId(commentUser.getId())
+                    .build();
+
+            comments.add(commentResponse);
+        }
 
         MomentDetailResponse momentDetailResponse = MomentDetailResponse.builder()
                 .nickname(nickname)
@@ -82,7 +92,7 @@ public class MomentService {
                 .momentDescription(moment.getMomentDescription())
                 .createdAt(createdAt)
                 .comments(comments)
-                .userId(moment.getUser().getId())
+                .userId(momentUser.getId())
                 .build();
 
         return DataResponseDto.of(momentDetailResponse, Code.OK.getMessage());

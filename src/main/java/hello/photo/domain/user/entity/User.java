@@ -1,7 +1,5 @@
 package hello.photo.domain.user.entity;
 
-import hello.photo.domain.comment.entity.Comment;
-import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.room.entity.RoomMembers;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -31,12 +29,6 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomMembers> rooms = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Invitation> invitations = new ArrayList<>();
 
     @Builder
     public User(String nickname, String email, String password) {

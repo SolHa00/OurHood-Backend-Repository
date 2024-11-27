@@ -31,21 +31,20 @@ public class InvitationService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.MEMBER_NOT_FOUND, Code.MEMBER_NOT_FOUND.getMessage()));
 
         //이미 초대된 사용자인지 확인
-        boolean invitationExists = invitationRepository.existsByRoomAndUser(room, user);
+        boolean invitationExists = invitationRepository.existsByRoomAndUserId(room, user.getId());
         if (invitationExists) {
             throw new DuplicateException(Code.INVITATION_REQUEST_DUPLICATED, Code.INVITATION_REQUEST_DUPLICATED.getMessage());
         }
 
         // 이미 해당 방의 멤버인지 확인
-        boolean isMember = room.getRoomMembers().stream()
-                .anyMatch(roomMember -> roomMember.getUser().getId().equals(user.getId()));
+        boolean isMember = room.isUserMember(user.getId());
         if (isMember) {
             throw new DuplicateException(Code.ALREADY_INVITED_USER, Code.ALREADY_INVITED_USER.getMessage());
         }
 
         Invitation invitation = Invitation.builder()
                 .room(room)
-                .user(user)
+                .userId(user.getId())
                 .build();
 
         invitationRepository.save(invitation);
@@ -60,7 +59,8 @@ public class InvitationService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         if("accept".equals(request.getAction())) {
             Room room = invitation.getRoom();
-            User user = invitation.getUser();
+            User user = userRepository.findById(invitation.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
             room.addRoomMember(user);
             invitationRepository.delete(invitation);
             return ApiResponse.of("초대 요청을 승인 했습니다");

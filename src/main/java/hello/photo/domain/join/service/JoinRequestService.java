@@ -19,8 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,14 +38,14 @@ public class JoinRequestService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
         //이미 해당 방에 참여 요청이 있는지 확인
-        boolean joinRequestExists = joinRequestRepository.existsByRoomAndUser(room, user);
+        boolean joinRequestExists = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
         if (joinRequestExists) {
             throw new DuplicateException(Code.JOIN_REQUEST_DUPLICATED, Code.JOIN_REQUEST_DUPLICATED.getMessage());
         }
 
         JoinRequest joinRequest = JoinRequest.builder()
                 .room(room)
-                .user(user)
+                .userId(user.getId())
                 .build();
 
         joinRequestRepository.save(joinRequest);
@@ -58,12 +58,19 @@ public class JoinRequestService {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        List<JoinRequestDetail> joinList = joinRequestRepository.findByRoom(room).stream()
-                .map(joinRequest -> JoinRequestDetail.builder()
-                        .joinId(joinRequest.getId())
-                        .nickname(joinRequest.getUser().getNickname())
-                        .build())
-                .collect(Collectors.toList());
+        List<JoinRequest> joinRequests = joinRequestRepository.findByRoom(room);
+        List<JoinRequestDetail> joinList = new ArrayList<>();
+
+        for (JoinRequest joinRequest : joinRequests) {
+            User user = userRepository.findById(joinRequest.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+            JoinRequestDetail joinRequestDetail = JoinRequestDetail.builder()
+                    .joinId(joinRequest.getId())
+                    .nickname(user.getNickname())
+                    .build();
+
+            joinList.add(joinRequestDetail);
+        }
 
         JoinRequestListResponse joinResponseDto = new JoinRequestListResponse(joinList);
 
@@ -77,7 +84,8 @@ public class JoinRequestService {
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
         if ("accept".equals(request.getAction())) {
             Room room = joinRequest.getRoom();
-            User user = joinRequest.getUser();
+            User user = userRepository.findById(joinRequest.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
             room.addRoomMember(user);
             joinRequestRepository.delete(joinRequest);
             return ApiResponse.of("참여 요청이 승인 되었습니다");

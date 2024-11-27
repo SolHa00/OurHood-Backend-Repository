@@ -1,10 +1,14 @@
 package hello.photo.domain.user.service;
 
 import hello.photo.domain.invitation.dto.response.InvitationInfo;
+import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.invitation.repository.InvitationRepository;
 import hello.photo.domain.refresh.entity.RefreshToken;
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
+import hello.photo.domain.room.converter.RoomConverter;
 import hello.photo.domain.room.entity.Room;
+import hello.photo.domain.room.entity.RoomMembers;
+import hello.photo.domain.user.converter.UserConverter;
 import hello.photo.domain.user.dto.request.UserLoginRequest;
 import hello.photo.domain.user.dto.request.UserSignUpRequest;
 import hello.photo.domain.user.dto.response.*;
@@ -27,9 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,12 +55,11 @@ public class UserService {
             throw new DuplicateException(Code.USER_NICKNAME_DUPLICATED, Code.USER_NICKNAME_DUPLICATED.getMessage());
         }
 
-        User user = User.builder()
-                .nickname(request.getNickname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+        String password = passwordEncoder.encode(request.getPassword());
+        User user = UserConverter.toUser(request, password);
+
         userRepository.save(user);
+
         return ApiResponse.of(Code.OK.getMessage());
     }
 
@@ -67,8 +69,7 @@ public class UserService {
             throw new LogInFailException(Code.LOGIN_FAIL, Code.LOGIN_FAIL.getMessage());
         }
 
-        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
-        User user = userOptional.get();
+        User user = userRepository.findByEmail(request.getEmail());
 
         // 토큰 생성
         String accessToken = jwtUtil.createJwt("accessToken", user.getEmail(), 1000 * 60 * 60 *2L); // 2시간
@@ -79,56 +80,43 @@ public class UserService {
         response.setHeader("accessToken", accessToken);
         response.addCookie(createCookie("refreshToken", refreshToken));
 
-        UserLoginInfo userLoginInfo = UserLoginInfo.builder()
-                .userId(user.getId())
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .build();
-
-        UserLoginResponse userLoginResponse = new UserLoginResponse(userLoginInfo);
+        UserLoginInfo userLoginInfo = UserConverter.toUserLoginInfo(user);
+        UserLoginResponse userLoginResponse = UserConverter.toUserLoginResponse(userLoginInfo);
 
         return DataResponseDto.of(userLoginResponse, Code.OK.getMessage());
 
     }
 
-    public DataResponseDto<MyPageResponse> getMyPage(Long id) {
-        User user = userRepository.findById(id)
+    public DataResponseDto<MyPageResponse> getMyPage(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
 
-        MyInfo myInfo = MyInfo.builder()
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
+        MyInfo myInfo = UserConverter.toMyInfo(user);
 
-        List<InvitationInfo> invitations = invitationRepository.findByUser(user).stream()
-                .map(invitation -> InvitationInfo.builder()
-                                .invitationId(invitation.getId())
-                                .createdAt(invitation.getCreatedAt())
-                                .roomId(invitation.getRoom().getId())
-                                .roomName(invitation.getRoom().getRoomName())
-                                .hostName(invitation.getRoom().getUser().getNickname())
-                                .build())
-                .collect(Collectors.toList());
+        List<Invitation> invitationList = invitationRepository.findByUserId(user.getId());
+        List<InvitationInfo> invitations = new ArrayList<>();
 
-        List<RoomsMyPageInfo> hostedRooms = user.getRooms().stream()
-                .map(roomMembers -> {
-                    Room room = roomMembers.getRoom();
-                    return RoomsMyPageInfo.builder()
-                            .roomId(room.getId())
-                            .roomName(room.getRoomName())
-                            .hostName(room.getUser().getNickname())
-                            .numOfMembers(room.getRoomMembers().size())
-                            .createdAt(room.getCreatedAt())
-                            .thumbnail(room.getThumbnailImage())
-                            .build();
-                })
-                .collect(Collectors.toList());
+        for (Invitation invitation : invitationList) {
+            User host = userRepository.findById(invitation.getRoom().getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+            InvitationInfo invitationInfo = UserConverter.toInvitaionInfo(invitation, host);
+            invitations.add(invitationInfo);
+        }
 
-        MyPageResponse myPageResponse = MyPageResponse.builder()
-                .myInfo(myInfo)
-                .rooms(hostedRooms)
-                .invitations(invitations)
-                .build();
+        List<RoomsMyPageInfo> hostedRooms = new ArrayList<>();
+        List<RoomMembers> roomMembersList = user.getRooms();
+
+        for (RoomMembers roomMembers : roomMembersList) {
+            Room room = roomMembers.getRoom();
+            User host = userRepository.findById(room.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+
+            RoomsMyPageInfo roomsMyPageInfo = UserConverter.toRoomsMyPageInfo(room, host);
+
+            hostedRooms.add(roomsMyPageInfo);
+        }
+
+        MyPageResponse myPageResponse = RoomConverter.toMyPageResponse(myInfo, hostedRooms, invitations);
 
         return DataResponseDto.of(myPageResponse);
     }
