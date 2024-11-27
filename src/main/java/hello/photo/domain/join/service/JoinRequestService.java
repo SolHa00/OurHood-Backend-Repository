@@ -1,5 +1,6 @@
 package hello.photo.domain.join.service;
 
+import hello.photo.domain.join.converter.JoinRequestConverter;
 import hello.photo.domain.join.dto.request.JoinRequestCreateDto;
 import hello.photo.domain.join.dto.request.JoinRequestHandleDto;
 import hello.photo.domain.join.dto.response.JoinRequestDetail;
@@ -43,10 +44,7 @@ public class JoinRequestService {
             throw new DuplicateException(Code.JOIN_REQUEST_DUPLICATED, Code.JOIN_REQUEST_DUPLICATED.getMessage());
         }
 
-        JoinRequest joinRequest = JoinRequest.builder()
-                .room(room)
-                .userId(user.getId())
-                .build();
+        JoinRequest joinRequest = JoinRequestConverter.toJoinRequest(room, user);
 
         joinRequestRepository.save(joinRequest);
 
@@ -64,15 +62,11 @@ public class JoinRequestService {
         for (JoinRequest joinRequest : joinRequests) {
             User user = userRepository.findById(joinRequest.getUserId())
                     .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
-            JoinRequestDetail joinRequestDetail = JoinRequestDetail.builder()
-                    .joinId(joinRequest.getId())
-                    .nickname(user.getNickname())
-                    .build();
-
+            JoinRequestDetail joinRequestDetail = JoinRequestConverter.toJoinRequestDetail(joinRequest, user);
             joinList.add(joinRequestDetail);
         }
 
-        JoinRequestListResponse joinResponseDto = new JoinRequestListResponse(joinList);
+        JoinRequestListResponse joinResponseDto = JoinRequestConverter.toJoinRequestListResponse(joinList);
 
         return DataResponseDto.of(joinResponseDto, Code.OK.getMessage());
     }

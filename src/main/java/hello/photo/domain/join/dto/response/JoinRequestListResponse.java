@@ -1,6 +1,7 @@
 package hello.photo.domain.join.dto.response;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.List;
  public class JoinRequestListResponse {
     private List<JoinRequestDetail> joinList;
 
+    @Builder
     public JoinRequestListResponse(List<JoinRequestDetail> joinList) {
         this.joinList = joinList;
     }
