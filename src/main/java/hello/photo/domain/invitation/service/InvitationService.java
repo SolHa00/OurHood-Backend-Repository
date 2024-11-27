@@ -1,5 +1,6 @@
 package hello.photo.domain.invitation.service;
 
+import hello.photo.domain.invitation.converter.InvitationConverter;
 import hello.photo.domain.invitation.dto.request.InvitationHandleRequest;
 import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.invitation.repository.InvitationRepository;
@@ -42,13 +43,8 @@ public class InvitationService {
             throw new DuplicateException(Code.ALREADY_INVITED_USER, Code.ALREADY_INVITED_USER.getMessage());
         }
 
-        Invitation invitation = Invitation.builder()
-                .room(room)
-                .userId(user.getId())
-                .build();
-
+        Invitation invitation = InvitationConverter.toInvitation(room, user);
         invitationRepository.save(invitation);
-
         return ApiResponse.of(Code.OK.getMessage());
     }
 
