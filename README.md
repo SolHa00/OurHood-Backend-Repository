@@ -1,4 +1,4 @@
-#### 📂 Directory Structure
+## 📂 Directory Structure
 ```
 ├── src
     └── main
@@ -24,12 +24,15 @@
 
 
 
+```
+
 ## 🛠 Tech Stack
 
-| 구분 | 기술 스택 |
-| --- | --- |
-| 프레임워크 |  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-social&logo=SpringBoot&logoColor=white">  <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-social&logo=Gradle&logoColor=white"> |
-| ORM | <img src="https://img.shields.io/badge/SpringDataJPA-6DB33F?style=for-the-social&logo=Databricks&logoColor=white"> |
-| Authorization |  <img src="https://img.shields.io/badge/SpringSecurity-6DB33F?style=for-the-social&logo=springsecurity&logoColor=white">  <img src="https://img.shields.io/badge/JSONWebTokens-000000?style=for-the-social&logo=JSONWebTokens&logoColor=white"> |
-| Database | <img src="https://img.shields.io/badge/MySQL-4479A1.svg?style=for-the-social&logo=MySQL&logoColor=white"> |
-| AWS | <img src="https://img.shields.io/badge/AWSRDS-527FFF?style=for-the-social&logo=amazonrds&logoColor=white"> <img src ="https://img.shields.io/badge/AWSS3-69A31?style=for-the-social&logo=amazons3&logoColor=white"> |
+
+| 구분            | 기술 스택                                                                                                                                                                                                                                               |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Framework     | <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-social&logo=Spring Boot&logoColor=white"> <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-social&logo=Gradle&logoColor=white">                           
+| ORM           | <img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=for-the-social&logo=Databricks&logoColor=white">                                                                                                                                |
+| Authorization | <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-social&logo=springsecurity&logoColor=white">  <img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-social&logo=JSON Web Tokens&logoColor=white"> |
+| Database      | <img src="https://img.shields.io/badge/MySQL-4479A1.svg?style=for-the-social&logo=MySQL&logoColor=white">                                                                                                                                           |
+| AWS           | <img src="https://img.shields.io/badge/AWS RDS-527FFF?style=for-the-social&logo=amazonrds&logoColor=white"> <img src ="https://img.shields.io/badge/AWS S3-69A31?style=for-the-social&logo=amazons3&logoColor=white">                               |
