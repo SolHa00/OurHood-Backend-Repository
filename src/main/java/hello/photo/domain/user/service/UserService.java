@@ -20,7 +20,7 @@ import hello.photo.global.exception.LogInFailException;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
-import jakarta.servlet.http.Cookie;
+import hello.photo.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -74,7 +74,7 @@ public class UserService {
         refreshTokenService.saveRefreshToken(user.getEmail(), refreshToken, 1000 * 60 * 60 * 24 *7L); // 7일
 
         response.setHeader("accessToken", accessToken);
-        response.addCookie(createCookie("refreshToken", refreshToken));
+        response.addCookie(CookieUtil.createCookie("refreshToken", refreshToken));
 
         UserLoginInfo userLoginInfo = UserConverter.toUserLoginInfo(user);
         UserLoginResponse userLoginResponse = UserConverter.toUserLoginResponse(userLoginInfo);
@@ -115,14 +115,5 @@ public class UserService {
         MyPageResponse myPageResponse = RoomConverter.toMyPageResponse(myInfo, hostedRooms, invitations);
 
         return DataResponseDto.of(myPageResponse);
-    }
-
-    private Cookie createCookie(String key, String value) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60); //1일
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
     }
 }

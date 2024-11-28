@@ -9,7 +9,6 @@ import hello.photo.domain.room.dto.response.RoomListResponse;
 import hello.photo.domain.room.service.RoomService;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.DataResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,13 +40,11 @@ public class RoomController {
     }
 
     @DeleteMapping("/{roomId}")
-    @Operation(summary = "방 삭제")
     public ApiResponse deleteRoom(@PathVariable Long roomId) {
         return roomService.deleteRoom(roomId);
     }
 
     @PostMapping("/{roomId}/leave")
-    @Operation(summary = "방 탈퇴")
     public ApiResponse leaveRoom(@PathVariable Long roomId, @RequestBody RoomLeaveRequest request) {
         return roomService.leaveRoom(roomId, request.getUserId());
     }
