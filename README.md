@@ -36,3 +36,24 @@
 | Authorization | <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-social&logo=springsecurity&logoColor=white">  <img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-social&logo=JSON Web Tokens&logoColor=white"> |
 | Database      | <img src="https://img.shields.io/badge/MySQL-4479A1.svg?style=for-the-social&logo=MySQL&logoColor=white">                                                                                                                                           |
 | AWS           | <img src="https://img.shields.io/badge/AWS RDS-527FFF?style=for-the-social&logo=amazonrds&logoColor=white"> <img src ="https://img.shields.io/badge/AWS S3-69A31?style=for-the-social&logo=amazons3&logoColor=white">                               |
+
+
+## 📈 DataBase Schema
+### MySQL Schema
+
+![]( https://mozipp.s3.ap-northeast-2.amazonaws.com/asset/OurHood+Erd.png))
+
+## 👥 Contributors
+
+| FE                                                                                                                    |
+|-----------------------------------------------------------------------------------------------------------------------|
+| <a href="https://github.com/dongha-choi"><img src="https://github.com/dongha-choi.png" alt="profile" width="140"></a> | 
+| [최동하](https://github.com/dongha-choi)                                                                                 |
+
+
+| BE |
+| --- |
+| <a href="https://github.com/so1eeee"><img src="https://github.com/so1eeee.png" alt="profile" width="140"> </a> 
+|[정 솔](https://github.com/so1eeee)
+
+
