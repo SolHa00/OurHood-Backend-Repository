@@ -3,8 +3,8 @@ package hello.photo.domain.user.service;
 import hello.photo.domain.invitation.dto.response.InvitationInfo;
 import hello.photo.domain.invitation.entity.Invitation;
 import hello.photo.domain.invitation.repository.InvitationRepository;
-import hello.photo.domain.refresh.entity.RefreshToken;
-import hello.photo.domain.refresh.repository.RefreshTokenRepository;
+import hello.photo.domain.refresh.service.JwtTokenService;
+import hello.photo.domain.refresh.service.RefreshTokenService;
 import hello.photo.domain.room.converter.RoomConverter;
 import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.entity.RoomMembers;
@@ -17,7 +17,6 @@ import hello.photo.domain.user.repository.UserRepository;
 import hello.photo.global.exception.DuplicateException;
 import hello.photo.global.exception.EntityNotFoundException;
 import hello.photo.global.exception.LogInFailException;
-import hello.photo.global.jwt.JwtUtil;
 import hello.photo.global.response.ApiResponse;
 import hello.photo.global.response.Code;
 import hello.photo.global.response.DataResponseDto;
@@ -29,8 +28,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +37,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final InvitationRepository invitationRepository;
     private final CustomUserDetailsService customUserDetailsService;
-    private final JwtUtil jwtUtil;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final InvitationRepository invitationRepository;
+    private final RefreshTokenService refreshTokenService;
+    private final JwtTokenService jwtTokenService;
+
 
     @Transactional
     public ApiResponse signup(UserSignUpRequest request) {
@@ -71,12 +69,10 @@ public class UserService {
 
         User user = userRepository.findByEmail(request.getEmail());
 
-        // 토큰 생성
-        String accessToken = jwtUtil.createJwt("accessToken", user.getEmail(), 1000 * 60 * 60 *2L); // 2시간
-        String refreshToken = jwtUtil.createJwt("refreshToken", user.getEmail(), 1000 * 60 * 60 * 24 *7L); // 7일
-        addRefreshToken(user.getEmail(), refreshToken, 1000 * 60 * 60 * 24 *7L); // 7일
+        String accessToken = jwtTokenService.createAccessToken(user.getEmail()); // 2시간
+        String refreshToken = jwtTokenService.createRefreshToken(user.getEmail()); // 7일
+        refreshTokenService.saveRefreshToken(user.getEmail(), refreshToken, 1000 * 60 * 60 * 24 *7L); // 7일
 
-        // 응답 생성
         response.setHeader("accessToken", accessToken);
         response.addCookie(createCookie("refreshToken", refreshToken));
 
@@ -122,26 +118,11 @@ public class UserService {
     }
 
     private Cookie createCookie(String key, String value) {
-
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60); //1일
-        //cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
 
         return cookie;
-    }
-
-    private void addRefreshToken(String email, String refresh, Long expiredMs) {
-
-        LocalDateTime expirationDate = LocalDateTime.now().plus(Duration.ofMillis(expiredMs));
-
-        RefreshToken refreshEntity = RefreshToken.builder()
-                .email(email)
-                .refresh(refresh)
-                .expiration(expirationDate)
-                .build();
-
-        refreshTokenRepository.save(refreshEntity);
     }
 }
