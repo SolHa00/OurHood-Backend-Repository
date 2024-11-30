@@ -1,6 +1,24 @@
+# OurHood
+> ### 우리만의 공간, 특별한 추억
+
+
+
+## 📸 새로운 사진 공유 플랫폼 OurHood를 소개해요!
+- **OurHood는 가족, 친구, 팀, 동아리 등 개인적인 조직 단위로 추억과 사진을 공유할 수 있는 플랫폼입니다.**
+- **우리만의 방에서만 소통하며, 안전하고 따뜻한 공간을 경험해보세요!**
+
+
+## OurHood 핵심 기능
+
+https://ourhood-bucket.s3.ap-northeast-2.amazonaws.com/assets/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2024-11-30+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+6.54.10.png
+
+
+
+
+
 ## 📂 Directory Structure
 ```
-├── src
+└── src
     └── main
         └── java
             └── hello
@@ -41,7 +59,7 @@
 ## 📈 DataBase Schema
 ### MySQL Schema
 
-![]( https://mozipp.s3.ap-northeast-2.amazonaws.com/asset/OurHood+Erd.png))
+![]( https://mozipp.s3.ap-northeast-2.amazonaws.com/asset/OurHood+Erd.png)
 
 ## 👥 Contributors
 
