@@ -4,8 +4,7 @@ import hello.photo.domain.join.dto.request.JoinRequestCreateDto;
 import hello.photo.domain.join.dto.request.JoinRequestHandleDto;
 import hello.photo.domain.join.dto.response.JoinRequestListResponse;
 import hello.photo.domain.join.service.JoinRequestService;
-import hello.photo.global.response.ApiResponse;
-import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.handler.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,19 +17,19 @@ public class JoinRequestController {
 
     //방 참여 요청 생성
     @PostMapping
-    public ApiResponse joinRequest(@RequestBody JoinRequestCreateDto request) {
+    public BaseResponse joinRequest(@RequestBody JoinRequestCreateDto request) {
         return joinRequestService.createJoinRequest(request);
     }
 
     //방 참여 요청 목록
     @GetMapping("/{roomId}")
-    public DataResponseDto<JoinRequestListResponse> getJoinRequestList(@PathVariable Long roomId) {
+    public BaseResponse<JoinRequestListResponse> getJoinRequestList(@PathVariable Long roomId) {
         return joinRequestService.getJoinRequests(roomId);
     }
 
     //방 참여 요청 처리
     @PostMapping("/{joinRequestId}")
-    public ApiResponse handleJoinRequest(@PathVariable Long joinRequestId, @RequestBody JoinRequestHandleDto request) {
+    public BaseResponse handleJoinRequest(@PathVariable Long joinRequestId, @RequestBody JoinRequestHandleDto request) {
         return joinRequestService.handleJoinRequest(joinRequestId, request);
     }
 }

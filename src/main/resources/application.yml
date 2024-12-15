@@ -1,20 +1,28 @@
 spring:
-  application:
-    name: photo
   jpa:
     hibernate:
       ddl-auto: create
-  datasource:
-    url: ${DB_HOST}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: ${DB_HOST}
+#    username: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   jwt:
     secret: ${JWT_SECRET_KEY}
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/photo
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
 logging:
   level:

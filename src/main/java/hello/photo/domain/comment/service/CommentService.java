@@ -10,10 +10,9 @@ import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.moment.repository.MomentRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.exception.EntityNotFoundException;
-import hello.photo.global.response.ApiResponse;
-import hello.photo.global.response.Code;
-import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.handler.BaseException;
+import hello.photo.global.handler.response.BaseResponse;
+import hello.photo.global.handler.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,32 +26,32 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ApiResponse createComment(CommentCreateRequest request) {
+    public BaseResponse createComment(CommentCreateRequest request) {
         Moment moment = momentRepository.findById(request.getMomentId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         Comment comment = CommentConverter.toComment(request, moment, user);
         commentRepository.save(comment);
 
         CommentCreateResponse response = CommentConverter.toCommentCreateResponse(comment);
-        return DataResponseDto.of(response);
+        return BaseResponse.success(response);
     }
 
     @Transactional
-    public ApiResponse updateComment(Long commentId, CommentUpdateRequest request) {
+    public BaseResponse updateComment(Long commentId, CommentUpdateRequest request) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         comment.updateContent(request.getCommentContent());
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 
     @Transactional
-    public ApiResponse deleteComment(Long commentId) {
+    public BaseResponse deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         commentRepository.delete(comment);
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 }

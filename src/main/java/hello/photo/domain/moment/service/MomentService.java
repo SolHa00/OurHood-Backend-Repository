@@ -13,10 +13,9 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.exception.EntityNotFoundException;
-import hello.photo.global.response.ApiResponse;
-import hello.photo.global.response.Code;
-import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.handler.BaseException;
+import hello.photo.global.handler.response.BaseResponse;
+import hello.photo.global.handler.response.BaseResponseStatus;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,11 +37,11 @@ public class MomentService {
 
     //Moment 생성
     @Transactional
-    public ApiResponse createMoment(MomentCreateRequest request) {
+    public BaseResponse createMoment(MomentCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         String imageUrl = s3FileService.uploadFile(request.getMomentImage());
 
@@ -51,15 +50,15 @@ public class MomentService {
 
         MomentCreateResponse momentCreateResponse = MomentConverter.toMomentCreateResponse(moment);
 
-        return DataResponseDto.of(momentCreateResponse);
+        return BaseResponse.success(momentCreateResponse);
     }
 
     //특정 Moment 조회
-    public ApiResponse getMoment(Long momentId) {
+    public BaseResponse getMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         User momentUser = userRepository.findById(moment.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         String nickname = momentUser.getNickname();
         LocalDateTime createdAt = moment.getCreatedAt();
@@ -68,21 +67,21 @@ public class MomentService {
         List<Comment> commentList = commentRepository.findByMoment(moment);
         for (Comment comment : commentList) {
             User commentUser = userRepository.findById(comment.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
             CommentResponse commentResponse = MomentConverter.toCommentResponse(comment, commentUser);
             comments.add(commentResponse);
         }
 
         MomentDetailResponse momentDetailResponse = MomentConverter.toMomentDetailResponse(nickname, moment, createdAt, comments, momentUser);
 
-        return DataResponseDto.of(momentDetailResponse, Code.OK.getMessage());
+        return BaseResponse.success(momentDetailResponse);
     }
 
     //Moment 삭제
     @Transactional
-    public ApiResponse deleteMoment(Long momentId) {
+    public BaseResponse deleteMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         String imageUrl = moment.getImageUrl();
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -92,7 +91,7 @@ public class MomentService {
 
         momentRepository.delete(moment);
 
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 
     private String extractFileNameFromUrl(String url) {

@@ -7,6 +7,7 @@ import hello.photo.domain.moment.entity.Moment;
 import hello.photo.domain.user.entity.User;
 
 public class CommentConverter {
+
     public static Comment toComment(CommentCreateRequest request, Moment moment, User user) {
         return Comment.builder()
                 .userId(user.getId())

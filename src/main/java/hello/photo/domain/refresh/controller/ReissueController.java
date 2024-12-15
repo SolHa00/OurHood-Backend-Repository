@@ -1,9 +1,9 @@
 package hello.photo.domain.refresh.controller;
 
 import hello.photo.domain.refresh.repository.RefreshTokenRepository;
-import hello.photo.global.exception.GeneralException;
+import hello.photo.global.handler.BaseException;
+import hello.photo.global.handler.response.BaseResponseStatus;
 import hello.photo.global.jwt.JwtUtil;
-import hello.photo.global.response.Code;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +44,7 @@ public class ReissueController {
         } catch (ExpiredJwtException e) {
             //response status code
             refreshTokenRepository.deleteByRefresh(refreshToken);
-            throw new GeneralException(Code.REFRESH_TOKEN_EXPIRED, Code.REFRESH_TOKEN_EXPIRED.getMessage());
+            throw new BaseException(BaseResponseStatus.REFRESH_TOKEN_EXPIRED);
         }
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)

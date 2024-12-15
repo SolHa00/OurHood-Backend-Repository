@@ -3,8 +3,8 @@ package hello.photo.global.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.photo.domain.user.dto.CustomUserDetails;
 import hello.photo.domain.user.entity.User;
-import hello.photo.global.response.Code;
-import hello.photo.global.response.ErrorResponseDto;
+import hello.photo.global.handler.response.BaseResponse;
+import hello.photo.global.handler.response.BaseResponseStatus;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
             // 필터 내에서 JSON 형식으로 응답 처리
-            ErrorResponseDto errorResponse = ErrorResponseDto.of(Code.ACCESS_TOKEN_EXPIRED, Code.ACCESS_TOKEN_EXPIRED.getMessage());
+            BaseResponse errorResponse = BaseResponse.fail(BaseResponseStatus.ACCESS_TOKEN_EXPIRED);
 
             // 응답의 상태 코드 설정
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401

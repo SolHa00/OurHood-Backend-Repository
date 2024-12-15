@@ -11,11 +11,9 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.exception.DuplicateException;
-import hello.photo.global.exception.EntityNotFoundException;
-import hello.photo.global.response.ApiResponse;
-import hello.photo.global.response.Code;
-import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.handler.BaseException;
+import hello.photo.global.handler.response.BaseResponse;
+import hello.photo.global.handler.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,60 +30,60 @@ public class JoinRequestService {
 
     //방 참여 요청 생성
     @Transactional
-    public ApiResponse createJoinRequest(JoinRequestCreateDto request) {
+    public BaseResponse createJoinRequest(JoinRequestCreateDto request) {
         Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         //이미 해당 방에 참여 요청이 있는지 확인
         boolean joinRequestExists = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
         if (joinRequestExists) {
-            throw new DuplicateException(Code.JOIN_REQUEST_DUPLICATED, Code.JOIN_REQUEST_DUPLICATED.getMessage());
+            throw new BaseException(BaseResponseStatus.JOIN_REQUEST_DUPLICATED);
         }
 
         JoinRequest joinRequest = JoinRequestConverter.toJoinRequest(room, user);
 
         joinRequestRepository.save(joinRequest);
 
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 
     //방 참여 요청 목록
-    public DataResponseDto<JoinRequestListResponse> getJoinRequests(Long roomId) {
+    public BaseResponse<JoinRequestListResponse> getJoinRequests(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         List<JoinRequest> joinRequests = joinRequestRepository.findByRoom(room);
         List<JoinRequestDetail> joinList = new ArrayList<>();
 
         for (JoinRequest joinRequest : joinRequests) {
             User user = userRepository.findById(joinRequest.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
             JoinRequestDetail joinRequestDetail = JoinRequestConverter.toJoinRequestDetail(joinRequest, user);
             joinList.add(joinRequestDetail);
         }
 
         JoinRequestListResponse joinResponseDto = JoinRequestConverter.toJoinRequestListResponse(joinList);
 
-        return DataResponseDto.of(joinResponseDto, Code.OK.getMessage());
+        return BaseResponse.success(joinResponseDto);
     }
 
     //방 참여 요청 처리
     @Transactional
-    public ApiResponse handleJoinRequest(Long joinRequestId, JoinRequestHandleDto request) {
+    public BaseResponse handleJoinRequest(Long joinRequestId, JoinRequestHandleDto request) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         if ("accept".equals(request.getAction())) {
             Room room = joinRequest.getRoom();
             User user = userRepository.findById(joinRequest.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
             room.addRoomMember(user);
             joinRequestRepository.delete(joinRequest);
-            return ApiResponse.of("참여 요청이 승인 되었습니다");
+            return BaseResponse.success();
         }
 
         joinRequestRepository.delete(joinRequest);
-        return ApiResponse.of("참여 요청이 거절 되었습니다");
+        return BaseResponse.success();
     }
 }

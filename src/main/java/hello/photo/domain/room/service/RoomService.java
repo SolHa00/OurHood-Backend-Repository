@@ -11,10 +11,9 @@ import hello.photo.domain.room.entity.Room;
 import hello.photo.domain.room.repository.RoomRepository;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.exception.EntityNotFoundException;
-import hello.photo.global.response.ApiResponse;
-import hello.photo.global.response.Code;
-import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.handler.BaseException;
+import hello.photo.global.handler.response.BaseResponse;
+import hello.photo.global.handler.response.BaseResponseStatus;
 import hello.photo.global.s3.S3FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -38,10 +37,10 @@ public class RoomService {
 
     //방 생성
     @Transactional
-    public DataResponseDto<RoomCreateResponse> createRoom(RoomCreateRequest request) {
+    public BaseResponse<RoomCreateResponse> createRoom(RoomCreateRequest request) {
 
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         Room room = RoomConverter.toRoom(request, user);
 
@@ -57,15 +56,15 @@ public class RoomService {
 
         RoomCreateResponse roomResponse = RoomConverter.toRoomCreateResponse(room);
 
-        return DataResponseDto.of(roomResponse, Code.OK.getMessage());
+        return BaseResponse.success(roomResponse);
     }
 
     // 방 정보 수정
     @Transactional
-    public ApiResponse updateRoom(Long roomId, RoomUpdateRequest request) {
+    public BaseResponse updateRoom(Long roomId, RoomUpdateRequest request) {
 
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         if(request.getRoomName() != null){
             room.updateRoomName(request.getRoomName());
@@ -93,11 +92,11 @@ public class RoomService {
             room.updateThumbnailImage(imageUrl);
         }
 
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 
     //방 리스트 조회
-    public DataResponseDto<RoomListResponse> getRooms(String order, String condition, String q) {
+    public BaseResponse<RoomListResponse> getRooms(String order, String condition, String q) {
         Sort sort;
         if (order.equals("date_desc")) {
             sort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -123,24 +122,24 @@ public class RoomService {
         List<RoomListInfo> roomListInfos = new ArrayList<>();
         for (Room room : rooms) {
             User host = userRepository.findById(room.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
             RoomListInfo roomListInfo = RoomConverter.toRoomListInfo(room, host.getNickname());
             roomListInfos.add(roomListInfo);
         }
 
         RoomListResponse roomListResponse = RoomConverter.toRoomListResponse(roomListInfos);
 
-        return DataResponseDto.of(roomListResponse, Code.OK.getMessage());
+        return BaseResponse.success(roomListResponse);
     }
 
     //특정 방 입장
-    public ApiResponse enterRoom(Long roomId, Long userId) {
+    public BaseResponse enterRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         User host = userRepository.findById(room.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getUser().getId().equals(userId));
 
@@ -159,7 +158,7 @@ public class RoomService {
                     .createdAt(room.getCreatedAt())
                     .build();
 
-            return DataResponseDto.of(roomEnterFailResponse,"해당 회원은 현재 이 Room의 Member로 등록되어 있지 않습니다");
+            return BaseResponse.success(roomEnterFailResponse);
         }
 
         List<MemberInfo> members = room.getRoomMembers().stream()
@@ -183,7 +182,7 @@ public class RoomService {
 
         for (Invitation invitation : invitations) {
             User invitaionUser = userRepository.findById(invitation.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
             String nickname = invitaionUser.getNickname();
             invitedUsers.add(nickname);
         }
@@ -207,29 +206,29 @@ public class RoomService {
                 .userId(room.getUserId())
                 .build();
 
-        return DataResponseDto.of(roomEnterSuccessResponse, Code.OK.getMessage());
+        return BaseResponse.success(roomEnterSuccessResponse);
     }
 
     //방 삭제
     @Transactional
-    public ApiResponse deleteRoom(Long roomId) {
+    public BaseResponse deleteRoom(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         roomRepository.delete(room);
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 
     //방 탈퇴
     @Transactional
-    public ApiResponse leaveRoom(Long roomId, Long userId) {
+    public BaseResponse leaveRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         room.removeRoomMember(user);
         
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 
     private String extractFileNameFromUrl(String url) {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +24,5 @@ public class RefreshTokenService {
                 .build();
 
         refreshTokenRepository.save(refreshEntity);
-    }
-
-    public Optional<RefreshToken> findRefreshTokenByEmail(String email) {
-        return refreshTokenRepository.findByEmail(email);
-    }
-
-    public void deleteRefreshToken(String email) {
-        refreshTokenRepository.deleteByEmail((email));
     }
 }

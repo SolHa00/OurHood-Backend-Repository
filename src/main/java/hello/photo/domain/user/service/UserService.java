@@ -14,12 +14,9 @@ import hello.photo.domain.user.dto.request.UserSignUpRequest;
 import hello.photo.domain.user.dto.response.*;
 import hello.photo.domain.user.entity.User;
 import hello.photo.domain.user.repository.UserRepository;
-import hello.photo.global.exception.DuplicateException;
-import hello.photo.global.exception.EntityNotFoundException;
-import hello.photo.global.exception.LogInFailException;
-import hello.photo.global.response.ApiResponse;
-import hello.photo.global.response.Code;
-import hello.photo.global.response.DataResponseDto;
+import hello.photo.global.handler.BaseException;
+import hello.photo.global.handler.response.BaseResponse;
+import hello.photo.global.handler.response.BaseResponseStatus;
 import hello.photo.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -44,13 +41,13 @@ public class UserService {
 
 
     @Transactional
-    public ApiResponse signup(UserSignUpRequest request) {
+    public BaseResponse signup(UserSignUpRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new DuplicateException(Code.USER_EMAIL_DUPLICATED, Code.USER_EMAIL_DUPLICATED.getMessage());
+            throw new BaseException(BaseResponseStatus.USER_EMAIL_DUPLICATED);
         }
         if (userRepository.existsByNickname(request.getNickname())) {
-            throw new DuplicateException(Code.USER_NICKNAME_DUPLICATED, Code.USER_NICKNAME_DUPLICATED.getMessage());
+            throw new BaseException(BaseResponseStatus.USER_NICKNAME_DUPLICATED);
         }
 
         String password = passwordEncoder.encode(request.getPassword());
@@ -58,13 +55,13 @@ public class UserService {
 
         userRepository.save(user);
 
-        return ApiResponse.of(Code.OK.getMessage());
+        return BaseResponse.success();
     }
 
-    public ApiResponse login(UserLoginRequest request, HttpServletResponse response) {
+    public BaseResponse login(UserLoginRequest request, HttpServletResponse response) {
         UserDetails userData = customUserDetailsService.loadUserByUsername(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), userData.getPassword())) {
-            throw new LogInFailException(Code.LOGIN_FAIL, Code.LOGIN_FAIL.getMessage());
+            throw new BaseException(BaseResponseStatus.LOGIN_FAIL);
         }
 
         User user = userRepository.findByEmail(request.getEmail());
@@ -79,13 +76,12 @@ public class UserService {
         UserLoginInfo userLoginInfo = UserConverter.toUserLoginInfo(user);
         UserLoginResponse userLoginResponse = UserConverter.toUserLoginResponse(userLoginInfo);
 
-        return DataResponseDto.of(userLoginResponse, Code.OK.getMessage());
-
+        return BaseResponse.success(userLoginResponse);
     }
 
-    public DataResponseDto<MyPageResponse> getMyPage(Long userId) {
+    public BaseResponse<MyPageResponse> getMyPage(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
         MyInfo myInfo = UserConverter.toMyInfo(user);
 
@@ -94,7 +90,7 @@ public class UserService {
 
         for (Invitation invitation : invitationList) {
             User host = userRepository.findById(invitation.getRoom().getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
             InvitationInfo invitationInfo = UserConverter.toInvitaionInfo(invitation, host);
             invitations.add(invitationInfo);
         }
@@ -105,7 +101,7 @@ public class UserService {
         for (RoomMembers roomMembers : roomMembersList) {
             Room room = roomMembers.getRoom();
             User host = userRepository.findById(room.getUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(Code.NOT_FOUND, Code.NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
 
             RoomsMyPageInfo roomsMyPageInfo = UserConverter.toRoomsMyPageInfo(room, host);
 
@@ -114,6 +110,6 @@ public class UserService {
 
         MyPageResponse myPageResponse = RoomConverter.toMyPageResponse(myInfo, hostedRooms, invitations);
 
-        return DataResponseDto.of(myPageResponse);
+        return BaseResponse.success(myPageResponse);
     }
 }
