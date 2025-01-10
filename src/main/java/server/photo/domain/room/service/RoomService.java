@@ -231,7 +231,27 @@ public class RoomService {
         return BaseResponse.success();
     }
 
+    public BaseResponse<RoomInvitationsDto> getInvitations(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+
+        List<Invitation> invitations = invitationRepository.findByRoom(room);
+
+        List<RoomInvitationList> invitationLists = new ArrayList<>();
+        for (Invitation invitation : invitations) {
+            User inviter = userRepository.findById(invitation.getUserId())
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+            RoomInvitationList invitationList = RoomConverter.toRoomInvitationList(invitation, inviter);
+            invitationLists.add(invitationList);
+        }
+
+        RoomInvitationsDto roomInvitationsDto = RoomConverter.toRoomInvitationsDto(invitationLists);
+
+        return BaseResponse.success(roomInvitationsDto);
+    }
+
     private String extractFileNameFromUrl(String url) {
         return url.substring(url.lastIndexOf("/") + 1);
     }
+
 }

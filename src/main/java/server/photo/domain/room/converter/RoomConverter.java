@@ -1,10 +1,9 @@
 package server.photo.domain.room.converter;
 
 import server.photo.domain.invitation.dto.response.InvitationInfo;
+import server.photo.domain.invitation.entity.Invitation;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
-import server.photo.domain.room.dto.response.RoomCreateResponse;
-import server.photo.domain.room.dto.response.RoomListInfo;
-import server.photo.domain.room.dto.response.RoomListResponse;
+import server.photo.domain.room.dto.response.*;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.user.dto.response.MyInfo;
 import server.photo.domain.user.dto.response.MyPageResponse;
@@ -52,6 +51,20 @@ public class RoomConverter {
                 .myInfo(myInfo)
                 .rooms(hostedRooms)
                 .invitations(invitations)
+                .build();
+    }
+
+    public static RoomInvitationList toRoomInvitationList(Invitation invitation, User inviter) {
+        return RoomInvitationList.builder()
+                .invitationId(invitation.getId())
+                .nickname(inviter.getNickname())
+                .createdAt(invitation.getCreatedAt())
+                .build();
+    }
+
+    public static RoomInvitationsDto toRoomInvitationsDto(List<RoomInvitationList> invitationLists) {
+        return RoomInvitationsDto.builder()
+                .invitaionList(invitationLists)
                 .build();
     }
 }
