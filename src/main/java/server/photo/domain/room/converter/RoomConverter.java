@@ -73,6 +73,7 @@ public class RoomConverter {
         return JoinRequestDetail.builder()
                 .joinId(joinRequest.getId())
                 .nickname(user.getNickname())
+                .createdAt(joinRequest.getCreatedAt())
                 .build();
     }
 
