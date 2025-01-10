@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import server.photo.domain.invitation.entity.Invitation;
 import server.photo.domain.invitation.repository.InvitationRepository;
+import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.join.repository.JoinRequestRepository;
 import server.photo.domain.room.converter.RoomConverter;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
@@ -248,6 +249,26 @@ public class RoomService {
         RoomInvitationsDto roomInvitationsDto = RoomConverter.toRoomInvitationsDto(invitationLists);
 
         return BaseResponse.success(roomInvitationsDto);
+    }
+
+    //방 참여 요청 목록
+    public BaseResponse<JoinRequestListResponse> getJoinRequests(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+
+        List<JoinRequest> joinRequests = joinRequestRepository.findByRoom(room);
+        List<JoinRequestDetail> joinList = new ArrayList<>();
+
+        for (JoinRequest joinRequest : joinRequests) {
+            User user = userRepository.findById(joinRequest.getUserId())
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+            JoinRequestDetail joinRequestDetail = RoomConverter.toJoinRequestDetail(joinRequest, user);
+            joinList.add(joinRequestDetail);
+        }
+
+        JoinRequestListResponse joinResponseDto = RoomConverter.toJoinRequestListResponse(joinList);
+
+        return BaseResponse.success(joinResponseDto);
     }
 
     private String extractFileNameFromUrl(String url) {

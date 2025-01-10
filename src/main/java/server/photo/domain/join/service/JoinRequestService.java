@@ -1,10 +1,11 @@
 package server.photo.domain.join.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import server.photo.domain.join.converter.JoinRequestConverter;
 import server.photo.domain.join.dto.request.JoinRequestCreateDto;
 import server.photo.domain.join.dto.request.JoinRequestHandleDto;
-import server.photo.domain.join.dto.response.JoinRequestDetail;
-import server.photo.domain.join.dto.response.JoinRequestListResponse;
 import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.join.repository.JoinRequestRepository;
 import server.photo.domain.room.entity.Room;
@@ -14,12 +15,6 @@ import server.photo.domain.user.repository.UserRepository;
 import server.photo.global.handler.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,26 +42,6 @@ public class JoinRequestService {
         joinRequestRepository.save(joinRequest);
 
         return BaseResponse.success();
-    }
-
-    //방 참여 요청 목록
-    public BaseResponse<JoinRequestListResponse> getJoinRequests(Long roomId) {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
-
-        List<JoinRequest> joinRequests = joinRequestRepository.findByRoom(room);
-        List<JoinRequestDetail> joinList = new ArrayList<>();
-
-        for (JoinRequest joinRequest : joinRequests) {
-            User user = userRepository.findById(joinRequest.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
-            JoinRequestDetail joinRequestDetail = JoinRequestConverter.toJoinRequestDetail(joinRequest, user);
-            joinList.add(joinRequestDetail);
-        }
-
-        JoinRequestListResponse joinResponseDto = JoinRequestConverter.toJoinRequestListResponse(joinList);
-
-        return BaseResponse.success(joinResponseDto);
     }
 
     //방 참여 요청 처리

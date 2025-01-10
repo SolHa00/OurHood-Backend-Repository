@@ -2,6 +2,7 @@ package server.photo.domain.room.converter;
 
 import server.photo.domain.invitation.dto.response.InvitationInfo;
 import server.photo.domain.invitation.entity.Invitation;
+import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
 import server.photo.domain.room.dto.response.*;
 import server.photo.domain.room.entity.Room;
@@ -65,6 +66,19 @@ public class RoomConverter {
     public static RoomInvitationsDto toRoomInvitationsDto(List<RoomInvitationList> invitationLists) {
         return RoomInvitationsDto.builder()
                 .invitaionList(invitationLists)
+                .build();
+    }
+
+    public static JoinRequestDetail toJoinRequestDetail(JoinRequest joinRequest, User user) {
+        return JoinRequestDetail.builder()
+                .joinId(joinRequest.getId())
+                .nickname(user.getNickname())
+                .build();
+    }
+
+    public static JoinRequestListResponse toJoinRequestListResponse(List<JoinRequestDetail> joinList) {
+        return JoinRequestListResponse.builder()
+                .joinList(joinList)
                 .build();
     }
 }

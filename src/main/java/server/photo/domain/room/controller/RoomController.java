@@ -2,6 +2,7 @@ package server.photo.domain.room.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import server.photo.domain.room.dto.response.JoinRequestListResponse;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
 import server.photo.domain.room.dto.request.RoomDetailRequest;
 import server.photo.domain.room.dto.request.RoomLeaveRequest;
@@ -49,9 +50,15 @@ public class RoomController {
         return roomService.leaveRoom(roomId, request.getUserId());
     }
 
-    // 방에서 보낸 초대 요청 목록
+    // 방에서 보낸 초대 요청 목록 조회
     @GetMapping("/{roomId}/invitations")
     public BaseResponse<RoomInvitationsDto> getInvitations(@PathVariable Long roomId) {
         return roomService.getInvitations(roomId);
+    }
+
+    //방 참여 요청 목록 조회
+    @GetMapping("/{roomId}/join-requests")
+    public BaseResponse<JoinRequestListResponse> getJoinRequestList(@PathVariable Long roomId) {
+        return roomService.getJoinRequests(roomId);
     }
 }

@@ -1,4 +1,4 @@
-package server.photo.domain.join.dto.response;
+package server.photo.domain.room.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
