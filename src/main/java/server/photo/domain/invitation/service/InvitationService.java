@@ -26,9 +26,9 @@ public class InvitationService {
     @Transactional
     public BaseResponse createInvitation(Long roomId, String nickname) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         User user = userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
         //이미 초대된 사용자인지 확인
         boolean invitationExists = invitationRepository.existsByRoomAndUserId(room, user.getId());
@@ -50,11 +50,11 @@ public class InvitationService {
     @Transactional
     public BaseResponse handleInviteRequest(Long invitationId, InvitationHandleRequest request) {
         Invitation invitation = invitationRepository.findById(invitationId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVITATION_NOT_FOUND));
         if("accept".equals(request.getAction())) {
             Room room = invitation.getRoom();
             User user = userRepository.findById(invitation.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
             room.addRoomMember(user);
             invitationRepository.delete(invitation);
             return BaseResponse.success();
@@ -66,7 +66,7 @@ public class InvitationService {
     @Transactional
     public BaseResponse deleteInvitation(Long invitationId) {
         Invitation invitation = invitationRepository.findById(invitationId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.INVITATION_NOT_FOUND));
         invitationRepository.delete(invitation);
         return BaseResponse.success();
     }

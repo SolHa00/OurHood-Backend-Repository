@@ -40,9 +40,9 @@ public class MomentService {
     @Transactional
     public BaseResponse createMoment(MomentCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
         Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
 
         String imageUrl = s3FileService.uploadFile(request.getMomentImage());
 
@@ -57,9 +57,9 @@ public class MomentService {
     //특정 Moment 조회
     public BaseResponse getMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
         User momentUser = userRepository.findById(moment.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
         String nickname = momentUser.getNickname();
         LocalDateTime createdAt = moment.getCreatedAt();
@@ -68,7 +68,7 @@ public class MomentService {
         List<Comment> commentList = commentRepository.findByMoment(moment);
         for (Comment comment : commentList) {
             User commentUser = userRepository.findById(comment.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
             CommentResponse commentResponse = MomentConverter.toCommentResponse(comment, commentUser);
             comments.add(commentResponse);
         }
@@ -82,7 +82,7 @@ public class MomentService {
     @Transactional
     public BaseResponse deleteMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
 
         String imageUrl = moment.getImageUrl();
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -98,7 +98,7 @@ public class MomentService {
     @Transactional
     public BaseResponse changeMomentDescription(Long momentId, MomentDescriptionRequest request) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
         moment.updateMomentDescription(request.getMomentDescription());
         return BaseResponse.success();
     }

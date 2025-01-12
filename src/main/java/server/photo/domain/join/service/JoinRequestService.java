@@ -27,9 +27,9 @@ public class JoinRequestService {
     @Transactional
     public BaseResponse createJoinRequest(JoinRequestCreateDto request) {
         Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
         //이미 해당 방에 참여 요청이 있는지 확인
         boolean joinRequestExists = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
@@ -48,11 +48,11 @@ public class JoinRequestService {
     @Transactional
     public BaseResponse handleJoinRequest(Long joinRequestId, JoinRequestHandleDto request) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.JOIN_REQUEST_NOT_FOUND));
         if ("accept".equals(request.getAction())) {
             Room room = joinRequest.getRoom();
             User user = userRepository.findById(joinRequest.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
             room.addRoomMember(user);
             joinRequestRepository.delete(joinRequest);
             return BaseResponse.success();
@@ -66,7 +66,7 @@ public class JoinRequestService {
     @Transactional
     public BaseResponse deleteJoinRequest(Long joinRequestId) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.JOIN_REQUEST_NOT_FOUND));
         joinRequestRepository.delete(joinRequest);
         return BaseResponse.success();
     }

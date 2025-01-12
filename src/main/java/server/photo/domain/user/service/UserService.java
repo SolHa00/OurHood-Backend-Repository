@@ -81,7 +81,7 @@ public class UserService {
 
     public BaseResponse<MyPageResponse> getMyPage(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
         MyInfo myInfo = UserConverter.toMyInfo(user);
 
@@ -90,7 +90,7 @@ public class UserService {
 
         for (Invitation invitation : invitationList) {
             User host = userRepository.findById(invitation.getRoom().getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
             InvitationInfo invitationInfo = UserConverter.toInvitaionInfo(invitation, host);
             invitations.add(invitationInfo);
         }
@@ -101,7 +101,7 @@ public class UserService {
         for (RoomMembers roomMembers : roomMembersList) {
             Room room = roomMembers.getRoom();
             User host = userRepository.findById(room.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
             RoomsMyPageInfo roomsMyPageInfo = UserConverter.toRoomsMyPageInfo(room, host);
 
