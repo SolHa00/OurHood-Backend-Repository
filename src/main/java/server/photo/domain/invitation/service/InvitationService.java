@@ -47,7 +47,6 @@ public class InvitationService {
         return BaseResponse.success();
     }
 
-
     @Transactional
     public BaseResponse handleInviteRequest(Long invitationId, InvitationHandleRequest request) {
         Invitation invitation = invitationRepository.findById(invitationId)
@@ -60,6 +59,14 @@ public class InvitationService {
             invitationRepository.delete(invitation);
             return BaseResponse.success();
         }
+        invitationRepository.delete(invitation);
+        return BaseResponse.success();
+    }
+
+    @Transactional
+    public BaseResponse deleteInvitation(Long invitationId) {
+        Invitation invitation = invitationRepository.findById(invitationId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
         invitationRepository.delete(invitation);
         return BaseResponse.success();
     }

@@ -24,4 +24,9 @@ public class InvitationController {
     public BaseResponse handleInvitation(@PathVariable Long invitationId, @RequestBody InvitationHandleRequest request) {
         return invitationService.handleInviteRequest(invitationId, request);
     }
+
+    @DeleteMapping("/{invitationId}")
+    public BaseResponse deleteInvitation(@PathVariable Long invitationId) {
+        return invitationService.deleteInvitation(invitationId);
+    }
 }
