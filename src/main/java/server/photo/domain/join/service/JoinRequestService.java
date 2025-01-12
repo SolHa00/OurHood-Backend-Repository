@@ -61,4 +61,13 @@ public class JoinRequestService {
         joinRequestRepository.delete(joinRequest);
         return BaseResponse.success();
     }
+
+    //방 참여 요청 삭제
+    @Transactional
+    public BaseResponse deleteJoinRequest(Long joinRequestId) {
+        JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND));
+        joinRequestRepository.delete(joinRequest);
+        return BaseResponse.success();
+    }
 }

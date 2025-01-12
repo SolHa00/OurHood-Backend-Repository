@@ -25,4 +25,10 @@ public class JoinRequestController {
     public BaseResponse handleJoinRequest(@PathVariable Long joinRequestId, @RequestBody JoinRequestHandleDto request) {
         return joinRequestService.handleJoinRequest(joinRequestId, request);
     }
+
+    //방 참여 요청 삭제
+    @DeleteMapping("/{joinRequestId}")
+    public BaseResponse deleteJoinRequest(@PathVariable Long joinRequestId) {
+        return joinRequestService.deleteJoinRequest(joinRequestId);
+    }
 }
