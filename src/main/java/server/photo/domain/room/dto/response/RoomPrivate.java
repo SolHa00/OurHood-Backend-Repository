@@ -9,17 +9,15 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomEnterInfo {
+public class RoomPrivate {
     private List<MemberInfo> members;
-    private List<MomentEnterInfo> moments;
+    private List<MomentInfo> moments;
     private Long numOfNewJoinRequests;
-    private List<String> invitedUsers;
 
     @Builder
-    public RoomEnterInfo(List<MemberInfo> members, List<MomentEnterInfo> moments, Long numOfNewJoinRequests, List<String> invitedUsers) {
+    public RoomPrivate(List<MemberInfo> members, List<MomentInfo> moments, Long numOfNewJoinRequests) {
         this.members = members;
         this.moments = moments;
         this.numOfNewJoinRequests = numOfNewJoinRequests;
-        this.invitedUsers = invitedUsers;
     }
 }

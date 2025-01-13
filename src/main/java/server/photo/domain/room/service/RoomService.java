@@ -151,16 +151,12 @@ public class RoomService {
 
         if (!isMember) {
             Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
-            RoomEnterFailResponse roomEnterFailResponse = RoomEnterFailResponse.builder()
-                    .isMember(false)
-                    .roomId(room.getId())
-                    .roomName(room.getRoomName())
-                    .roomDescription(room.getRoomDescription())
-                    .hostName(host.getNickname())
-                    .thumbnail(thumbnailUrl)
-                    .isJoinRequestSent(isJoinRequestSent)
-                    .createdAt(room.getCreatedAt())
-                    .build();
+
+            UserContextFail userContext = RoomConverter.toUserContextFail(isMember, isJoinRequestSent);
+            RoomMetadataFail roomMetadata = RoomConverter.toRoomMetadataFail(room, host);
+            RoomDetail roomDetail = RoomConverter.toRoomDetail(room);
+
+            RoomEnterFailResponse roomEnterFailResponse = RoomConverter.toRoomEnterFailResponse(userContext, roomMetadata, roomDetail);
 
             return BaseResponse.success(roomEnterFailResponse);
         }
@@ -172,8 +168,8 @@ public class RoomService {
                         .build())
                 .collect(Collectors.toList());
 
-        List<MomentEnterInfo> moments = room.getMoments().stream()
-                .map(moment -> MomentEnterInfo.builder()
+        List<MomentInfo> moments = room.getMoments().stream()
+                .map(moment -> MomentInfo.builder()
                         .momentId(moment.getId())
                         .imageUrl(moment.getImageUrl())
                         .build())
@@ -181,35 +177,12 @@ public class RoomService {
 
         Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
 
-        List<Invitation> invitations = invitationRepository.findByRoom(room);
-        List<String> invitedUsers = new ArrayList<>();
+        UserContextSuccess userContext = RoomConverter.toUserContextSuccess(isMember);
+        RoomMetadataSuccess roomMetadata = RoomConverter.toRoomMetaDataSuccess(room, host);
+        RoomDetail roomDetail = RoomConverter.toRoomDetail(room);
+        RoomPrivate roomPrivate = RoomConverter.toRoomPrivate(members, moments, numOfNewJoinRequests);
 
-        for (Invitation invitation : invitations) {
-            User invitaionUser = userRepository.findById(invitation.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
-            String nickname = invitaionUser.getNickname();
-            invitedUsers.add(nickname);
-        }
-
-        RoomEnterInfo roomEnterInfo = RoomEnterInfo.builder()
-                .members(members)
-                .moments(moments)
-                .numOfNewJoinRequests(numOfNewJoinRequests)
-                .invitedUsers(invitedUsers)
-                .build();
-
-        RoomEnterSuccessResponse roomEnterSuccessResponse = RoomEnterSuccessResponse.builder()
-                .isMember(true)
-                .roomId(room.getId())
-                .roomName(room.getRoomName())
-                .roomDescription(room.getRoomDescription())
-                .hostName(host.getNickname())
-                .roomDetail(roomEnterInfo)
-                .thumbnail(thumbnailUrl)
-                .createdAt(room.getCreatedAt())
-                .userId(room.getUserId())
-                .build();
-
+        RoomEnterSuccessResponse roomEnterSuccessResponse = RoomConverter.toRoomEnterSuccessResponse(userContext, roomMetadata, roomDetail, roomPrivate);
         return BaseResponse.success(roomEnterSuccessResponse);
     }
 

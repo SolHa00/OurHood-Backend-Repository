@@ -82,4 +82,67 @@ public class RoomConverter {
                 .joinList(joinList)
                 .build();
     }
+
+    public static UserContextSuccess toUserContextSuccess(Boolean isMember) {
+        return UserContextSuccess.builder()
+                .isMember(isMember)
+                .build();
+    }
+
+    public static RoomMetadataSuccess toRoomMetaDataSuccess(Room room, User host) {
+        return RoomMetadataSuccess.builder()
+                .roomId(room.getId())
+                .userId(host.getId())
+                .hostName(host.getNickname())
+                .createdAt(room.getCreatedAt())
+                .build();
+    }
+
+    public static RoomDetail toRoomDetail(Room room) {
+        return RoomDetail.builder()
+                .roomName(room.getRoomName())
+                .roomDescription(room.getRoomDescription())
+                .thumbnail(room.getThumbnailImage())
+                .build();
+    }
+
+    public static RoomPrivate toRoomPrivate(List<MemberInfo> members, List<MomentInfo> moments, Long numOfNewJoinRequests) {
+        return RoomPrivate.builder()
+                .members(members)
+                .moments(moments)
+                .numOfNewJoinRequests(numOfNewJoinRequests)
+                .build();
+    }
+
+    public static RoomEnterSuccessResponse toRoomEnterSuccessResponse(UserContextSuccess userContext, RoomMetadataSuccess roomMetadata, RoomDetail roomDetail, RoomPrivate roomPrivate) {
+        return RoomEnterSuccessResponse.builder()
+                .userContext(userContext)
+                .roomMetaData(roomMetadata)
+                .roomDetail(roomDetail)
+                .roomPrivate(roomPrivate)
+                .build();
+    }
+
+    public static UserContextFail toUserContextFail(Boolean isMember, Boolean isJoinRequestSent) {
+        return UserContextFail.builder()
+                .isMember(isMember)
+                .isJoinRequestSent(isJoinRequestSent)
+                .build();
+    }
+
+    public static RoomMetadataFail toRoomMetadataFail(Room room, User host) {
+        return RoomMetadataFail.builder()
+                .roomId(room.getId())
+                .hostName(host.getNickname())
+                .createdAt(room.getCreatedAt())
+                .build();
+    }
+
+    public static RoomEnterFailResponse toRoomEnterFailResponse(UserContextFail userContext, RoomMetadataFail roomMetadata, RoomDetail roomDetail) {
+        return RoomEnterFailResponse.builder()
+                .userContext(userContext)
+                .roomMetadata(roomMetadata)
+                .roomDetail(roomDetail)
+                .build();
+    }
 }

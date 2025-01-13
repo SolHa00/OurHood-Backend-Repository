@@ -20,26 +20,31 @@ public class RoomController {
 
     private final RoomService roomService;
 
+    //방 생성
     @PostMapping
     public BaseResponse<RoomCreateResponse> createRoom(RoomCreateRequest request) {
         return roomService.createRoom(request);
     }
 
+    //방 수정
     @PutMapping("/{roomId}")
     public BaseResponse<Object> updateRoom(@PathVariable Long roomId, RoomUpdateRequest request){
         return roomService.updateRoom(roomId, request);
     }
 
+    //방 리스트 조회
     @GetMapping
     public BaseResponse<RoomListResponse> roomList(String order, String condition, @RequestParam(required = false) String q) {
         return roomService.getRooms(order, condition, q);
     }
 
+    //특정 방 입장
     @PostMapping("/{roomId}")
     public BaseResponse<Object> enterRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
         return roomService.enterRoom(roomId, request.getUserId());
     }
 
+    //방 삭제
     @DeleteMapping("/{roomId}")
     public BaseResponse<Object> deleteRoom(@PathVariable Long roomId) {
         return roomService.deleteRoom(roomId);

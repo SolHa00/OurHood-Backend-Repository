@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MomentEnterInfo {
+public class MomentInfo {
     private Long momentId;
     private String imageUrl;
 
     @Builder
-    public MomentEnterInfo(Long momentId, String imageUrl) {
+    public MomentInfo(Long momentId, String imageUrl) {
         this.momentId = momentId;
         this.imageUrl = imageUrl;
     }
