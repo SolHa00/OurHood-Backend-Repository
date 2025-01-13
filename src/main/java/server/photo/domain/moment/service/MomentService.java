@@ -1,5 +1,8 @@
 package server.photo.domain.moment.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import server.photo.domain.comment.entity.Comment;
 import server.photo.domain.comment.repository.CommentRepository;
 import server.photo.domain.moment.converter.MomentConverter;
@@ -14,13 +17,10 @@ import server.photo.domain.room.entity.Room;
 import server.photo.domain.room.repository.RoomRepository;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 import server.photo.global.s3.S3FileService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class MomentService {
 
     //Moment 생성
     @Transactional
-    public BaseResponse createMoment(MomentCreateRequest request) {
+    public BaseResponse<MomentCreateResponse> createMoment(MomentCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
         Room room = roomRepository.findById(request.getRoomId())
@@ -55,7 +55,7 @@ public class MomentService {
     }
 
     //특정 Moment 조회
-    public BaseResponse getMoment(Long momentId) {
+    public BaseResponse<MomentDetailResponse> getMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
         User momentUser = userRepository.findById(moment.getUserId())
@@ -80,7 +80,7 @@ public class MomentService {
 
     //Moment 삭제
     @Transactional
-    public BaseResponse deleteMoment(Long momentId) {
+    public BaseResponse<Object> deleteMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
 
@@ -96,7 +96,7 @@ public class MomentService {
     }
 
     @Transactional
-    public BaseResponse changeMomentDescription(Long momentId, MomentDescriptionRequest request) {
+    public BaseResponse<Object> changeMomentDescription(Long momentId, MomentDescriptionRequest request) {
         Moment moment = momentRepository.findById(momentId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
         moment.updateMomentDescription(request.getMomentDescription());

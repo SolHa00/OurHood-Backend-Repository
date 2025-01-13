@@ -1,5 +1,6 @@
 package server.photo.global.handler;
 
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 import org.springframework.http.HttpStatus;

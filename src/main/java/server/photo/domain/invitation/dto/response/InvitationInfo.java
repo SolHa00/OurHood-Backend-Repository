@@ -1,29 +1,22 @@
 package server.photo.domain.invitation.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import server.photo.domain.user.dto.response.InvitationMetaData;
+import server.photo.domain.user.dto.response.InvitingRoomInfo;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class InvitationInfo {
-    private Long invitationId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt;
-    private Long roomId;
-    private String roomName;
-    private String hostName;
+
+    private InvitationMetaData invitationMetaData;
+    private InvitingRoomInfo invitingRoomInfo;
 
     @Builder
-    public InvitationInfo(Long invitationId, LocalDateTime createdAt, Long roomId, String roomName, String hostName) {
-        this.invitationId = invitationId;
-        this.createdAt = createdAt;
-        this.roomId = roomId;
-        this.roomName = roomName;
-        this.hostName = hostName;
+    public InvitationInfo(InvitationMetaData invitationMetaData, InvitingRoomInfo invitingRoomInfo) {
+        this.invitationMetaData = invitationMetaData;
+        this.invitingRoomInfo = invitingRoomInfo;
     }
 }

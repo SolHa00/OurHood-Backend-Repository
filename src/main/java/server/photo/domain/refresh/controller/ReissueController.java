@@ -1,7 +1,7 @@
 package server.photo.domain.refresh.controller;
 
 import server.photo.domain.refresh.repository.RefreshTokenRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponseStatus;
 import server.photo.global.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;

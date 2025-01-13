@@ -3,7 +3,7 @@ package server.photo.domain.user.service;
 import server.photo.domain.user.dto.CustomUserDetails;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

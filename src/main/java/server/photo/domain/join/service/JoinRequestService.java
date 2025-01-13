@@ -12,7 +12,7 @@ import server.photo.domain.room.entity.Room;
 import server.photo.domain.room.repository.RoomRepository;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 
@@ -25,7 +25,7 @@ public class JoinRequestService {
 
     //방 참여 요청 생성
     @Transactional
-    public BaseResponse createJoinRequest(JoinRequestCreateDto request) {
+    public BaseResponse<Object> createJoinRequest(JoinRequestCreateDto request) {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         User user = userRepository.findById(request.getUserId())
@@ -46,7 +46,7 @@ public class JoinRequestService {
 
     //방 참여 요청 처리
     @Transactional
-    public BaseResponse handleJoinRequest(Long joinRequestId, JoinRequestHandleDto request) {
+    public BaseResponse<Object> handleJoinRequest(Long joinRequestId, JoinRequestHandleDto request) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.JOIN_REQUEST_NOT_FOUND));
         if ("accept".equals(request.getAction())) {
@@ -64,7 +64,7 @@ public class JoinRequestService {
 
     //방 참여 요청 삭제
     @Transactional
-    public BaseResponse deleteJoinRequest(Long joinRequestId) {
+    public BaseResponse<Object> deleteJoinRequest(Long joinRequestId) {
         JoinRequest joinRequest = joinRequestRepository.findById(joinRequestId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.JOIN_REQUEST_NOT_FOUND));
         joinRequestRepository.delete(joinRequest);

@@ -10,23 +10,19 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomsMyPageInfo {
+public class RoomMetaData {
 
     private Long roomId;
-    private String roomName;
     private String hostName;
     private int numOfMembers;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
-    private String thumbnail;
 
     @Builder
-    public RoomsMyPageInfo(Long roomId, String roomName, String hostName, int numOfMembers, LocalDateTime createdAt, String thumbnail) {
+    public RoomMetaData(Long roomId, String hostName, int numOfMembers, LocalDateTime createdAt) {
         this.roomId = roomId;
-        this.roomName = roomName;
         this.hostName = hostName;
         this.numOfMembers = numOfMembers;
         this.createdAt = createdAt;
-        this.thumbnail = thumbnail;
     }
 }

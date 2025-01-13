@@ -8,7 +8,7 @@ import server.photo.domain.room.dto.response.*;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.user.dto.response.MyInfo;
 import server.photo.domain.user.dto.response.MyPageResponse;
-import server.photo.domain.user.dto.response.RoomsMyPageInfo;
+import server.photo.domain.user.dto.response.RoomInfo;
 import server.photo.domain.user.entity.User;
 
 import java.util.List;
@@ -47,10 +47,10 @@ public class RoomConverter {
                 .build();
     }
 
-    public static MyPageResponse toMyPageResponse(MyInfo myInfo, List<RoomsMyPageInfo> hostedRooms, List<InvitationInfo> invitations) {
+    public static MyPageResponse toMyPageResponse(MyInfo myInfo, List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
         return MyPageResponse.builder()
                 .myInfo(myInfo)
-                .rooms(hostedRooms)
+                .myRooms(myRooms)
                 .invitations(invitations)
                 .build();
     }

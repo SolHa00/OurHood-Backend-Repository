@@ -2,6 +2,7 @@ package server.photo.domain.comment.controller;
 
 import server.photo.domain.comment.dto.request.CommentUpdateRequest;
 import server.photo.domain.comment.dto.request.CommentCreateRequest;
+import server.photo.domain.comment.dto.response.CommentCreateResponse;
 import server.photo.domain.comment.service.CommentService;
 import server.photo.global.handler.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,19 +17,19 @@ public class CommentController {
 
     //Comment 생성
     @PostMapping
-    public BaseResponse createComment(@RequestBody CommentCreateRequest request) {
+    public BaseResponse<CommentCreateResponse> createComment(@RequestBody CommentCreateRequest request) {
         return commentService.createComment(request);
     }
 
     //Comment 수정
     @PutMapping("/{commentId}")
-    public BaseResponse updateContent(@PathVariable Long commentId, @RequestBody CommentUpdateRequest request){
+    public BaseResponse<Object> updateContent(@PathVariable Long commentId, @RequestBody CommentUpdateRequest request){
         return commentService.updateComment(commentId, request);
     }
 
     //Comment 삭제
     @DeleteMapping("/{commentId}")
-    public BaseResponse deleteComment(@PathVariable Long commentId) {
+    public BaseResponse<Object> deleteComment(@PathVariable Long commentId) {
         return commentService.deleteComment(commentId);
     }
 }

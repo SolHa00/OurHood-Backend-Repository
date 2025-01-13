@@ -10,7 +10,7 @@ import server.photo.domain.moment.entity.Moment;
 import server.photo.domain.moment.repository.MomentRepository;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BaseResponse createComment(CommentCreateRequest request) {
+    public BaseResponse<CommentCreateResponse> createComment(CommentCreateRequest request) {
         Moment moment = momentRepository.findById(request.getMomentId())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
         User user = userRepository.findById(request.getUserId())
@@ -40,7 +40,7 @@ public class CommentService {
     }
 
     @Transactional
-    public BaseResponse updateComment(Long commentId, CommentUpdateRequest request) {
+    public BaseResponse<Object> updateComment(Long commentId, CommentUpdateRequest request) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.COMMENT_NOT_FOUND));
         comment.updateContent(request.getCommentContent());
@@ -48,7 +48,7 @@ public class CommentService {
     }
 
     @Transactional
-    public BaseResponse deleteComment(Long commentId) {
+    public BaseResponse<Object> deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.COMMENT_NOT_FOUND));
         commentRepository.delete(comment);

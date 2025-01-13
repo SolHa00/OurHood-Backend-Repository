@@ -18,7 +18,7 @@ import server.photo.domain.room.entity.Room;
 import server.photo.domain.room.repository.RoomRepository;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 import server.photo.global.s3.S3FileService;
@@ -64,7 +64,7 @@ public class RoomService {
 
     // 방 정보 수정
     @Transactional
-    public BaseResponse updateRoom(Long roomId, RoomUpdateRequest request) {
+    public BaseResponse<Object> updateRoom(Long roomId, RoomUpdateRequest request) {
 
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
@@ -100,6 +100,7 @@ public class RoomService {
 
     //방 리스트 조회
     public BaseResponse<RoomListResponse> getRooms(String order, String condition, String q) {
+
         Sort sort;
         if (order.equals("date_desc")) {
             sort = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -136,7 +137,7 @@ public class RoomService {
     }
 
     //특정 방 입장
-    public BaseResponse enterRoom(Long roomId, Long userId) {
+    public BaseResponse<Object> enterRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         User user = userRepository.findById(userId)
@@ -214,7 +215,7 @@ public class RoomService {
 
     //방 삭제
     @Transactional
-    public BaseResponse deleteRoom(Long roomId) {
+    public BaseResponse<Object> deleteRoom(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         roomRepository.delete(room);
@@ -223,7 +224,7 @@ public class RoomService {
 
     //방 탈퇴
     @Transactional
-    public BaseResponse leaveRoom(Long roomId, Long userId) {
+    public BaseResponse<Object> leaveRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         User user = userRepository.findById(userId)

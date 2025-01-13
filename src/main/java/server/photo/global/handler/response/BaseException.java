@@ -1,6 +1,5 @@
-package server.photo.global.handler;
+package server.photo.global.handler.response;
 
-import server.photo.global.handler.response.BaseResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

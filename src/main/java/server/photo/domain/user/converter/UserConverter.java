@@ -4,10 +4,7 @@ import server.photo.domain.invitation.dto.response.InvitationInfo;
 import server.photo.domain.invitation.entity.Invitation;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.user.dto.request.UserSignUpRequest;
-import server.photo.domain.user.dto.response.MyInfo;
-import server.photo.domain.user.dto.response.RoomsMyPageInfo;
-import server.photo.domain.user.dto.response.UserLoginInfo;
-import server.photo.domain.user.dto.response.UserLoginResponse;
+import server.photo.domain.user.dto.response.*;
 import server.photo.domain.user.entity.User;
 
 public class UserConverter {
@@ -41,24 +38,47 @@ public class UserConverter {
                 .build();
     }
 
-    public static InvitationInfo toInvitaionInfo(Invitation invitation, User host) {
+    public static InvitationInfo toInvitationInfo(InvitationMetaData invitationMetaData, InvitingRoomInfo invitingRoomInfo) {
         return InvitationInfo.builder()
+                .invitationMetaData(invitationMetaData)
+                .invitingRoomInfo(invitingRoomInfo)
+                .build();
+    }
+
+    public static RoomInfo toRoomInfo(RoomMetaData roomMetaData, RoomDetail roomDetail) {
+        return RoomInfo.builder()
+                .roomMetaData(roomMetaData)
+                .roomDetail(roomDetail)
+                .build();
+    }
+
+    public static InvitationMetaData toInvitationMetaData(Invitation invitation) {
+        return InvitationMetaData.builder()
                 .invitationId(invitation.getId())
                 .createdAt(invitation.getCreatedAt())
-                .roomId(invitation.getRoom().getId())
-                .roomName(invitation.getRoom().getRoomName())
+                .build();
+    }
+
+    public static InvitingRoomInfo toInvitingRoomInfo(Room room, User host) {
+        return InvitingRoomInfo.builder()
+                .roomId(room.getId())
+                .roomName(room.getRoomName())
                 .hostName(host.getNickname())
                 .build();
     }
 
-    public static RoomsMyPageInfo toRoomsMyPageInfo(Room room, User host) {
-        return RoomsMyPageInfo.builder()
+    public static RoomMetaData toRoomMetaData(Room room, User host) {
+        return RoomMetaData.builder()
                 .roomId(room.getId())
-                .roomName(room.getRoomName())
                 .hostName(host.getNickname())
                 .numOfMembers(room.getRoomMembers().size())
                 .createdAt(room.getCreatedAt())
-                .thumbnail(room.getThumbnailImage())
+                .build();
+    }
+
+    public static RoomDetail toRoomDetail(Room room) {
+        return RoomDetail.builder()
+                .roomName(room.getRoomName())
                 .build();
     }
 }

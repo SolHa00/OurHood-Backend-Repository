@@ -8,7 +8,7 @@ import server.photo.domain.room.entity.Room;
 import server.photo.domain.room.repository.RoomRepository;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 import jakarta.transaction.Transactional;
@@ -24,7 +24,7 @@ public class InvitationService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BaseResponse createInvitation(Long roomId, String nickname) {
+    public BaseResponse<Object> createInvitation(Long roomId, String nickname) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         User user = userRepository.findByNickname(nickname)
@@ -48,7 +48,7 @@ public class InvitationService {
     }
 
     @Transactional
-    public BaseResponse handleInviteRequest(Long invitationId, InvitationHandleRequest request) {
+    public BaseResponse<Object> handleInviteRequest(Long invitationId, InvitationHandleRequest request) {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVITATION_NOT_FOUND));
         if("accept".equals(request.getAction())) {
@@ -64,7 +64,7 @@ public class InvitationService {
     }
 
     @Transactional
-    public BaseResponse deleteInvitation(Long invitationId) {
+    public BaseResponse<Object> deleteInvitation(Long invitationId) {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.INVITATION_NOT_FOUND));
         invitationRepository.delete(invitation);

@@ -20,7 +20,7 @@ import server.photo.domain.user.dto.request.UserSignUpRequest;
 import server.photo.domain.user.dto.response.*;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
-import server.photo.global.handler.BaseException;
+import server.photo.global.handler.response.BaseException;
 import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 import server.photo.global.util.CookieUtil;
@@ -41,7 +41,7 @@ public class UserService {
 
 
     @Transactional
-    public BaseResponse signup(UserSignUpRequest request) {
+    public BaseResponse<Object> signup(UserSignUpRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BaseException(BaseResponseStatus.USER_EMAIL_DUPLICATED);
@@ -58,7 +58,7 @@ public class UserService {
         return BaseResponse.success();
     }
 
-    public BaseResponse login(UserLoginRequest request, HttpServletResponse response) {
+    public BaseResponse<UserLoginResponse> login(UserLoginRequest request, HttpServletResponse response) {
         UserDetails userData = customUserDetailsService.loadUserByUsername(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), userData.getPassword())) {
             throw new BaseException(BaseResponseStatus.LOGIN_FAIL);
@@ -91,24 +91,27 @@ public class UserService {
         for (Invitation invitation : invitationList) {
             User host = userRepository.findById(invitation.getRoom().getUserId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
-            InvitationInfo invitationInfo = UserConverter.toInvitaionInfo(invitation, host);
+            Room room = invitation.getRoom();
+            InvitationMetaData invitationMetaData = UserConverter.toInvitationMetaData(invitation);
+            InvitingRoomInfo invitingRoomInfo = UserConverter.toInvitingRoomInfo(room, host);
+            InvitationInfo invitationInfo = UserConverter.toInvitationInfo(invitationMetaData, invitingRoomInfo);
             invitations.add(invitationInfo);
         }
 
-        List<RoomsMyPageInfo> hostedRooms = new ArrayList<>();
         List<RoomMembers> roomMembersList = user.getRooms();
+        List<RoomInfo> myRooms = new ArrayList<>();
 
         for (RoomMembers roomMembers : roomMembersList) {
             Room room = roomMembers.getRoom();
             User host = userRepository.findById(room.getUserId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
-
-            RoomsMyPageInfo roomsMyPageInfo = UserConverter.toRoomsMyPageInfo(room, host);
-
-            hostedRooms.add(roomsMyPageInfo);
+            RoomMetaData roomMetaData = UserConverter.toRoomMetaData(room, host);
+            RoomDetail roomDetail = UserConverter.toRoomDetail(room);
+            RoomInfo roomInfo = UserConverter.toRoomInfo(roomMetaData, roomDetail);
+            myRooms.add(roomInfo);
         }
 
-        MyPageResponse myPageResponse = RoomConverter.toMyPageResponse(myInfo, hostedRooms, invitations);
+        MyPageResponse myPageResponse = RoomConverter.toMyPageResponse(myInfo, myRooms, invitations);
 
         return BaseResponse.success(myPageResponse);
     }

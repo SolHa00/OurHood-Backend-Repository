@@ -16,19 +16,19 @@ public class JoinRequestController {
 
     //방 참여 요청 생성
     @PostMapping
-    public BaseResponse joinRequest(@RequestBody JoinRequestCreateDto request) {
+    public BaseResponse<Object> joinRequest(@RequestBody JoinRequestCreateDto request) {
         return joinRequestService.createJoinRequest(request);
     }
 
     //방 참여 요청 처리
     @PostMapping("/{joinRequestId}")
-    public BaseResponse handleJoinRequest(@PathVariable Long joinRequestId, @RequestBody JoinRequestHandleDto request) {
+    public BaseResponse<Object> handleJoinRequest(@PathVariable Long joinRequestId, @RequestBody JoinRequestHandleDto request) {
         return joinRequestService.handleJoinRequest(joinRequestId, request);
     }
 
     //방 참여 요청 삭제
     @DeleteMapping("/{joinRequestId}")
-    public BaseResponse deleteJoinRequest(@PathVariable Long joinRequestId) {
+    public BaseResponse<Object> deleteJoinRequest(@PathVariable Long joinRequestId) {
         return joinRequestService.deleteJoinRequest(joinRequestId);
     }
 }

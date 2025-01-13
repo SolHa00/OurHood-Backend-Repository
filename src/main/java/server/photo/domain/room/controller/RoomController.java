@@ -2,11 +2,11 @@ package server.photo.domain.room.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import server.photo.domain.room.dto.response.JoinRequestListResponse;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
 import server.photo.domain.room.dto.request.RoomDetailRequest;
 import server.photo.domain.room.dto.request.RoomLeaveRequest;
 import server.photo.domain.room.dto.request.RoomUpdateRequest;
+import server.photo.domain.room.dto.response.JoinRequestListResponse;
 import server.photo.domain.room.dto.response.RoomCreateResponse;
 import server.photo.domain.room.dto.response.RoomInvitationsDto;
 import server.photo.domain.room.dto.response.RoomListResponse;
@@ -26,7 +26,7 @@ public class RoomController {
     }
 
     @PutMapping("/{roomId}")
-    public BaseResponse updateRoom(@PathVariable Long roomId, RoomUpdateRequest request){
+    public BaseResponse<Object> updateRoom(@PathVariable Long roomId, RoomUpdateRequest request){
         return roomService.updateRoom(roomId, request);
     }
 
@@ -36,17 +36,17 @@ public class RoomController {
     }
 
     @PostMapping("/{roomId}")
-    public BaseResponse enterRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
+    public BaseResponse<Object> enterRoom(@PathVariable Long roomId, @RequestBody RoomDetailRequest request) {
         return roomService.enterRoom(roomId, request.getUserId());
     }
 
     @DeleteMapping("/{roomId}")
-    public BaseResponse deleteRoom(@PathVariable Long roomId) {
+    public BaseResponse<Object> deleteRoom(@PathVariable Long roomId) {
         return roomService.deleteRoom(roomId);
     }
 
     @PostMapping("/{roomId}/leave")
-    public BaseResponse leaveRoom(@PathVariable Long roomId, @RequestBody RoomLeaveRequest request) {
+    public BaseResponse<Object> leaveRoom(@PathVariable Long roomId, @RequestBody RoomLeaveRequest request) {
         return roomService.leaveRoom(roomId, request.getUserId());
     }
 

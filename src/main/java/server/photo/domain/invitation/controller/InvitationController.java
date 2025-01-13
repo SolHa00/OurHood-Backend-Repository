@@ -16,17 +16,17 @@ public class InvitationController {
     private final InvitationService invitationService;
 
     @PostMapping
-    public BaseResponse createInvitation(@RequestBody InvitationRequest request) {
+    public BaseResponse<Object> createInvitation(@RequestBody InvitationRequest request) {
         return invitationService.createInvitation(request.getRoomId(), request.getNickname());
     }
 
     @PostMapping("/{invitationId}")
-    public BaseResponse handleInvitation(@PathVariable Long invitationId, @RequestBody InvitationHandleRequest request) {
+    public BaseResponse<Object> handleInvitation(@PathVariable Long invitationId, @RequestBody InvitationHandleRequest request) {
         return invitationService.handleInviteRequest(invitationId, request);
     }
 
     @DeleteMapping("/{invitationId}")
-    public BaseResponse deleteInvitation(@PathVariable Long invitationId) {
+    public BaseResponse<Object> deleteInvitation(@PathVariable Long invitationId) {
         return invitationService.deleteInvitation(invitationId);
     }
 }

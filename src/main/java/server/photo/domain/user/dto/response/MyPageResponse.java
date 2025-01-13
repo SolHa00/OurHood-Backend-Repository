@@ -13,13 +13,13 @@ import java.util.List;
 public class MyPageResponse {
 
     private MyInfo myInfo;
-    private List<RoomsMyPageInfo> rooms;
+    private List<RoomInfo> myRooms;
     private List<InvitationInfo> invitations;
 
     @Builder
-    public MyPageResponse(MyInfo myInfo, List<RoomsMyPageInfo> rooms, List<InvitationInfo> invitations) {
+    public MyPageResponse(MyInfo myInfo, List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
         this.myInfo = myInfo;
-        this.rooms = rooms;
+        this.myRooms = myRooms;
         this.invitations = invitations;
     }
 }
