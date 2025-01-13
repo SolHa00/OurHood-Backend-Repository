@@ -38,22 +38,22 @@ public class UserConverter {
                 .build();
     }
 
-    public static InvitationInfo toInvitationInfo(InvitationMetaData invitationMetaData, InvitingRoomInfo invitingRoomInfo) {
+    public static InvitationInfo toInvitationInfo(InvitationMetadata invitationMetadata, InvitingRoomInfo invitingRoomInfo) {
         return InvitationInfo.builder()
-                .invitationMetaData(invitationMetaData)
+                .invitationMetadata(invitationMetadata)
                 .invitingRoomInfo(invitingRoomInfo)
                 .build();
     }
 
-    public static RoomInfo toRoomInfo(RoomMetaData roomMetaData, RoomDetail roomDetail) {
+    public static RoomInfo toRoomInfo(RoomMetadata roomMetadata, RoomDetail roomDetail) {
         return RoomInfo.builder()
-                .roomMetaData(roomMetaData)
+                .roomMetaData(roomMetadata)
                 .roomDetail(roomDetail)
                 .build();
     }
 
-    public static InvitationMetaData toInvitationMetaData(Invitation invitation) {
-        return InvitationMetaData.builder()
+    public static InvitationMetadata toInvitationMetadata(Invitation invitation) {
+        return InvitationMetadata.builder()
                 .invitationId(invitation.getId())
                 .createdAt(invitation.getCreatedAt())
                 .build();
@@ -67,8 +67,8 @@ public class UserConverter {
                 .build();
     }
 
-    public static RoomMetaData toRoomMetaData(Room room, User host) {
-        return RoomMetaData.builder()
+    public static RoomMetadata toRoomMetadata(Room room, User host) {
+        return RoomMetadata.builder()
                 .roomId(room.getId())
                 .hostName(host.getNickname())
                 .numOfMembers(room.getRoomMembers().size())

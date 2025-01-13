@@ -92,7 +92,7 @@ public class UserService {
             User host = userRepository.findById(invitation.getRoom().getUserId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
             Room room = invitation.getRoom();
-            InvitationMetaData invitationMetaData = UserConverter.toInvitationMetaData(invitation);
+            InvitationMetadata invitationMetaData = UserConverter.toInvitationMetadata(invitation);
             InvitingRoomInfo invitingRoomInfo = UserConverter.toInvitingRoomInfo(room, host);
             InvitationInfo invitationInfo = UserConverter.toInvitationInfo(invitationMetaData, invitingRoomInfo);
             invitations.add(invitationInfo);
@@ -105,9 +105,9 @@ public class UserService {
             Room room = roomMembers.getRoom();
             User host = userRepository.findById(room.getUserId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
-            RoomMetaData roomMetaData = UserConverter.toRoomMetaData(room, host);
+            RoomMetadata roomMetadata = UserConverter.toRoomMetadata(room, host);
             RoomDetail roomDetail = UserConverter.toRoomDetail(room);
-            RoomInfo roomInfo = UserConverter.toRoomInfo(roomMetaData, roomDetail);
+            RoomInfo roomInfo = UserConverter.toRoomInfo(roomMetadata, roomDetail);
             myRooms.add(roomInfo);
         }
 

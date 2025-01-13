@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 public class RoomEnterSuccessResponse {
 
     private UserContextSuccess userContext;
-    private RoomMetadataSuccess roomMetaData;
+    private RoomMetadataSuccess roomMetadata;
     private RoomDetail roomDetail;
     private RoomPrivate roomPrivate;
 
     @Builder
-    public RoomEnterSuccessResponse(UserContextSuccess userContext, RoomMetadataSuccess roomMetaData, RoomDetail roomDetail, RoomPrivate roomPrivate) {
+    public RoomEnterSuccessResponse(UserContextSuccess userContext, RoomMetadataSuccess roomMetadata, RoomDetail roomDetail, RoomPrivate roomPrivate) {
         this.userContext = userContext;
-        this.roomMetaData = roomMetaData;
+        this.roomMetadata = roomMetadata;
         this.roomDetail = roomDetail;
         this.roomPrivate = roomPrivate;
     }

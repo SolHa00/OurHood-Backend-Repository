@@ -29,24 +29,6 @@ public class RoomConverter {
                 .build();
     }
 
-
-    public static RoomListInfo toRoomListInfo(Room room, String hostName) {
-        return RoomListInfo.builder()
-                .roomId(room.getId())
-                .roomName(room.getRoomName())
-                .hostName(hostName)
-                .numOfMembers(room.getRoomMembers().size())
-                .createdAt(room.getCreatedAt())
-                .thumbnail(room.getThumbnailImage())
-                .build();
-    }
-
-    public static RoomListResponse toRoomListResponse(List<RoomListInfo> roomListInfos) {
-        return RoomListResponse.builder()
-                .rooms(roomListInfos)
-                .build();
-    }
-
     public static MyPageResponse toMyPageResponse(MyInfo myInfo, List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
         return MyPageResponse.builder()
                 .myInfo(myInfo)
@@ -89,7 +71,7 @@ public class RoomConverter {
                 .build();
     }
 
-    public static RoomMetadataSuccess toRoomMetaDataSuccess(Room room, User host) {
+    public static RoomMetadataSuccess toRoomMetadataSuccess(Room room, User host) {
         return RoomMetadataSuccess.builder()
                 .roomId(room.getId())
                 .userId(host.getId())
@@ -117,7 +99,7 @@ public class RoomConverter {
     public static RoomEnterSuccessResponse toRoomEnterSuccessResponse(UserContextSuccess userContext, RoomMetadataSuccess roomMetadata, RoomDetail roomDetail, RoomPrivate roomPrivate) {
         return RoomEnterSuccessResponse.builder()
                 .userContext(userContext)
-                .roomMetaData(roomMetadata)
+                .roomMetadata(roomMetadata)
                 .roomDetail(roomDetail)
                 .roomPrivate(roomPrivate)
                 .build();
@@ -141,6 +123,28 @@ public class RoomConverter {
     public static RoomEnterFailResponse toRoomEnterFailResponse(UserContextFail userContext, RoomMetadataFail roomMetadata, RoomDetail roomDetail) {
         return RoomEnterFailResponse.builder()
                 .userContext(userContext)
+                .roomMetadata(roomMetadata)
+                .roomDetail(roomDetail)
+                .build();
+    }
+
+    public static RoomMetadata toRoomMetadata(Room room, User host) {
+        return RoomMetadata.builder()
+                .roomId(room.getId())
+                .hostName(host.getNickname())
+                .createdAt(room.getCreatedAt())
+                .build();
+    }
+
+    public static RoomListDetail toRoomListDetail(Room room) {
+        return RoomListDetail.builder()
+                .roomName(room.getRoomName())
+                .thumbnail(room.getThumbnailImage())
+                .build();
+    }
+
+    public static RoomListResponse toRoomListResponse(RoomMetadata roomMetadata, RoomListDetail roomDetail) {
+        return RoomListResponse.builder()
                 .roomMetadata(roomMetadata)
                 .roomDetail(roomDetail)
                 .build();

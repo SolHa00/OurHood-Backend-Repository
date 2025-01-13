@@ -13,6 +13,8 @@ import server.photo.domain.room.dto.response.RoomListResponse;
 import server.photo.domain.room.service.RoomService;
 import server.photo.global.handler.response.BaseResponse;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/rooms")
@@ -34,7 +36,7 @@ public class RoomController {
 
     //방 리스트 조회
     @GetMapping
-    public BaseResponse<RoomListResponse> roomList(String order, String condition, @RequestParam(required = false) String q) {
+    public BaseResponse<List<RoomListResponse>> roomList(String order, String condition, @RequestParam(required = false) String q) {
         return roomService.getRooms(order, condition, q);
     }
 

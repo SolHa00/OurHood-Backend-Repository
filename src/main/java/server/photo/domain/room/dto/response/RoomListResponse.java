@@ -5,15 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomListResponse {
-    private List<RoomListInfo> rooms;
+    private RoomMetadata roomMetadata;
+    private RoomListDetail roomDetail;
 
     @Builder
-    public RoomListResponse(List<RoomListInfo> rooms) {
-        this.rooms = rooms;
+    public RoomListResponse(RoomMetadata roomMetadata, RoomListDetail roomDetail) {
+        this.roomMetadata = roomMetadata;
+        this.roomDetail = roomDetail;
     }
 }

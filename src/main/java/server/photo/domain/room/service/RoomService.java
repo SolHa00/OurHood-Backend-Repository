@@ -99,7 +99,7 @@ public class RoomService {
     }
 
     //방 리스트 조회
-    public BaseResponse<RoomListResponse> getRooms(String order, String condition, String q) {
+    public BaseResponse<List<RoomListResponse>> getRooms(String order, String condition, String q) {
 
         Sort sort;
         if (order.equals("date_desc")) {
@@ -123,17 +123,17 @@ public class RoomService {
             rooms = roomRepository.findAll(sort);
         }
 
-        List<RoomListInfo> roomListInfos = new ArrayList<>();
+        List<RoomListResponse> roomListResponses = new ArrayList<>();
         for (Room room : rooms) {
             User host = userRepository.findById(room.getUserId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
-            RoomListInfo roomListInfo = RoomConverter.toRoomListInfo(room, host.getNickname());
-            roomListInfos.add(roomListInfo);
+            RoomMetadata roomMetadata = RoomConverter.toRoomMetadata(room, host);
+            RoomListDetail roomDetail = RoomConverter.toRoomListDetail(room);
+            RoomListResponse roomListResponse = RoomConverter.toRoomListResponse(roomMetadata, roomDetail);
+            roomListResponses.add(roomListResponse);
         }
 
-        RoomListResponse roomListResponse = RoomConverter.toRoomListResponse(roomListInfos);
-
-        return BaseResponse.success(roomListResponse);
+        return BaseResponse.success(roomListResponses);
     }
 
     //특정 방 입장
@@ -178,7 +178,7 @@ public class RoomService {
         Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
 
         UserContextSuccess userContext = RoomConverter.toUserContextSuccess(isMember);
-        RoomMetadataSuccess roomMetadata = RoomConverter.toRoomMetaDataSuccess(room, host);
+        RoomMetadataSuccess roomMetadata = RoomConverter.toRoomMetadataSuccess(room, host);
         RoomDetail roomDetail = RoomConverter.toRoomDetail(room);
         RoomPrivate roomPrivate = RoomConverter.toRoomPrivate(members, moments, numOfNewJoinRequests);
 

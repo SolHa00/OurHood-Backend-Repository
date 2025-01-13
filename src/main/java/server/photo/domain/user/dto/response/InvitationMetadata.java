@@ -10,19 +10,15 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomMetaData {
+public class InvitationMetadata {
 
-    private Long roomId;
-    private String hostName;
-    private int numOfMembers;
+    private Long invitationId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Builder
-    public RoomMetaData(Long roomId, String hostName, int numOfMembers, LocalDateTime createdAt) {
-        this.roomId = roomId;
-        this.hostName = hostName;
-        this.numOfMembers = numOfMembers;
+    public InvitationMetadata(Long invitationId, LocalDateTime createdAt) {
+        this.invitationId = invitationId;
         this.createdAt = createdAt;
     }
 }
