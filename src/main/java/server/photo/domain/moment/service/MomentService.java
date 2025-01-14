@@ -11,6 +11,7 @@ import server.photo.domain.moment.dto.request.MomentDescriptionRequest;
 import server.photo.domain.moment.dto.response.CommentResponse;
 import server.photo.domain.moment.dto.response.MomentCreateResponse;
 import server.photo.domain.moment.dto.response.MomentDetailResponse;
+import server.photo.domain.moment.dto.response.MomentMetadata;
 import server.photo.domain.moment.entity.Moment;
 import server.photo.domain.moment.repository.MomentRepository;
 import server.photo.domain.room.entity.Room;
@@ -49,7 +50,8 @@ public class MomentService {
         Moment moment = MomentConverter.toMoment(imageUrl, request, user, room);
         momentRepository.save(moment);
 
-        MomentCreateResponse momentCreateResponse = MomentConverter.toMomentCreateResponse(moment);
+        MomentMetadata momentMetadata = MomentConverter.toMomentMetadata(moment);
+        MomentCreateResponse momentCreateResponse = MomentConverter.toMomentCreateResponse(momentMetadata);
 
         return BaseResponse.success(momentCreateResponse);
     }

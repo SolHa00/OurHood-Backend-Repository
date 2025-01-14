@@ -16,6 +16,7 @@ public class MomentController {
 
     private final MomentService momentService;
 
+    //Moment 생성
     @PostMapping
     public BaseResponse<MomentCreateResponse> createMoment(MomentCreateRequest request) {
         return momentService.createMoment(request);

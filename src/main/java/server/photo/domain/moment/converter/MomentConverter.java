@@ -5,6 +5,7 @@ import server.photo.domain.moment.dto.request.MomentCreateRequest;
 import server.photo.domain.moment.dto.response.CommentResponse;
 import server.photo.domain.moment.dto.response.MomentCreateResponse;
 import server.photo.domain.moment.dto.response.MomentDetailResponse;
+import server.photo.domain.moment.dto.response.MomentMetadata;
 import server.photo.domain.moment.entity.Moment;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.user.entity.User;
@@ -23,9 +24,9 @@ public class MomentConverter {
                 .build();
     }
 
-    public static MomentCreateResponse toMomentCreateResponse(Moment moment) {
+    public static MomentCreateResponse toMomentCreateResponse(MomentMetadata momentMetadata) {
         return MomentCreateResponse.builder()
-                .momentId(moment.getId())
+                .momentMetadata(momentMetadata)
                 .build();
     }
 
@@ -50,4 +51,10 @@ public class MomentConverter {
                 .build();
     }
 
+    public static MomentMetadata toMomentMetadata(Moment moment) {
+        return MomentMetadata.builder()
+                .momentId(moment.getId())
+                .momentImage(moment.getImageUrl())
+                .build();
+    }
 }

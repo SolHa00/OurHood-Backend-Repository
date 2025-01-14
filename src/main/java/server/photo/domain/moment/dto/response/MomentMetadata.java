@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MomentCreateResponse {
-    private MomentMetadata momentMetadata;
+public class MomentMetadata {
+    private Long momentId;
+    private String momentImage;
 
     @Builder
-    public MomentCreateResponse(MomentMetadata momentMetadata) {
-        this.momentMetadata = momentMetadata;
+    public MomentMetadata(Long momentId, String momentImage) {
+        this.momentId = momentId;
+        this.momentImage = momentImage;
     }
 }
