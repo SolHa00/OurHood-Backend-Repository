@@ -22,6 +22,7 @@ public class MomentController {
         return momentService.createMoment(request);
     }
 
+    //특정 Moment 조회
     @GetMapping("/{momentId}")
     public BaseResponse<MomentDetailResponse> getMoment(@PathVariable Long momentId) {
         return momentService.getMoment(momentId);

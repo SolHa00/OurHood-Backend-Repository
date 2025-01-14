@@ -2,15 +2,11 @@ package server.photo.domain.moment.converter;
 
 import server.photo.domain.comment.entity.Comment;
 import server.photo.domain.moment.dto.request.MomentCreateRequest;
-import server.photo.domain.moment.dto.response.CommentResponse;
-import server.photo.domain.moment.dto.response.MomentCreateResponse;
-import server.photo.domain.moment.dto.response.MomentDetailResponse;
-import server.photo.domain.moment.dto.response.MomentMetadata;
+import server.photo.domain.moment.dto.response.*;
 import server.photo.domain.moment.entity.Moment;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.user.entity.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class MomentConverter {
@@ -40,14 +36,11 @@ public class MomentConverter {
                 .build();
     }
 
-    public static MomentDetailResponse toMomentDetailResponse(String nickname, Moment moment, LocalDateTime createdAt, List<CommentResponse> comments, User momentUser) {
+    public static MomentDetailResponse toMomentDetailResponse(MomentDetailMetadata momentMetadata, MomentDetail momentDetail, List<CommentResponse> comments) {
         return MomentDetailResponse.builder()
-                .nickname(nickname)
-                .momentImage(moment.getImageUrl())
-                .momentDescription(moment.getMomentDescription())
-                .createdAt(createdAt)
+                .momentMetadata(momentMetadata)
+                .momentDetail(momentDetail)
                 .comments(comments)
-                .userId(momentUser.getId())
                 .build();
     }
 
@@ -55,6 +48,21 @@ public class MomentConverter {
         return MomentMetadata.builder()
                 .momentId(moment.getId())
                 .momentImage(moment.getImageUrl())
+                .build();
+    }
+
+    public static MomentDetailMetadata toMomentDetailMetadata(Moment moment, User user) {
+        return MomentDetailMetadata.builder()
+                .momentImage(moment.getImageUrl())
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .createdAt(moment.getCreatedAt())
+                .build();
+    }
+
+    public static MomentDetail toMomentDetail(Moment moment) {
+        return MomentDetail.builder()
+                .momentDescription(moment.getMomentDescription())
                 .build();
     }
 }

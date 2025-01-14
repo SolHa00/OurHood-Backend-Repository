@@ -8,10 +8,7 @@ import server.photo.domain.comment.repository.CommentRepository;
 import server.photo.domain.moment.converter.MomentConverter;
 import server.photo.domain.moment.dto.request.MomentCreateRequest;
 import server.photo.domain.moment.dto.request.MomentDescriptionRequest;
-import server.photo.domain.moment.dto.response.CommentResponse;
-import server.photo.domain.moment.dto.response.MomentCreateResponse;
-import server.photo.domain.moment.dto.response.MomentDetailResponse;
-import server.photo.domain.moment.dto.response.MomentMetadata;
+import server.photo.domain.moment.dto.response.*;
 import server.photo.domain.moment.entity.Moment;
 import server.photo.domain.moment.repository.MomentRepository;
 import server.photo.domain.room.entity.Room;
@@ -23,7 +20,6 @@ import server.photo.global.handler.response.BaseResponse;
 import server.photo.global.handler.response.BaseResponseStatus;
 import server.photo.global.s3.S3FileService;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +59,8 @@ public class MomentService {
         User momentUser = userRepository.findById(moment.getUserId())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
-        String nickname = momentUser.getNickname();
-        LocalDateTime createdAt = moment.getCreatedAt();
+        MomentDetailMetadata momentMetadata = MomentConverter.toMomentDetailMetadata(moment, momentUser);
+        MomentDetail momentDetail = MomentConverter.toMomentDetail(moment);
 
         List<CommentResponse> comments = new ArrayList<>();
         List<Comment> commentList = commentRepository.findByMoment(moment);
@@ -75,7 +71,7 @@ public class MomentService {
             comments.add(commentResponse);
         }
 
-        MomentDetailResponse momentDetailResponse = MomentConverter.toMomentDetailResponse(nickname, moment, createdAt, comments, momentUser);
+        MomentDetailResponse momentDetailResponse = MomentConverter.toMomentDetailResponse(momentMetadata, momentDetail, comments);
 
         return BaseResponse.success(momentDetailResponse);
     }
