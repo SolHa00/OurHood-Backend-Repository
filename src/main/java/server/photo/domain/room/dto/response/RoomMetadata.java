@@ -15,11 +15,13 @@ public class RoomMetadata {
     private String hostName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+    private int numOfMembers;
 
     @Builder
-    public RoomMetadata(Long roomId, String hostName, LocalDateTime createdAt) {
+    public RoomMetadata(Long roomId, String hostName, LocalDateTime createdAt, int numOfMembers) {
         this.roomId = roomId;
         this.hostName = hostName;
         this.createdAt = createdAt;
+        this.numOfMembers = numOfMembers;
     }
 }

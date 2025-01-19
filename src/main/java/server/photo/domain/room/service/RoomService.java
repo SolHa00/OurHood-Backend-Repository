@@ -147,8 +147,6 @@ public class RoomService {
 
         Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getUser().getId().equals(userId));
 
-        String thumbnailUrl = room.getThumbnailImage();
-
         if (!isMember) {
             Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
 
@@ -195,7 +193,7 @@ public class RoomService {
         return BaseResponse.success();
     }
 
-    //방 탈퇴
+    //방 나가기
     @Transactional
     public BaseResponse<Object> leaveRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)

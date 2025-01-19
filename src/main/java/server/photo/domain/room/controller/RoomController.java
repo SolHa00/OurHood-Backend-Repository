@@ -52,6 +52,7 @@ public class RoomController {
         return roomService.deleteRoom(roomId);
     }
 
+    //방 나가기
     @PostMapping("/{roomId}/leave")
     public BaseResponse<Object> leaveRoom(@PathVariable Long roomId, @RequestBody RoomLeaveRequest request) {
         return roomService.leaveRoom(roomId, request.getUserId());

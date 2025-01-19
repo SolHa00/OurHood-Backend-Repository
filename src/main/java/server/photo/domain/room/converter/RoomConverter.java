@@ -133,6 +133,7 @@ public class RoomConverter {
                 .roomId(room.getId())
                 .hostName(host.getNickname())
                 .createdAt(room.getCreatedAt())
+                .numOfMembers(room.getRoomMembers().size())
                 .build();
     }
 
