@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserContextSuccess {
     private Boolean isMember;
+    private Boolean isHost;
 
     @Builder
-    public UserContextSuccess(Boolean isMember) {
+    public UserContextSuccess(Boolean isMember, Boolean isHost) {
         this.isMember = isMember;
+        this.isHost = isHost;
     }
 }

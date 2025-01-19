@@ -65,9 +65,10 @@ public class RoomConverter {
                 .build();
     }
 
-    public static UserContextSuccess toUserContextSuccess(Boolean isMember) {
+    public static UserContextSuccess toUserContextSuccess(Boolean isMember, Boolean isHost) {
         return UserContextSuccess.builder()
                 .isMember(isMember)
+                .isHost(isHost)
                 .build();
     }
 
@@ -105,10 +106,11 @@ public class RoomConverter {
                 .build();
     }
 
-    public static UserContextFail toUserContextFail(Boolean isMember, Boolean isJoinRequestSent) {
+    public static UserContextFail toUserContextFail(Boolean isMember, Boolean isJoinRequestSent, Boolean isHost) {
         return UserContextFail.builder()
                 .isMember(isMember)
                 .isJoinRequestSent(isJoinRequestSent)
+                .isHost(isHost)
                 .build();
     }
 

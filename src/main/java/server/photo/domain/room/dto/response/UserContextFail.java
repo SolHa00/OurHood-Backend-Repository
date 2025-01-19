@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 public class UserContextFail {
     private Boolean isMember;
     private Boolean isJoinRequestSent;
+    private Boolean isHost;
 
     @Builder
-    public UserContextFail(Boolean isMember, Boolean isJoinRequestSent) {
+    public UserContextFail(Boolean isMember, Boolean isJoinRequestSent, Boolean isHost) {
         this.isMember = isMember;
         this.isJoinRequestSent = isJoinRequestSent;
+        this.isHost = isHost;
     }
 }

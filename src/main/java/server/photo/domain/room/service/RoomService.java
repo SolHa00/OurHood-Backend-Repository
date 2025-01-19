@@ -146,11 +146,12 @@ public class RoomService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
         Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getUser().getId().equals(userId));
+        Boolean isHost = room.getUserId().equals(userId);
 
         if (!isMember) {
             Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
 
-            UserContextFail userContext = RoomConverter.toUserContextFail(isMember, isJoinRequestSent);
+            UserContextFail userContext = RoomConverter.toUserContextFail(isMember, isJoinRequestSent, isHost);
             RoomMetadataFail roomMetadata = RoomConverter.toRoomMetadataFail(room, host);
             RoomDetail roomDetail = RoomConverter.toRoomDetail(room);
 
@@ -175,7 +176,7 @@ public class RoomService {
 
         Long numOfNewJoinRequests = joinRequestRepository.countByRoom(room);
 
-        UserContextSuccess userContext = RoomConverter.toUserContextSuccess(isMember);
+        UserContextSuccess userContext = RoomConverter.toUserContextSuccess(isMember, isHost);
         RoomMetadataSuccess roomMetadata = RoomConverter.toRoomMetadataSuccess(room, host);
         RoomDetail roomDetail = RoomConverter.toRoomDetail(room);
         RoomPrivate roomPrivate = RoomConverter.toRoomPrivate(members, moments, numOfNewJoinRequests);
