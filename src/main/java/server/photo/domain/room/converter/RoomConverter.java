@@ -6,7 +6,6 @@ import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
 import server.photo.domain.room.dto.response.*;
 import server.photo.domain.room.entity.Room;
-import server.photo.domain.user.dto.response.MyInfo;
 import server.photo.domain.user.dto.response.MyPageResponse;
 import server.photo.domain.user.dto.response.RoomInfo;
 import server.photo.domain.user.entity.User;
@@ -29,9 +28,8 @@ public class RoomConverter {
                 .build();
     }
 
-    public static MyPageResponse toMyPageResponse(MyInfo myInfo, List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
+    public static MyPageResponse toMyPageResponse(List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
         return MyPageResponse.builder()
-                .myInfo(myInfo)
                 .myRooms(myRooms)
                 .invitations(invitations)
                 .build();
@@ -150,6 +148,12 @@ public class RoomConverter {
         return RoomListResponse.builder()
                 .roomMetadata(roomMetadata)
                 .roomDetail(roomDetail)
+                .build();
+    }
+
+    public static RoomListDto toRoomListDto(List<RoomListResponse> roomListResponses) {
+        return RoomListDto.builder()
+                .roomList(roomListResponses)
                 .build();
     }
 }

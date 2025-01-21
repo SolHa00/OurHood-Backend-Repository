@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 public class RoomDetail {
 
     private String roomName;
+    private String thumbnail;
 
     @Builder
-    public RoomDetail(String roomName) {
+    public RoomDetail(String roomName, String thumbnail) {
         this.roomName = roomName;
+        this.thumbnail = thumbnail;
     }
 }

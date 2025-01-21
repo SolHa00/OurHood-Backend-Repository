@@ -47,7 +47,7 @@ public class UserConverter {
 
     public static RoomInfo toRoomInfo(RoomMetadata roomMetadata, RoomDetail roomDetail) {
         return RoomInfo.builder()
-                .roomMetaData(roomMetadata)
+                .roomMetadata(roomMetadata)
                 .roomDetail(roomDetail)
                 .build();
     }
@@ -79,6 +79,7 @@ public class UserConverter {
     public static RoomDetail toRoomDetail(Room room) {
         return RoomDetail.builder()
                 .roomName(room.getRoomName())
+                .thumbnail(room.getThumbnailImage())
                 .build();
     }
 }

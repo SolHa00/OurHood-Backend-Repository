@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomInfo {
 
-    private RoomMetadata roomMetaData;
+    private RoomMetadata roomMetadata;
     private RoomDetail roomDetail;
 
     @Builder
-    public RoomInfo(RoomMetadata roomMetaData, RoomDetail roomDetail) {
-        this.roomMetaData = roomMetaData;
+    public RoomInfo(RoomMetadata roomMetadata, RoomDetail roomDetail) {
+        this.roomMetadata = roomMetadata;
         this.roomDetail = roomDetail;
     }
 }

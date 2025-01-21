@@ -99,7 +99,7 @@ public class RoomService {
     }
 
     //방 리스트 조회
-    public BaseResponse<List<RoomListResponse>> getRooms(String order, String condition, String q) {
+    public BaseResponse<RoomListDto> getRooms(String order, String condition, String q) {
 
         Sort sort;
         if (order.equals("date_desc")) {
@@ -132,8 +132,9 @@ public class RoomService {
             RoomListResponse roomListResponse = RoomConverter.toRoomListResponse(roomMetadata, roomDetail);
             roomListResponses.add(roomListResponse);
         }
+        RoomListDto roomListDto = RoomConverter.toRoomListDto(roomListResponses);
 
-        return BaseResponse.success(roomListResponses);
+        return BaseResponse.success(roomListDto);
     }
 
     //특정 방 입장

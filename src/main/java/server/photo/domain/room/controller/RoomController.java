@@ -6,10 +6,7 @@ import server.photo.domain.room.dto.request.RoomCreateRequest;
 import server.photo.domain.room.dto.request.RoomDetailRequest;
 import server.photo.domain.room.dto.request.RoomLeaveRequest;
 import server.photo.domain.room.dto.request.RoomUpdateRequest;
-import server.photo.domain.room.dto.response.JoinRequestListResponse;
-import server.photo.domain.room.dto.response.RoomCreateResponse;
-import server.photo.domain.room.dto.response.RoomInvitationsDto;
-import server.photo.domain.room.dto.response.RoomListResponse;
+import server.photo.domain.room.dto.response.*;
 import server.photo.domain.room.service.RoomService;
 import server.photo.global.handler.response.BaseResponse;
 
@@ -36,7 +33,7 @@ public class RoomController {
 
     //방 리스트 조회
     @GetMapping
-    public BaseResponse<List<RoomListResponse>> roomList(String order, String condition, @RequestParam(required = false) String q) {
+    public BaseResponse<RoomListDto> roomList(String order, String condition, @RequestParam(required = false) String q) {
         return roomService.getRooms(order, condition, q);
     }
 

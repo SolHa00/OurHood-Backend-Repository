@@ -12,13 +12,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyPageResponse {
 
-    private MyInfo myInfo;
     private List<RoomInfo> myRooms;
     private List<InvitationInfo> invitations;
 
     @Builder
-    public MyPageResponse(MyInfo myInfo, List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
-        this.myInfo = myInfo;
+    public MyPageResponse(List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
         this.myRooms = myRooms;
         this.invitations = invitations;
     }
