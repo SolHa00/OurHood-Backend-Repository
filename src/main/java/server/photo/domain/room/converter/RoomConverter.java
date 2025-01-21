@@ -73,7 +73,6 @@ public class RoomConverter {
     public static RoomMetadataSuccess toRoomMetadataSuccess(Room room, User host) {
         return RoomMetadataSuccess.builder()
                 .roomId(room.getId())
-                .userId(host.getId())
                 .hostName(host.getNickname())
                 .createdAt(room.getCreatedAt())
                 .build();

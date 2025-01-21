@@ -12,15 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomMetadataSuccess {
     private Long roomId;
-    private Long userId;
     private String hostName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Builder
-    public RoomMetadataSuccess(Long roomId, Long userId, String hostName, LocalDateTime createdAt) {
+    public RoomMetadataSuccess(Long roomId, String hostName, LocalDateTime createdAt) {
         this.roomId = roomId;
-        this.userId = userId;
         this.hostName = hostName;
         this.createdAt = createdAt;
     }
