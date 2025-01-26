@@ -1,4 +1,4 @@
-package server.photo.domain.comment.service;
+package server.photo.domain.comment.application;
 
 import server.photo.domain.comment.converter.CommentConverter;
 import server.photo.domain.comment.dto.request.CommentCreateRequest;

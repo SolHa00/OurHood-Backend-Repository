@@ -1,4 +1,4 @@
-package server.photo.domain.user.service;
+package server.photo.domain.user.application;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import server.photo.domain.invitation.dto.response.InvitationInfo;
 import server.photo.domain.invitation.entity.Invitation;
 import server.photo.domain.invitation.repository.InvitationRepository;
-import server.photo.domain.refresh.service.JwtTokenService;
-import server.photo.domain.refresh.service.RefreshTokenService;
+import server.photo.domain.refresh.application.JwtTokenService;
+import server.photo.domain.refresh.application.RefreshTokenService;
 import server.photo.domain.room.converter.RoomConverter;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.room.entity.RoomMembers;

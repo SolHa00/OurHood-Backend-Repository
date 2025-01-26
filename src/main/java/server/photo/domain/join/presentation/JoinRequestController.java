@@ -1,10 +1,10 @@
-package server.photo.domain.join.controller;
+package server.photo.domain.join.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import server.photo.domain.join.dto.request.JoinRequestCreateDto;
 import server.photo.domain.join.dto.request.JoinRequestHandleDto;
-import server.photo.domain.join.service.JoinRequestService;
+import server.photo.domain.join.application.JoinRequestService;
 import server.photo.global.handler.response.BaseResponse;
 
 @RestController

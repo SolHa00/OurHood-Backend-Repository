@@ -37,7 +37,7 @@
                    │   └── user # User 도메인 폴더
                    └── global
                        ├── config # 설정 파일 폴더
-                       ├── exception # 예외 처리 폴더
+                       ├── handler # 예외 처리 및 공통 응답 폴더
                        ├── jwt # JWT 폴더
                        ├── response # API Response 폴더
                        ├── s3 # s3 service 폴더 

@@ -1,4 +1,4 @@
-package server.photo.domain.refresh.service;
+package server.photo.domain.refresh.application;
 
 import server.photo.domain.refresh.entity.RefreshToken;
 import server.photo.domain.refresh.repository.RefreshTokenRepository;

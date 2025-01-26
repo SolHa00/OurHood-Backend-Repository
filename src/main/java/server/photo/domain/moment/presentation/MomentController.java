@@ -1,10 +1,10 @@
-package server.photo.domain.moment.controller;
+package server.photo.domain.moment.presentation;
 
 import server.photo.domain.moment.dto.request.MomentCreateRequest;
 import server.photo.domain.moment.dto.request.MomentDescriptionRequest;
 import server.photo.domain.moment.dto.response.MomentCreateResponse;
 import server.photo.domain.moment.dto.response.MomentDetailResponse;
-import server.photo.domain.moment.service.MomentService;
+import server.photo.domain.moment.application.MomentService;
 import server.photo.global.handler.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

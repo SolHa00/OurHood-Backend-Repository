@@ -1,9 +1,9 @@
-package server.photo.domain.comment.controller;
+package server.photo.domain.comment.presentation;
 
 import server.photo.domain.comment.dto.request.CommentUpdateRequest;
 import server.photo.domain.comment.dto.request.CommentCreateRequest;
 import server.photo.domain.comment.dto.response.CommentCreateResponse;
-import server.photo.domain.comment.service.CommentService;
+import server.photo.domain.comment.application.CommentService;
 import server.photo.global.handler.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

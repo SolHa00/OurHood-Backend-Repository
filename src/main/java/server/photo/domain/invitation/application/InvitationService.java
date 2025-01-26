@@ -1,4 +1,4 @@
-package server.photo.domain.invitation.service;
+package server.photo.domain.invitation.application;
 
 import server.photo.domain.invitation.converter.InvitationConverter;
 import server.photo.domain.invitation.dto.request.InvitationHandleRequest;

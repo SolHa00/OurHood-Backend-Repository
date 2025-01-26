@@ -1,4 +1,4 @@
-package server.photo.domain.room.service;
+package server.photo.domain.room.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

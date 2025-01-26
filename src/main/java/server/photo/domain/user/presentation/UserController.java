@@ -1,10 +1,10 @@
-package server.photo.domain.user.controller;
+package server.photo.domain.user.presentation;
 
 import server.photo.domain.user.dto.request.UserLoginRequest;
 import server.photo.domain.user.dto.request.UserSignUpRequest;
 import server.photo.domain.user.dto.response.MyPageResponse;
 import server.photo.domain.user.dto.response.UserLoginResponse;
-import server.photo.domain.user.service.UserService;
+import server.photo.domain.user.application.UserService;
 import server.photo.global.handler.response.BaseResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

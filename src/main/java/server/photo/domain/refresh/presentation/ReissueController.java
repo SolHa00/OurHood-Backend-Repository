@@ -1,4 +1,4 @@
-package server.photo.domain.refresh.controller;
+package server.photo.domain.refresh.presentation;
 
 import server.photo.domain.refresh.repository.RefreshTokenRepository;
 import server.photo.global.handler.response.BaseException;

@@ -1,9 +1,9 @@
-package server.photo.domain.invitation.controller;
+package server.photo.domain.invitation.presentation;
 
 
 import server.photo.domain.invitation.dto.request.InvitationHandleRequest;
 import server.photo.domain.invitation.dto.request.InvitationRequest;
-import server.photo.domain.invitation.service.InvitationService;
+import server.photo.domain.invitation.application.InvitationService;
 import server.photo.global.handler.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

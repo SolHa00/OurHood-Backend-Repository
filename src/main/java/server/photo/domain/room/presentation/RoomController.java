@@ -1,4 +1,4 @@
-package server.photo.domain.room.controller;
+package server.photo.domain.room.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -7,10 +7,8 @@ import server.photo.domain.room.dto.request.RoomDetailRequest;
 import server.photo.domain.room.dto.request.RoomLeaveRequest;
 import server.photo.domain.room.dto.request.RoomUpdateRequest;
 import server.photo.domain.room.dto.response.*;
-import server.photo.domain.room.service.RoomService;
+import server.photo.domain.room.application.RoomService;
 import server.photo.global.handler.response.BaseResponse;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

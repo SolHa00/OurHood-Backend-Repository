@@ -1,4 +1,4 @@
-package server.photo.domain.join.service;
+package server.photo.domain.join.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

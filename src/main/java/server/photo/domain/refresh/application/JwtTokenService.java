@@ -1,4 +1,4 @@
-package server.photo.domain.refresh.service;
+package server.photo.domain.refresh.application;
 
 import server.photo.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;

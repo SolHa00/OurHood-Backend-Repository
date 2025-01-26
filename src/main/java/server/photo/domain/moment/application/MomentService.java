@@ -1,4 +1,4 @@
-package server.photo.domain.moment.service;
+package server.photo.domain.moment.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

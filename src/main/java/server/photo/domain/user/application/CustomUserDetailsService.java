@@ -1,4 +1,4 @@
-package server.photo.domain.user.service;
+package server.photo.domain.user.application;
 
 import server.photo.domain.user.dto.CustomUserDetails;
 import server.photo.domain.user.entity.User;
