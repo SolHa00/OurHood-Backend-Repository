@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MomentInfo {
     private Long momentId;
-    private String imageUrl;
+    private String momentImage;
 
     @Builder
-    public MomentInfo(Long momentId, String imageUrl) {
+    public MomentInfo(Long momentId, String momentImage) {
         this.momentId = momentId;
-        this.imageUrl = imageUrl;
+        this.momentImage = momentImage;
     }
 }

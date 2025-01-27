@@ -171,7 +171,7 @@ public class RoomService {
         List<MomentInfo> moments = room.getMoments().stream()
                 .map(moment -> MomentInfo.builder()
                         .momentId(moment.getId())
-                        .imageUrl(moment.getImageUrl())
+                        .momentImage(moment.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
 
