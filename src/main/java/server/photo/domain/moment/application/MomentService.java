@@ -46,8 +46,7 @@ public class MomentService {
         Moment moment = MomentConverter.toMoment(imageUrl, request, user, room);
         momentRepository.save(moment);
 
-        MomentMetadata momentMetadata = MomentConverter.toMomentMetadata(moment);
-        MomentCreateResponse momentCreateResponse = MomentConverter.toMomentCreateResponse(momentMetadata);
+        MomentCreateResponse momentCreateResponse = MomentConverter.toMomentCreateResponse(moment);
 
         return BaseResponse.success(momentCreateResponse);
     }

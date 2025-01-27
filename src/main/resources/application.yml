@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
   datasource:
     url: ${DB_HOST}
     username: ${DB_USERNAME}

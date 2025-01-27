@@ -20,9 +20,9 @@ public class MomentConverter {
                 .build();
     }
 
-    public static MomentCreateResponse toMomentCreateResponse(MomentMetadata momentMetadata) {
+    public static MomentCreateResponse toMomentCreateResponse(Moment moment) {
         return MomentCreateResponse.builder()
-                .momentMetadata(momentMetadata)
+                .momentId(moment.getId())
                 .build();
     }
 
@@ -41,13 +41,6 @@ public class MomentConverter {
                 .momentMetadata(momentMetadata)
                 .momentDetail(momentDetail)
                 .comments(comments)
-                .build();
-    }
-
-    public static MomentMetadata toMomentMetadata(Moment moment) {
-        return MomentMetadata.builder()
-                .momentId(moment.getId())
-                .momentImage(moment.getImageUrl())
                 .build();
     }
 

@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MomentCreateResponse {
-    private MomentMetadata momentMetadata;
+    private Long momentId;
 
     @Builder
-    public MomentCreateResponse(MomentMetadata momentMetadata) {
-        this.momentMetadata = momentMetadata;
+    public MomentCreateResponse(Long momentId) {
+        this.momentId = momentId;
     }
 }
