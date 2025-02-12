@@ -1,7 +1,11 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
   datasource:
     url: ${DB_HOST}
     username: ${DB_USERNAME}
@@ -28,7 +32,7 @@ logging:
   level:
     org:
       hibernate:
-        SQL: DEBUG
+        SQL: debug
 
 cloud:
   aws:

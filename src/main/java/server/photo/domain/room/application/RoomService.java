@@ -50,7 +50,6 @@ public class RoomService {
         if (request.getThumbnail() != null && !request.getThumbnail().isEmpty()) {
             MultipartFile thumbnail = request.getThumbnail();
             String imageUrl = s3FileService.uploadFile(thumbnail);
-
             room.updateThumbnailImage(imageUrl);
         }
 

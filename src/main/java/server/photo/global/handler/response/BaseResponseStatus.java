@@ -35,7 +35,7 @@ public enum BaseResponseStatus {
      * 404 NOT_FOUND 잘못된 리소스 접근
      */
     NOT_FOUND( 404, HttpStatus.NOT_FOUND,"Not Found"),
-    USER_NOT_FOUND(40401, HttpStatus.NOT_FOUND,"해당 닉네임이 존재하지 않음"),
+    USER_NOT_FOUND(40401, HttpStatus.NOT_FOUND,"해당 User를 찾을 수 않음"),
     ROOM_NOT_FOUND(40402, HttpStatus.NOT_FOUND, "해당 Room을 찾을 수 없음"),
     MOMENT_NOT_FOUND(40403, HttpStatus.NOT_FOUND, "해당 Moment를 찾을 수 없음"),
     JOIN_REQUEST_NOT_FOUND(40404, HttpStatus.NOT_FOUND, "해당 Join Request를 찾을 수 없음"),
