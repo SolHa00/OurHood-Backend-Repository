@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserContextFail {
     private Boolean isMember;
-    private Boolean isJoinRequestSent;
+    private Long sentJoinRequestId;
     private Boolean isHost;
 
     @Builder
-    public UserContextFail(Boolean isMember, Boolean isJoinRequestSent, Boolean isHost) {
+    public UserContextFail(Boolean isMember, Long sentJoinRequestId, Boolean isHost) {
         this.isMember = isMember;
-        this.isJoinRequestSent = isJoinRequestSent;
+        this.sentJoinRequestId = sentJoinRequestId;
         this.isHost = isHost;
     }
 }

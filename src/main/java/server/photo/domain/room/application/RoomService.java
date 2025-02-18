@@ -150,8 +150,13 @@ public class RoomService {
 
         if (!isMember) {
             Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
+            Long sentJoinRequestId = null;
+            if(isJoinRequestSent){
+                JoinRequest joinRequest = joinRequestRepository.findByUserIdAndRoom(userId, room);
+                sentJoinRequestId = joinRequest.getId();
+            }
 
-            UserContextFail userContext = RoomConverter.toUserContextFail(isMember, isJoinRequestSent, isHost);
+            UserContextFail userContext = RoomConverter.toUserContextFail(isMember, sentJoinRequestId, isHost);
             RoomMetadataFail roomMetadata = RoomConverter.toRoomMetadataFail(room, host);
             RoomDetail roomDetail = RoomConverter.toRoomDetail(room);
 
