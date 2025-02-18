@@ -6,6 +6,7 @@ import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
 import server.photo.domain.room.dto.response.*;
 import server.photo.domain.room.entity.Room;
+import server.photo.domain.user.dto.response.JoinRequestInfo;
 import server.photo.domain.user.dto.response.MyPageResponse;
 import server.photo.domain.user.dto.response.RoomInfo;
 import server.photo.domain.user.entity.User;
@@ -28,10 +29,11 @@ public class RoomConverter {
                 .build();
     }
 
-    public static MyPageResponse toMyPageResponse(List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
+    public static MyPageResponse toMyPageResponse(List<RoomInfo> myRooms, List<InvitationInfo> invitations, List<JoinRequestInfo> joinRequestInfoList) {
         return MyPageResponse.builder()
                 .myRooms(myRooms)
                 .invitations(invitations)
+                .myJoinRequests(joinRequestInfoList)
                 .build();
     }
 

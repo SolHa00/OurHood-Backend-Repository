@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import server.photo.domain.invitation.dto.response.InvitationInfo;
 import server.photo.domain.invitation.entity.Invitation;
 import server.photo.domain.invitation.repository.InvitationRepository;
+import server.photo.domain.join.entity.JoinRequest;
+import server.photo.domain.join.repository.JoinRequestRepository;
 import server.photo.domain.refresh.application.JwtTokenService;
 import server.photo.domain.refresh.application.RefreshTokenService;
 import server.photo.domain.room.converter.RoomConverter;
@@ -38,6 +40,7 @@ public class UserService {
     private final InvitationRepository invitationRepository;
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenService jwtTokenService;
+    private final JoinRequestRepository joinRequestRepository;
 
 
     @Transactional
@@ -83,21 +86,21 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
-        List<Invitation> invitationList = invitationRepository.findByUserId(user.getId());
-        List<InvitationInfo> invitations = new ArrayList<>();
+        List<Invitation> invitations = invitationRepository.findByUserId(userId);
+        List<InvitationInfo> invitationInfoList = new ArrayList<>();
 
-        for (Invitation invitation : invitationList) {
+        for (Invitation invitation : invitations) {
             User host = userRepository.findById(invitation.getRoom().getUserId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
             Room room = invitation.getRoom();
             InvitationMetadata invitationMetadata = UserConverter.toInvitationMetadata(invitation);
             InvitingRoomInfo invitingRoomInfo = UserConverter.toInvitingRoomInfo(room, host);
             InvitationInfo invitationInfo = UserConverter.toInvitationInfo(invitationMetadata, invitingRoomInfo);
-            invitations.add(invitationInfo);
+            invitationInfoList.add(invitationInfo);
         }
 
         List<RoomMembers> roomMembersList = user.getRooms();
-        List<RoomInfo> myRooms = new ArrayList<>();
+        List<RoomInfo> roomInfoList = new ArrayList<>();
 
         for (RoomMembers roomMembers : roomMembersList) {
             Room room = roomMembers.getRoom();
@@ -106,10 +109,19 @@ public class UserService {
             RoomMetadata roomMetadata = UserConverter.toRoomMetadata(room, host);
             RoomDetail roomDetail = UserConverter.toRoomDetail(room);
             RoomInfo roomInfo = UserConverter.toRoomInfo(roomMetadata, roomDetail);
-            myRooms.add(roomInfo);
+            roomInfoList.add(roomInfo);
         }
 
-        MyPageResponse myPageResponse = RoomConverter.toMyPageResponse(myRooms, invitations);
+        List<JoinRequest> joinRequests = joinRequestRepository.findByUserId(userId);
+        List<JoinRequestInfo> joinRequestInfoList = new ArrayList<>();
+
+        for(JoinRequest joinRequest : joinRequests) {
+            Room room = joinRequest.getRoom();
+            JoinRequestInfo joinRequestInfo = UserConverter.toJoinRequestInfo(joinRequest, room);
+            joinRequestInfoList.add(joinRequestInfo);
+        }
+
+        MyPageResponse myPageResponse = RoomConverter.toMyPageResponse(roomInfoList, invitationInfoList, joinRequestInfoList);
 
         return BaseResponse.success(myPageResponse);
     }

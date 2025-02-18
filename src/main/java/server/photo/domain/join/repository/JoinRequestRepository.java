@@ -12,4 +12,5 @@ public interface JoinRequestRepository extends JpaRepository<JoinRequest, Long> 
     List<JoinRequest> findByRoom(Room room);
     boolean existsByRoomAndUserId(Room room, Long userId);
     Long countByRoom(Room room);
+    List<JoinRequest> findByUserId(Long userId);
 }

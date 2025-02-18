@@ -1,10 +1,10 @@
 package server.photo.domain.user.dto.response;
 
-import server.photo.domain.invitation.dto.response.InvitationInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import server.photo.domain.invitation.dto.response.InvitationInfo;
 
 import java.util.List;
 
@@ -14,10 +14,12 @@ public class MyPageResponse {
 
     private List<RoomInfo> myRooms;
     private List<InvitationInfo> invitations;
+    private List<JoinRequestInfo> myJoinRequests;
 
     @Builder
-    public MyPageResponse(List<RoomInfo> myRooms, List<InvitationInfo> invitations) {
+    public MyPageResponse(List<RoomInfo> myRooms, List<InvitationInfo> invitations, List<JoinRequestInfo> myJoinRequests) {
         this.myRooms = myRooms;
         this.invitations = invitations;
+        this.myJoinRequests = myJoinRequests;
     }
 }

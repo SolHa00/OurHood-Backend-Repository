@@ -2,6 +2,7 @@ package server.photo.domain.user.converter;
 
 import server.photo.domain.invitation.dto.response.InvitationInfo;
 import server.photo.domain.invitation.entity.Invitation;
+import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.user.dto.request.UserSignUpRequest;
 import server.photo.domain.user.dto.response.*;
@@ -80,6 +81,14 @@ public class UserConverter {
         return RoomDetail.builder()
                 .roomName(room.getRoomName())
                 .thumbnail(room.getThumbnailImage())
+                .build();
+    }
+
+    public static JoinRequestInfo toJoinRequestInfo(JoinRequest joinRequest, Room room) {
+        return JoinRequestInfo.builder()
+                .joinRequestId(joinRequest.getId())
+                .roomName(room.getRoomName())
+                .createdAt(joinRequest.getCreatedAt())
                 .build();
     }
 }
