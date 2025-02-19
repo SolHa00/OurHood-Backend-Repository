@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import server.photo.domain.join.converter.JoinRequestConverter;
 import server.photo.domain.join.dto.request.JoinRequestCreateDto;
 import server.photo.domain.join.dto.request.JoinRequestHandleDto;
+import server.photo.domain.join.dto.response.JoinRequestCreateResponse;
 import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.join.repository.JoinRequestRepository;
 import server.photo.domain.room.entity.Room;
@@ -25,7 +26,7 @@ public class JoinRequestService {
 
     //방 참여 요청 생성
     @Transactional
-    public BaseResponse<Object> createJoinRequest(JoinRequestCreateDto request) {
+    public BaseResponse<JoinRequestCreateResponse> createJoinRequest(JoinRequestCreateDto request) {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
         User user = userRepository.findById(request.getUserId())
@@ -38,10 +39,11 @@ public class JoinRequestService {
         }
 
         JoinRequest joinRequest = JoinRequestConverter.toJoinRequest(room, user);
+        JoinRequestCreateResponse response = JoinRequestConverter.toJoinRequestCreateResponse(joinRequest);
 
         joinRequestRepository.save(joinRequest);
 
-        return BaseResponse.success();
+        return BaseResponse.success(response);
     }
 
     //방 참여 요청 처리

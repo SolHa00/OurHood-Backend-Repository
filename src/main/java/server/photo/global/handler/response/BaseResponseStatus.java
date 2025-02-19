@@ -17,6 +17,8 @@ public enum BaseResponseStatus {
      * 400 BAD_REQUEST 잘못된 요청
      */
     BAD_REQUEST(400, HttpStatus.BAD_REQUEST, "잘못된 요청"),
+    BAD_REQUEST_ORDER(40001, HttpStatus.BAD_REQUEST, "파라미터 바인딩 실패(order)"),
+    BAD_REQUEST_CONDITION(40002, HttpStatus.BAD_REQUEST, "파라미터 바인딩 실패(condition)"),
 
     /**
      * 401 UNAUTHORIZED 권한없음(인증 실패)

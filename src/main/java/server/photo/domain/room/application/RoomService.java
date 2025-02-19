@@ -2,9 +2,9 @@ package server.photo.domain.room.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import server.photo.domain.invitation.entity.Invitation;
 import server.photo.domain.invitation.repository.InvitationRepository;
@@ -16,6 +16,7 @@ import server.photo.domain.room.dto.request.RoomUpdateRequest;
 import server.photo.domain.room.dto.response.*;
 import server.photo.domain.room.entity.Room;
 import server.photo.domain.room.repository.RoomRepository;
+import server.photo.domain.room.repository.RoomRepositoryImpl;
 import server.photo.domain.user.entity.User;
 import server.photo.domain.user.repository.UserRepository;
 import server.photo.global.handler.response.BaseException;
@@ -37,6 +38,7 @@ public class RoomService {
     private final S3FileService s3FileService;
     private final JoinRequestRepository joinRequestRepository;
     private final InvitationRepository invitationRepository;
+    private final RoomRepositoryImpl roomRepositoryImpl;
 
     //방 생성
     @Transactional
@@ -98,28 +100,18 @@ public class RoomService {
     }
 
     //방 리스트 조회
-    public BaseResponse<RoomListDto> getRooms(String order, String condition, String q) {
-
-        Sort sort;
-        if (order.equals("date_desc")) {
-            sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        } else if (order.equals("date_asc")) {
-            sort = Sort.by(Sort.Direction.ASC, "createdAt");
-        } else {
-            sort = Sort.unsorted();
-        }
+    public BaseResponse<RoomListDto> getRooms(String q, String condition, String order) {
 
         List<Room> rooms;
-        if (q != null && !q.isEmpty()) {
-            if ("room".equals(condition)) {
-                rooms = roomRepository.findByRoomNameContaining(q, sort);
-            } else if ("host".equals(condition)) {
-                rooms = roomRepository.findByUserNicknameContaining(q, sort);
-            } else {
-                rooms = roomRepository.findAll(sort);
-            }
-        } else {
-            rooms = roomRepository.findAll(sort);
+
+        if ("name".equals(condition)) {
+            rooms = getRoomsByRoomName(q, order);
+        } else if ("host".equals(condition)) {
+            rooms = getRoomsByHostNickname(q, order);
+        } else if(StringUtils.hasText(condition)){
+            throw new BaseException(BaseResponseStatus.BAD_REQUEST_CONDITION);
+        } else{
+            rooms = getRoomsByCreatedAt(order);
         }
 
         List<RoomListResponse> roomListResponses = new ArrayList<>();
@@ -134,6 +126,41 @@ public class RoomService {
         RoomListDto roomListDto = RoomConverter.toRoomListDto(roomListResponses);
 
         return BaseResponse.success(roomListDto);
+    }
+
+    private List<Room> getRoomsByCreatedAt(String order) {
+        if("date_asc".equals(order)){
+            return roomRepositoryImpl.findRoomsByCreatedAtAsc();
+        } else if("date_desc".equals(order)){
+            return roomRepositoryImpl.findRoomsByCreatedAtDesc();
+        } else if(StringUtils.hasText(order)){
+            throw new BaseException(BaseResponseStatus.BAD_REQUEST_ORDER);
+        }
+        return roomRepositoryImpl.findRoomsByCreatedAtDesc();
+    }
+
+    //방 제목 기준으로 검색
+    private List<Room> getRoomsByRoomName(String roomName, String order) {
+        if ("date_asc".equals(order)) {
+            return roomRepositoryImpl.findRoomsByRoomNameAsc(roomName);
+        } else if("date_desc".equals(order)) {
+            return roomRepositoryImpl.findRoomsByRoomNameDesc(roomName);
+        } else if(StringUtils.hasText(order)){
+            throw new BaseException(BaseResponseStatus.BAD_REQUEST_ORDER);
+        }
+        return roomRepositoryImpl.findRoomsByRoomNameDesc(roomName);
+    }
+
+    //호스트 닉네임 기준으로 검색
+    private List<Room> getRoomsByHostNickname(String hostNickname, String order) {
+        if ("date_asc".equals(order)) {
+            return roomRepositoryImpl.findRoomsByHostNicknameAsc(hostNickname);
+        } else if("date_desc".equals(order)) {
+            return roomRepositoryImpl.findRoomsByHostNicknameDesc(hostNickname);
+        } else if(StringUtils.hasText(order)){
+            throw new BaseException(BaseResponseStatus.BAD_REQUEST_ORDER);
+        }
+        return roomRepositoryImpl.findRoomsByHostNicknameDesc(hostNickname);
     }
 
     //특정 방 입장
@@ -254,5 +281,4 @@ public class RoomService {
     private String extractFileNameFromUrl(String url) {
         return url.substring(url.lastIndexOf("/") + 1);
     }
-
 }
