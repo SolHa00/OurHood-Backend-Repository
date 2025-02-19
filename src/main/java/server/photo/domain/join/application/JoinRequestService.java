@@ -39,10 +39,8 @@ public class JoinRequestService {
         }
 
         JoinRequest joinRequest = JoinRequestConverter.toJoinRequest(room, user);
-        JoinRequestCreateResponse response = JoinRequestConverter.toJoinRequestCreateResponse(joinRequest);
-
         joinRequestRepository.save(joinRequest);
-
+        JoinRequestCreateResponse response = JoinRequestConverter.toJoinRequestCreateResponse(joinRequest);
         return BaseResponse.success(response);
     }
 
