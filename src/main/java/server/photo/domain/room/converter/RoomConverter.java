@@ -47,7 +47,7 @@ public class RoomConverter {
 
     public static RoomInvitationsDto toRoomInvitationsDto(List<RoomInvitationList> invitationLists) {
         return RoomInvitationsDto.builder()
-                .invitaionList(invitationLists)
+                .invitationList(invitationLists)
                 .build();
     }
 

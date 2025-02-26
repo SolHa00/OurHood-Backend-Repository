@@ -10,10 +10,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomInvitationsDto {
-    private List<RoomInvitationList> invitaionList;
+    private List<RoomInvitationList> invitationList;
 
     @Builder
-    public RoomInvitationsDto(List<RoomInvitationList> invitaionList) {
-        this.invitaionList = invitaionList;
+    public RoomInvitationsDto(List<RoomInvitationList> invitationList) {
+        this.invitationList = invitationList;
     }
 }

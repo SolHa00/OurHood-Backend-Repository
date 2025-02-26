@@ -104,7 +104,7 @@ public class RoomService {
 
         List<Room> rooms;
 
-        if ("name".equals(condition)) {
+        if ("room".equals(condition)) {
             rooms = getRoomsByRoomName(q, order);
         } else if ("host".equals(condition)) {
             rooms = getRoomsByHostNickname(q, order);

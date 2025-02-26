@@ -50,7 +50,7 @@ public class WebSecurityConfig {
                 //경로별 인가 작업
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/rooms/**").permitAll()  // GET /api/rooms 는 비회원도 허용
-                        .requestMatchers("/api/signup", "/api/login","/api/rooms","/error", "/api/logout","/swagger-ui/**", "/v3/api-docs/**", "/api/reissue").permitAll()
+                        .requestMatchers("/api/signup", "/api/login","/api/rooms","/error", "/api/logout","/api/reissue").permitAll()
                         .anyRequest().authenticated()
                 )
                 //세션을 stateless 상태로 관리
