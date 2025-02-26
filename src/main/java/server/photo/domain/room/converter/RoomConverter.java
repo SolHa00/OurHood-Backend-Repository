@@ -53,7 +53,7 @@ public class RoomConverter {
 
     public static JoinRequestDetail toJoinRequestDetail(JoinRequest joinRequest, User user) {
         return JoinRequestDetail.builder()
-                .joinId(joinRequest.getId())
+                .joinRequestId(joinRequest.getId())
                 .nickname(user.getNickname())
                 .createdAt(joinRequest.getCreatedAt())
                 .build();
@@ -61,7 +61,7 @@ public class RoomConverter {
 
     public static JoinRequestListResponse toJoinRequestListResponse(List<JoinRequestDetail> joinList) {
         return JoinRequestListResponse.builder()
-                .joinList(joinList)
+                .joinRequestList(joinList)
                 .build();
     }
 

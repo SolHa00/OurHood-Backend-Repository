@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JoinRequestDetail {
-    private Long joinId;
+    private Long joinRequestId;
     private String nickname;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Builder
-    public JoinRequestDetail(Long joinId, String nickname, LocalDateTime createdAt) {
-        this.joinId = joinId;
+    public JoinRequestDetail(Long joinRequestId, String nickname, LocalDateTime createdAt) {
+        this.joinRequestId = joinRequestId;
         this.nickname = nickname;
         this.createdAt = createdAt;
     }
