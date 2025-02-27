@@ -86,19 +86,6 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
 
-        List<Invitation> invitations = invitationRepository.findByUserId(userId);
-        List<InvitationInfo> invitationInfoList = new ArrayList<>();
-
-        for (Invitation invitation : invitations) {
-            User host = userRepository.findById(invitation.getRoom().getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
-            Room room = invitation.getRoom();
-            InvitationMetadata invitationMetadata = UserConverter.toInvitationMetadata(invitation);
-            InvitingRoomInfo invitingRoomInfo = UserConverter.toInvitingRoomInfo(room, host);
-            InvitationInfo invitationInfo = UserConverter.toInvitationInfo(invitationMetadata, invitingRoomInfo);
-            invitationInfoList.add(invitationInfo);
-        }
-
         List<RoomMembers> roomMembersList = user.getRooms();
         List<RoomInfo> roomInfoList = new ArrayList<>();
 
@@ -110,6 +97,17 @@ public class UserService {
             RoomDetail roomDetail = UserConverter.toRoomDetail(room);
             RoomInfo roomInfo = UserConverter.toRoomInfo(roomMetadata, roomDetail);
             roomInfoList.add(roomInfo);
+        }
+
+        List<Invitation> invitations = invitationRepository.findByUserId(userId);
+        List<InvitationInfo> invitationInfoList = new ArrayList<>();
+
+        for (Invitation invitation : invitations) {
+            User host = userRepository.findById(invitation.getRoom().getUserId())
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+            Room room = invitation.getRoom();
+            InvitationInfo invitationInfo = UserConverter.toInvitationInfo(invitation, room, host);
+            invitationInfoList.add(invitationInfo);
         }
 
         List<JoinRequest> joinRequests = joinRequestRepository.findByUserId(userId);

@@ -32,39 +32,10 @@ public class UserConverter {
                 .build();
     }
 
-    public static MyInfo toMyInfo(User user) {
-        return MyInfo.builder()
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .build();
-    }
-
-    public static InvitationInfo toInvitationInfo(InvitationMetadata invitationMetadata, InvitingRoomInfo invitingRoomInfo) {
-        return InvitationInfo.builder()
-                .invitationMetadata(invitationMetadata)
-                .invitingRoomInfo(invitingRoomInfo)
-                .build();
-    }
-
     public static RoomInfo toRoomInfo(RoomMetadata roomMetadata, RoomDetail roomDetail) {
         return RoomInfo.builder()
                 .roomMetadata(roomMetadata)
                 .roomDetail(roomDetail)
-                .build();
-    }
-
-    public static InvitationMetadata toInvitationMetadata(Invitation invitation) {
-        return InvitationMetadata.builder()
-                .invitationId(invitation.getId())
-                .createdAt(invitation.getCreatedAt())
-                .build();
-    }
-
-    public static InvitingRoomInfo toInvitingRoomInfo(Room room, User host) {
-        return InvitingRoomInfo.builder()
-                .roomId(room.getId())
-                .roomName(room.getRoomName())
-                .hostName(host.getNickname())
                 .build();
     }
 
@@ -89,6 +60,15 @@ public class UserConverter {
                 .joinRequestId(joinRequest.getId())
                 .roomName(room.getRoomName())
                 .createdAt(joinRequest.getCreatedAt())
+                .build();
+    }
+
+    public static InvitationInfo toInvitationInfo(Invitation invitation, Room room, User host) {
+        return InvitationInfo.builder()
+                .invitationId(invitation.getId())
+                .createdAt(invitation.getCreatedAt())
+                .roomName(room.getRoomName())
+                .hostName(host.getNickname())
                 .build();
     }
 }

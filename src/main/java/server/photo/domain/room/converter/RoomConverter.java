@@ -32,8 +32,8 @@ public class RoomConverter {
     public static MyPageResponse toMyPageResponse(List<RoomInfo> myRooms, List<InvitationInfo> invitations, List<JoinRequestInfo> joinRequestInfoList) {
         return MyPageResponse.builder()
                 .myRooms(myRooms)
-                .invitations(invitations)
-                .myJoinRequests(joinRequestInfoList)
+                .receivedInvitations(invitations)
+                .sentJoinRequests(joinRequestInfoList)
                 .build();
     }
 
