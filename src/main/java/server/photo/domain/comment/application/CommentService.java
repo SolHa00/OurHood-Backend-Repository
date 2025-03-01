@@ -28,9 +28,9 @@ public class CommentService {
     @Transactional
     public BaseResponse<CommentCreateResponse> createComment(CommentCreateRequest request) {
         Moment moment = momentRepository.findById(request.getMomentId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOMENT));
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
 
         Comment comment = CommentConverter.toComment(request, moment, user);
         commentRepository.save(comment);
@@ -42,7 +42,7 @@ public class CommentService {
     @Transactional
     public BaseResponse<Object> updateComment(Long commentId, CommentUpdateRequest request) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_COMMENT));
         comment.updateContent(request.getCommentContent());
         return BaseResponse.success();
     }
@@ -50,7 +50,7 @@ public class CommentService {
     @Transactional
     public BaseResponse<Object> deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_COMMENT));
         commentRepository.delete(comment);
         return BaseResponse.success();
     }

@@ -10,4 +10,6 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     List<Invitation> findByUserId(Long userId);
     boolean existsByRoomAndUserId(Room room, Long userId);
     List<Invitation> findByRoom(Room room);
+
+    Invitation findByUserIdAndRoom(Long userId, Room room);
 }

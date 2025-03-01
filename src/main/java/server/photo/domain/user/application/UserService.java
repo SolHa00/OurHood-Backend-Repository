@@ -47,10 +47,10 @@ public class UserService {
     public BaseResponse<Object> signup(UserSignUpRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new BaseException(BaseResponseStatus.USER_EMAIL_DUPLICATED);
+            throw new BaseException(BaseResponseStatus.DUPLICATE_EMAIL);
         }
         if (userRepository.existsByNickname(request.getNickname())) {
-            throw new BaseException(BaseResponseStatus.USER_NICKNAME_DUPLICATED);
+            throw new BaseException(BaseResponseStatus.DUPLICATE_NICKNAME);
         }
 
         String password = passwordEncoder.encode(request.getPassword());
@@ -84,7 +84,7 @@ public class UserService {
 
     public BaseResponse<MyPageResponse> getMyPage(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
 
         List<RoomMembers> roomMembersList = user.getRooms();
         List<RoomInfo> roomInfoList = new ArrayList<>();
@@ -92,7 +92,7 @@ public class UserService {
         for (RoomMembers roomMembers : roomMembersList) {
             Room room = roomMembers.getRoom();
             User host = userRepository.findById(room.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             RoomMetadata roomMetadata = UserConverter.toRoomMetadata(room, host);
             RoomDetail roomDetail = UserConverter.toRoomDetail(room);
             RoomInfo roomInfo = UserConverter.toRoomInfo(roomMetadata, roomDetail);
@@ -104,7 +104,7 @@ public class UserService {
 
         for (Invitation invitation : invitations) {
             User host = userRepository.findById(invitation.getRoom().getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             Room room = invitation.getRoom();
             InvitationInfo invitationInfo = UserConverter.toInvitationInfo(invitation, room, host);
             invitationInfoList.add(invitationInfo);

@@ -1,9 +1,9 @@
 package server.photo.domain.join.repository;
 
-import server.photo.domain.join.entity.JoinRequest;
-import server.photo.domain.room.entity.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import server.photo.domain.join.entity.JoinRequest;
+import server.photo.domain.room.entity.Room;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface JoinRequestRepository extends JpaRepository<JoinRequest, Long> 
     Long countByRoom(Room room);
     List<JoinRequest> findByUserId(Long userId);
 
-    JoinRequest findByUserIdAndRoom(Long id, Room room);
+    JoinRequest findByUserIdAndRoom(Long userId, Room room);
 }

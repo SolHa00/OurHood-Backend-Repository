@@ -45,7 +45,7 @@ public class RoomService {
     public BaseResponse<RoomCreateResponse> createRoom(RoomCreateRequest request) {
 
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
 
         Room room = RoomConverter.toRoom(request, user);
 
@@ -68,7 +68,7 @@ public class RoomService {
     public BaseResponse<Object> updateRoom(Long roomId, RoomUpdateRequest request) {
 
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
 
         if(request.getRoomName() != null){
             room.updateRoomName(request.getRoomName());
@@ -117,7 +117,7 @@ public class RoomService {
         List<RoomListResponse> roomListResponses = new ArrayList<>();
         for (Room room : rooms) {
             User host = userRepository.findById(room.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             RoomMetadata roomMetadata = RoomConverter.toRoomMetadata(room, host);
             RoomListDetail roomDetail = RoomConverter.toRoomListDetail(room);
             RoomListResponse roomListResponse = RoomConverter.toRoomListResponse(roomMetadata, roomDetail);
@@ -166,11 +166,11 @@ public class RoomService {
     //특정 방 입장
     public BaseResponse<Object> enterRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
         User host = userRepository.findById(room.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
 
         Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getUser().getId().equals(userId));
         Boolean isHost = room.getUserId().equals(userId);
@@ -221,7 +221,7 @@ public class RoomService {
     @Transactional
     public BaseResponse<Object> deleteRoom(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
         roomRepository.delete(room);
         return BaseResponse.success();
     }
@@ -230,9 +230,9 @@ public class RoomService {
     @Transactional
     public BaseResponse<Object> leaveRoom(Long roomId, Long userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
 
         room.removeRoomMember(user);
         
@@ -241,14 +241,14 @@ public class RoomService {
 
     public BaseResponse<RoomInvitationsDto> getInvitations(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
 
         List<Invitation> invitations = invitationRepository.findByRoom(room);
 
         List<RoomInvitationList> invitationLists = new ArrayList<>();
         for (Invitation invitation : invitations) {
             User inviter = userRepository.findById(invitation.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             RoomInvitationList invitationList = RoomConverter.toRoomInvitationList(invitation, inviter);
             invitationLists.add(invitationList);
         }
@@ -261,14 +261,14 @@ public class RoomService {
     //방 참여 요청 목록
     public BaseResponse<JoinRequestListResponse> getJoinRequests(Long roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
 
         List<JoinRequest> joinRequests = joinRequestRepository.findByRoom(room);
         List<JoinRequestDetail> joinList = new ArrayList<>();
 
         for (JoinRequest joinRequest : joinRequests) {
             User user = userRepository.findById(joinRequest.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             JoinRequestDetail joinRequestDetail = RoomConverter.toJoinRequestDetail(joinRequest, user);
             joinList.add(joinRequestDetail);
         }

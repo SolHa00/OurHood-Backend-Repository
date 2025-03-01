@@ -2,10 +2,9 @@ package server.photo.domain.join.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import server.photo.domain.join.application.JoinRequestService;
 import server.photo.domain.join.dto.request.JoinRequestCreateDto;
 import server.photo.domain.join.dto.request.JoinRequestHandleDto;
-import server.photo.domain.join.application.JoinRequestService;
-import server.photo.domain.join.dto.response.JoinRequestCreateResponse;
 import server.photo.global.handler.response.BaseResponse;
 
 @RestController
@@ -17,7 +16,7 @@ public class JoinRequestController {
 
     //방 참여 요청 생성
     @PostMapping
-    public BaseResponse<JoinRequestCreateResponse> joinRequest(@RequestBody JoinRequestCreateDto request) {
+    public BaseResponse<Object> joinRequest(@RequestBody JoinRequestCreateDto request) {
         return joinRequestService.createJoinRequest(request);
     }
 

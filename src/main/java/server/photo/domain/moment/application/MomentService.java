@@ -37,9 +37,9 @@ public class MomentService {
     @Transactional
     public BaseResponse<MomentCreateResponse> createMoment(MomentCreateRequest request) {
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
         Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.ROOM_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
 
         String imageUrl = s3FileService.uploadFile(request.getMomentImage());
 
@@ -54,9 +54,9 @@ public class MomentService {
     //특정 Moment 조회
     public BaseResponse<MomentDetailResponse> getMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOMENT));
         User momentUser = userRepository.findById(moment.getUserId())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
 
         MomentDetailMetadata momentMetadata = MomentConverter.toMomentDetailMetadata(moment, momentUser);
         MomentDetail momentDetail = MomentConverter.toMomentDetail(moment);
@@ -65,7 +65,7 @@ public class MomentService {
         List<Comment> commentList = commentRepository.findByMoment(moment);
         for (Comment comment : commentList) {
             User commentUser = userRepository.findById(comment.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.USER_NOT_FOUND));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             CommentResponse commentResponse = MomentConverter.toCommentResponse(comment, commentUser);
             comments.add(commentResponse);
         }
@@ -79,7 +79,7 @@ public class MomentService {
     @Transactional
     public BaseResponse<Object> deleteMoment(Long momentId) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOMENT));
 
         String imageUrl = moment.getImageUrl();
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -95,7 +95,7 @@ public class MomentService {
     @Transactional
     public BaseResponse<Object> changeMomentDescription(Long momentId, MomentDescriptionRequest request) {
         Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.MOMENT_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOMENT));
         moment.updateMomentDescription(request.getMomentDescription());
         return BaseResponse.success();
     }
