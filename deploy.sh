@@ -9,8 +9,8 @@
          sleep 3
  fi
 
- JAR_PATH="/home/ec2-user/ourhood/*.jar"
+ JAR_PATH="/home/ubuntu/ourhood/*.jar"
  echo "jar path : $JAR_PATH"
  chmod +x "$JAR_PATH"
- nohup java -jar "$JAR_PATH" >> /home/ec2-user/ourhood/deploy.log 2>> /home/ec2-user/ourhoood/deploy_err.log &
+ nohup java -jar "$JAR_PATH" >> /home/ubuntu/ourhood/deploy.log 2>> /home/ubuntu/ourhoood/deploy_err.log &
  echo "jar fild deploy success"
