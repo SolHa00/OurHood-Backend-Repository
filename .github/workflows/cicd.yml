@@ -45,6 +45,11 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build clean build -x test
+    - name: Check build output
+      run: ls -al ./build
+    - name: Check libs folder
+      run: ls -al ./build/libs
+
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
