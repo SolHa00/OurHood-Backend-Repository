@@ -7,8 +7,8 @@ on:
     branches: [ "main" ]
 
 env:
-  S3_BUCKET_NAME: ourhood-deploy
-  PROJECT_NAME: ourhoood
+  S3_BUCKET_NAME: ourhood-s3-bucket
+  PROJECT_NAME: ourhood
 
 jobs:
   build:
@@ -32,8 +32,8 @@ jobs:
         spring.datasource.url: ${{ secrets.DB_URL }}
         spring.datasource.username: ${{ secrets.DB_USERNAME }}
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
-        cloud.aws.credentials.access-key: ${{ secrets.S3_ACCESS_KEY }}
-        cloud.aws.credentials.secret-key: ${{ secrets.S3_SECRET_KEY }}
+        cloud.aws.credentials.access-key: ${{ secrets.ACCESS_KEY }}
+        cloud.aws.credentials.secret-key: ${{ secrets.SECRET_KEY }}
         cloud.aws.s3.bucket: ${{ secrets.S3_BUCKET }}
         jwt.secret: ${{ secrets.JWT_SECRET_KEY }}
 
@@ -49,8 +49,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.S3_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.S3_SECRET_KEY }}
+        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Make dir
@@ -73,4 +73,4 @@ jobs:
       run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./deploy.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/
 
     - name: Code Deploy
-      run: aws deploy create-deployment --application-name ourhood-deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/deploy.zip
+      run: aws deploy create-deployment --application-name ourhood-codedeploy-application --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name my-codedeployment-group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/deploy.zip
