@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @Service
@@ -28,14 +27,14 @@ public class S3FileService {
     //MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
     public String uploadFile(MultipartFile multipartFile) {
 
-        String fileName = createFileName(multipartFile.getOriginalFilename());
+        String fileName = "photo/" + createFileName(multipartFile.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
 
-        try (InputStream inputStream = multipartFile.getInputStream()) {
+        try {
             // S3에 업로드 및 저장
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload file", e);
@@ -43,6 +42,7 @@ public class S3FileService {
 
         return "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
     }
+
 
     // 파일 업로드 시, 파일명을 난수화
     public String createFileName(String fileName) {
