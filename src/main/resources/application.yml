@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
@@ -15,7 +15,8 @@ spring:
     secret: ${JWT_SECRET_KEY}
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 logging:
   level:
@@ -32,3 +33,5 @@ cloud:
         static: ${AWS_REGION}
       s3:
         bucket: ${S3_BUCKET}
+      stack:
+        auto: false
