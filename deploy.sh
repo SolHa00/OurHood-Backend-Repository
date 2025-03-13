@@ -12,6 +12,6 @@
  JAR_PATH="/home/ubuntu/ourhood/photo-0.0.1-SNAPSHOT.jar"
  echo "jar path : $JAR_PATH"
  chmod +x $JAR_PATH
- nohup java -jar $JAR_PATH --debug >> /home/ubuntu/ourhood/deploy.log 2>> /home/ubuntu/ourhood/deploy_err.log &
+ nohup java -jar $JAR_PATH >> /home/ubuntu/ourhood/deploy.log 2>> /home/ubuntu/ourhood/deploy_err.log &
  echo "jar fild deploy success"
 
