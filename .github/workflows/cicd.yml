@@ -54,7 +54,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.SECRET_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: ap-northeast-2
 
     - name: Make dir
       run: mkdir cicd
