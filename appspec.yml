@@ -7,7 +7,7 @@ files:
 file_exists_behavior: OVERWRITE
 
 permissions:
-  - object: /
+  - object: /home/ubuntu/ourhood
     pattern: "**"
     owner: ubuntu
     group: ubuntu
@@ -16,4 +16,4 @@ hooks:
     ApplicationStart:
       - location: deploy.sh
         timeout: 60
-        runas: ubuntu
+        runas: root
