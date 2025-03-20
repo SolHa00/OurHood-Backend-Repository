@@ -19,6 +19,14 @@
 | <img src="https://ourhood-bucket.s3.ap-northeast-2.amazonaws.com/assets/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2024-11-30+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+7.04.50.png" width=300 height=350/> | <img src="https://ourhood-bucket.s3.ap-northeast-2.amazonaws.com/assets/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2024-11-30+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+6.55.46.png" width=300 height= 350 /> |
 
 
+## Service Architecture
+
+<img src="https://ourhood-s3-bucket.s3.ap-northeast-2.amazonaws.com/assets/architecture.png" width="800" height="600">
+
+
+
+
+
 
 ## 📂 Directory Structure
 ```
