@@ -61,6 +61,7 @@ public class UserService {
         return BaseResponse.success();
     }
 
+    @Transactional
     public BaseResponse<UserLoginResponse> login(UserLoginRequest request, HttpServletResponse response) {
         UserDetails userData = customUserDetailsService.loadUserByUsername(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), userData.getPassword())) {

@@ -1,9 +1,9 @@
 package server.photo.domain.refresh.application;
 
-import server.photo.domain.refresh.entity.RefreshToken;
-import server.photo.domain.refresh.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import server.photo.domain.refresh.entity.RefreshToken;
+import server.photo.domain.refresh.repository.RefreshTokenRepository;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
