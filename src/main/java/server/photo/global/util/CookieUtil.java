@@ -9,6 +9,7 @@ public class CookieUtil {
         cookie.setMaxAge(24 * 60 * 60); // 1일
         cookie.setPath("/");
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         return cookie;
     }
 }
