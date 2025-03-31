@@ -10,6 +10,7 @@ import server.photo.domain.invitation.entity.Invitation;
 import server.photo.domain.invitation.repository.InvitationRepository;
 import server.photo.domain.join.entity.JoinRequest;
 import server.photo.domain.join.repository.JoinRequestRepository;
+import server.photo.domain.moment.entity.Moment;
 import server.photo.domain.room.converter.RoomConverter;
 import server.photo.domain.room.dto.request.RoomCreateRequest;
 import server.photo.domain.room.dto.request.RoomUpdateRequest;
@@ -25,6 +26,7 @@ import server.photo.global.handler.response.BaseResponseStatus;
 import server.photo.global.s3.S3FileService;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -200,6 +202,7 @@ public class RoomService {
                 .collect(Collectors.toList());
 
         List<MomentInfo> moments = room.getMoments().stream()
+                .sorted(Comparator.comparing(Moment::getCreatedAt).reversed())
                 .map(moment -> MomentInfo.builder()
                         .momentId(moment.getId())
                         .momentImage(moment.getImageUrl())
@@ -239,6 +242,7 @@ public class RoomService {
         return BaseResponse.success();
     }
 
+    // 방에서 보낸 초대 요청 목록 조회
     public BaseResponse<RoomInvitationsDto> getInvitations(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
