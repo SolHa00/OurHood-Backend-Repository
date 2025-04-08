@@ -17,7 +17,7 @@ public class RoomConverter {
 
     public static Room toRoom(RoomCreateRequest request, User user) {
         return Room.builder()
-                .userId(user.getId())
+                .hostId(user.getId())
                 .roomName(request.getRoomName())
                 .roomDescription(request.getRoomDescription())
                 .build();

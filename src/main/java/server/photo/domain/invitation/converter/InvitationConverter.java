@@ -10,7 +10,7 @@ public class InvitationConverter {
     public static Invitation toInvitation(Room room, User user) {
         return Invitation.builder()
                 .room(room)
-                .userId(user.getId())
+                .user(user)
                 .build();
     }
 

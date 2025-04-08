@@ -62,8 +62,7 @@ public class JoinRequestService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_JOIN_REQUEST));
         if ("accept".equals(request.getAction())) {
             Room room = joinRequest.getRoom();
-            User user = userRepository.findById(joinRequest.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
+            User user = joinRequest.getUser();
             room.addRoomMember(user);
             joinRequestRepository.delete(joinRequest);
             return BaseResponse.success();

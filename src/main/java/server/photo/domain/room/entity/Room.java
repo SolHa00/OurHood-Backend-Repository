@@ -25,7 +25,7 @@ public class Room extends BaseTimeEntity {
     @Column(name = "room_id")
     private Long id;
 
-    private Long userId;
+    private Long hostId;
     private String roomName;
     private String roomDescription;
     private String thumbnailImage;
@@ -43,8 +43,8 @@ public class Room extends BaseTimeEntity {
     private List<Invitation> invitations = new ArrayList<>();
 
     @Builder
-    public Room(Long userId, String roomName, String roomDescription, String thumbnailImage) {
-        this.userId = userId;
+    public Room(Long hostId, String roomName, String roomDescription, String thumbnailImage) {
+        this.hostId = hostId;
         this.roomName = roomName;
         this.roomDescription = roomDescription;
         this.thumbnailImage = thumbnailImage;

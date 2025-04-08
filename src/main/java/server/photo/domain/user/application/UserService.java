@@ -92,7 +92,7 @@ public class UserService {
 
         for (RoomMembers roomMembers : roomMembersList) {
             Room room = roomMembers.getRoom();
-            User host = userRepository.findById(room.getUserId())
+            User host = userRepository.findById(room.getHostId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             RoomMetadata roomMetadata = UserConverter.toRoomMetadata(room, host);
             RoomDetail roomDetail = UserConverter.toRoomDetail(room);
@@ -104,7 +104,7 @@ public class UserService {
         List<InvitationInfo> invitationInfoList = new ArrayList<>();
 
         for (Invitation invitation : invitations) {
-            User host = userRepository.findById(invitation.getRoom().getUserId())
+            User host = userRepository.findById(invitation.getRoom().getHostId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             Room room = invitation.getRoom();
             InvitationInfo invitationInfo = UserConverter.toInvitationInfo(invitation, room, host);

@@ -10,7 +10,7 @@ public class CommentConverter {
 
     public static Comment toComment(CommentCreateRequest request, Moment moment, User user) {
         return Comment.builder()
-                .userId(user.getId())
+                .user(user)
                 .moment(moment)
                 .content(request.getCommentContent())
                 .build();

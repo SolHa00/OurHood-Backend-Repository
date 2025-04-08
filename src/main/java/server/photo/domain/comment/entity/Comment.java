@@ -1,12 +1,13 @@
 package server.photo.domain.comment.entity;
 
-import server.photo.domain.moment.entity.Moment;
-import server.photo.domain.user.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import server.photo.domain.moment.entity.Moment;
+import server.photo.domain.user.entity.BaseTimeEntity;
+import server.photo.domain.user.entity.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +19,10 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,8 +30,8 @@ public class Comment extends BaseTimeEntity {
     private Moment moment;
 
     @Builder
-    public Comment(Long userId, String content, Moment moment) {
-        this.userId = userId;
+    public Comment(User user, String content, Moment moment) {
+        this.user = user;
         this.content = content;
         this.moment = moment;
     }

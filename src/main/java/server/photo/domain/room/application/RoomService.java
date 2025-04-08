@@ -118,7 +118,7 @@ public class RoomService {
 
         List<RoomListResponse> roomListResponses = new ArrayList<>();
         for (Room room : rooms) {
-            User host = userRepository.findById(room.getUserId())
+            User host = userRepository.findById(room.getHostId())
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
             RoomMetadata roomMetadata = RoomConverter.toRoomMetadata(room, host);
             RoomListDetail roomDetail = RoomConverter.toRoomListDetail(room);
@@ -171,11 +171,11 @@ public class RoomService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_ROOM));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
-        User host = userRepository.findById(room.getUserId())
+        User host = userRepository.findById(room.getHostId())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
 
         Boolean isMember = room.getRoomMembers().stream().anyMatch(member -> member.getUser().getId().equals(userId));
-        Boolean isHost = room.getUserId().equals(userId);
+        Boolean isHost = room.getHostId().equals(userId);
 
         if (!isMember) {
             Boolean isJoinRequestSent = joinRequestRepository.existsByRoomAndUserId(room, user.getId());
@@ -251,8 +251,7 @@ public class RoomService {
 
         List<RoomInvitationList> invitationLists = new ArrayList<>();
         for (Invitation invitation : invitations) {
-            User inviter = userRepository.findById(invitation.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
+            User inviter = invitation.getUser();
             RoomInvitationList invitationList = RoomConverter.toRoomInvitationList(invitation, inviter);
             invitationLists.add(invitationList);
         }
@@ -271,8 +270,7 @@ public class RoomService {
         List<JoinRequestDetail> joinList = new ArrayList<>();
 
         for (JoinRequest joinRequest : joinRequests) {
-            User user = userRepository.findById(joinRequest.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
+            User user = joinRequest.getUser();
             JoinRequestDetail joinRequestDetail = RoomConverter.toJoinRequestDetail(joinRequest, user);
             joinList.add(joinRequestDetail);
         }

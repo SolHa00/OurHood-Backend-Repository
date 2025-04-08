@@ -11,7 +11,7 @@ public class JoinRequestConverter {
     public static JoinRequest toJoinRequest(Room room, User user) {
         return JoinRequest.builder()
                 .room(room)
-                .userId(user.getId())
+                .user(user)
                 .build();
     }
 

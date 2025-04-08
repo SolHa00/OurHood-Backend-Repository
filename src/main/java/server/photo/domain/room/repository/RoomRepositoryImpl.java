@@ -50,7 +50,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     public List<Room> findRoomsByHostNicknameDesc(String hostNickname) {
         return queryFactory.selectFrom(room)
                 .join(user)
-                .on(room.userId.eq(user.id))
+                .on(room.hostId.eq(user.id))
                 .where(user.nickname.contains(hostNickname))
                 .orderBy(room.createdAt.desc())
                 .fetch();
@@ -60,7 +60,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     public List<Room> findRoomsByHostNicknameAsc(String hostNickname) {
         return queryFactory.selectFrom(room)
                 .join(user)
-                .on(room.userId.eq(user.id))
+                .on(room.hostId.eq(user.id))
                 .where(user.nickname.contains(hostNickname))
                 .orderBy(room.createdAt.asc())
                 .fetch();

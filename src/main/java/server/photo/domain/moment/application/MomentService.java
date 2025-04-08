@@ -64,8 +64,7 @@ public class MomentService {
         List<CommentResponse> comments = new ArrayList<>();
         List<Comment> commentList = commentRepository.findByMoment(moment);
         for (Comment comment : commentList) {
-            User commentUser = userRepository.findById(comment.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
+            User commentUser = comment.getUser();
             CommentResponse commentResponse = MomentConverter.toCommentResponse(comment, commentUser);
             comments.add(commentResponse);
         }

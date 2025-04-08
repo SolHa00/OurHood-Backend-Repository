@@ -66,8 +66,7 @@ public class InvitationService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_INVITATION));
         if("accept".equals(request.getAction())) {
             Room room = invitation.getRoom();
-            User user = userRepository.findById(invitation.getUserId())
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_USER));
+            User user = invitation.getUser();
             room.addRoomMember(user);
             invitationRepository.delete(invitation);
             return BaseResponse.success();

@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import server.photo.domain.user.entity.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,15 +19,17 @@ public class Invitation extends BaseTimeEntity {
     @Column(name = "invitation_id")
     private Long id;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
 
     @Builder
-    public Invitation(Long userId, Room room) {
-        this.userId = userId;
+    public Invitation(User user, Room room) {
+        this.user = user;
         this.room = room;
     }
 }
