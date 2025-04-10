@@ -1,5 +1,3 @@
 spring:
-  config:
-    import: common.yml
   profiles:
     default: "local"
