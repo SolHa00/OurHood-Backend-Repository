@@ -19,7 +19,6 @@ spring:
 logging:
   file:
     path: ./ourhood-prod-logs
-    name: ourhood.log
 
 cloud:
   aws:
