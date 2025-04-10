@@ -45,9 +45,6 @@ dependencies {
 	//MySQL Driver
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
-	// h2 Driver (Test)
-	//runtimeOnly 'com.h2database:h2'
-
 	//S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
