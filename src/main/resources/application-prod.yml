@@ -18,7 +18,7 @@ spring:
 
 logging:
   file:
-    path: ./ourhood-prod-logs
+    path: /home/ubuntu/ourhood/ourhood-prod-logs
 
 cloud:
   aws:

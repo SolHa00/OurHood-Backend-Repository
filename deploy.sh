@@ -9,6 +9,9 @@ else
         sleep 3
 fi
 
+mkdir -p /home/ubuntu/ourhood/ourhood-prod-logs
+chmod 755 /home/ubuntu/ourhood/ourhood-prod-logs
+
 JAR_PATH="/home/ubuntu/ourhood/photo-0.0.1-SNAPSHOT.jar"
 echo "jar path : $JAR_PATH"
 chmod +x $JAR_PATH
