@@ -38,3 +38,4 @@ out/
 
 ### private 파일
 /ourhood-dev-logs/*
+/ourhood-local-logs/*
